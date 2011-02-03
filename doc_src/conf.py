@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'geocamUtilWeb'
-copyright = u'2010, Trey Smith'
+copyright = u'2008-2010 United States Government as represented by the Administrator of the National Aeronautics and Space Administration. All Rights Reserved'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
