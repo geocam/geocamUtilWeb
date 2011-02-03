@@ -34,4 +34,5 @@ setup(
         'License :: OSI Approved :: NASA Open Source Agreement',
         'Framework :: Django',
     ],
+    test_suite = 'geocamUtil.tests.suite',
 )
