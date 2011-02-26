@@ -12,32 +12,17 @@ from glob import glob
 import os
 import logging
 
+from geocamUtil.Builder import Builder
+
 class Foo(object):
     pass
 
 class Command(NoArgsCommand):
     help = 'Collects all app requirements.txt files into build/management/appRequirements.txt'
     
-    def handle_noargs(self, **options):
-        logger = logging.getLogger('collectreqs')
-        logger.setLevel(logging.INFO)
-
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        console.setFormatter(logging.Formatter('%(message)s'))
-        logger.addHandler(console)
-
-        # HACK: we expect the test cases to spout warnings, don't want the user to see them and get upset
-        if os.environ.has_key('TEST_SUPPRESS_STDERR'):
-            console.setLevel(logging.ERROR)
-
-        siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
-        logger.debug('siteDir: %s' % siteDir)
-
-        # find app requirements.txt files
-        subReqFileList = glob('%s/submodules/*/requirements.txt' % siteDir)
+    def collect(self, outName, subReqFileList):
         subReqFiles = dict([(os.path.basename(os.path.dirname(f)), f) for f in subReqFileList])
-        logger.debug('subReqFiles: %s' % subReqFiles)
+        self.logger.debug('subReqFiles: %s' % subReqFiles)
 
         # parse app requirements.txt files
         subReqs = {}
@@ -46,7 +31,7 @@ class Command(NoArgsCommand):
         for appName, reqsFile in subReqFiles.iteritems():
             reqs = [entry.req for entry in parse_requirements(reqsFile, options=opts)]
             subReqs[appName] = reqs
-        logger.debug('subReqs: %s' % subReqs)
+        self.logger.debug('subReqs: %s' % subReqs)
 
         # calculate maximum version requested for each requirement
         maxVersion = {}
@@ -58,7 +43,6 @@ class Command(NoArgsCommand):
                     maxVersion[req.key] = version
 
         # write out collected requirements
-        outName = '%s/build/management/appRequirements.txt' % siteDir
         outDir = os.path.dirname(outName)
         if not os.path.exists(outDir):
             os.makedirs(outDir)
@@ -72,8 +56,8 @@ class Command(NoArgsCommand):
             for req in reqs:
                 version = req.specs
                 if version < maxVersion[req.key]:
-                    logger.warning('WARNING: conflict -- app %s wants %s at version %s but another app wants version %s'
-                                    % (appName, req.key, version, maxVersion[req.key]))
+                    self.logger.warning('WARNING: conflict -- app %s wants %s at version %s but another app wants version %s'
+                                        % (appName, req.key, version, maxVersion[req.key]))
                     out.write('# %s ... CONFLICT: another app wants a different version!\n' % str(req))
                 elif reqDone.has_key(req.key):
                     out.write('# %s ... redundant with entry above\n' % str(req))
@@ -81,4 +65,27 @@ class Command(NoArgsCommand):
                     out.write('%s\n' % str(req))
                     reqDone[req.key] = True
 
-        logger.info('done collecting requirements')
+        self.logger.info('done collecting requirements')
+
+    def handle_noargs(self, **options):
+        self.logger = logging.getLogger('collectreqs')
+        self.logger.setLevel(logging.INFO)
+        
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        console.setFormatter(logging.Formatter('%(message)s'))
+        self.logger.addHandler(console)
+
+        # HACK: we expect the test cases to spout warnings, don't want the user to see them and get upset
+        if os.environ.has_key('TEST_SUPPRESS_STDERR'):
+            console.setLevel(logging.ERROR)
+
+        siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
+        self.logger.debug('siteDir: %s' % siteDir)
+        outName = '%s/build/management/appRequirements.txt' % siteDir
+
+        subReqFileList = glob('%s/submodules/*/requirements.txt' % siteDir)
+        
+        builder = Builder()
+        builder.applyRule(outName, subReqFileList,
+                          lambda: self.collect(outName, subReqFileList))
