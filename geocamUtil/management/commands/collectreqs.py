@@ -1,3 +1,9 @@
+# __BEGIN_LICENSE__
+# Copyright (C) 2008-2010 United States Government as represented by
+# the Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+# __END_LICENSE__
+
 from optparse import make_option
 from django.core.management.base import NoArgsCommand, CommandError
 
@@ -20,6 +26,10 @@ class Command(NoArgsCommand):
         console.setLevel(logging.INFO)
         console.setFormatter(logging.Formatter('%(message)s'))
         logger.addHandler(console)
+
+        # HACK: we expect the test cases to spout warnings, don't want the user to see them and get upset
+        if os.environ.has_key('TEST_SUPPRESS_STDERR'):
+            console.setLevel(logging.ERROR)
 
         siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
         logger.debug('siteDir: %s' % siteDir)
