@@ -9,3 +9,4 @@ from geocamUtil.anyjsonTest import *
 from geocamUtil.models.UuidFieldTest import *
 from geocamUtil.models.ExtrasFieldTest import *
 from geocamUtil.management.commandTests import *
+from geocamUtil.BuilderTest import *
