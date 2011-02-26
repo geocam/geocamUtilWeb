@@ -1,0 +1,3 @@
+# random pypi packages we are unlikely to use for other things
+dutest==0.1
+electruth

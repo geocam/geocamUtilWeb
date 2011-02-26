@@ -4,7 +4,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from MultiSettingsTest import *
-from anyjsonTest import *
-from models.UuidFieldTest import *
-from models.ExtrasFieldTest import *
+from geocamUtil.MultiSettingsTest import *
+from geocamUtil.anyjsonTest import *
+from geocamUtil.models.UuidFieldTest import *
+from geocamUtil.models.ExtrasFieldTest import *
+from geocamUtil.management.commandTests import *
