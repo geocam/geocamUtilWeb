@@ -28,7 +28,7 @@ class CollectReqsTest(TestCase):
         self.assertEquals(9, len(file(self.rfile, 'r').read().splitlines()))
 
 class InstallReqsTest(TestCase):
-    def setUp(self):
+    def tearDown(self):
         needSudo = not os.environ.has_key('VIRTUALENV')
         if needSudo:
             sudoStr = 'sudo '
@@ -47,10 +47,38 @@ class PrepAppsTest(TestCase):
         self.siteDir = commandUtil.getSiteDir()
         self.ps1 = '%sbuild/app1/prepStatus.txt' % self.siteDir
         self.ps2 = '%sbuild/app2/prepStatus.txt' % self.siteDir
-        os.unlink(self.ps1)
-        os.unlink(self.ps2)
+
+    def tearDown(self):
+        os.system('rm -f %s' % self.ps1)
+        os.system('rm -f %s' % self.ps2)
 
     def test_prep(self):
         management.call_command('prepapps')
         self.assert_(os.path.exists(self.ps1))
         self.assert_(os.path.exists(self.ps2))
+
+class CollectMediaTest(TestCase):
+    def setUp(self):
+        self.siteDir = commandUtil.getSiteDir()
+        self.bmediaDir = '%sbuild/media/' % self.siteDir
+
+    def tearDown(self):
+        pass #os.system('rm -rf %s' % self.bmediaDir)
+
+    def assertExists(self, f):
+        self.assert_(os.path.exists(f))
+
+    def test_collect(self):
+        import logging
+        logging.basicConfig(level=logging.DEBUG)
+        import sys
+        print >>sys.stderr, 'before'
+        management.call_command('collectmedia')
+        print >>sys.stderr, 'after'
+        self.assertExists('%sapp1/js/app1.js' % self.bmediaDir)
+        self.assertExists('%sapp2/js/app2.js' % self.bmediaDir)
+        self.assertExists('%sexternal/js/lib1.js' % self.bmediaDir)
+        self.assertExists('%sexternal/js/lib2.js' % self.bmediaDir)
+        self.assertExists('%sexternal/js/sharedlib.js' % self.bmediaDir)
+        self.assert_(not os.path.exists('%sshouldNotBeCollected.js' % self.bmediaDir))
+
