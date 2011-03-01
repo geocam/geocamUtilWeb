@@ -10,3 +10,4 @@ from geocamUtil.models.UuidFieldTest import *
 from geocamUtil.models.ExtrasFieldTest import *
 from geocamUtil.management.commandsTest import *
 from geocamUtil.BuilderTest import *
+from geocamUtil.InstallerTest import *
