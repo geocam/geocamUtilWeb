@@ -100,4 +100,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'geocamUtil',
+    'example.apps.app1',
+    'example.apps.app2',
 )

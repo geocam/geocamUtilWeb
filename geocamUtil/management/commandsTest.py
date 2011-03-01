@@ -9,13 +9,15 @@ import os
 from django.test import TestCase
 from django.core import management
 
+from geocamUtil.management import commandUtil
+
 def dosys(cmd):
     print 'running:', cmd
     os.system(cmd)
 
 class CollectReqsTest(TestCase):
     def setUp(self):
-        self.siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
+        self.siteDir = commandUtil.getSiteDir()
         self.rfile = '%s/build/management/appRequirements.txt' % self.siteDir
         os.system('rm -f %s' % self.rfile)
         os.environ['TEST_SUPPRESS_STDERR'] = '1'
@@ -39,3 +41,16 @@ class InstallReqsTest(TestCase):
         # test fails if the following imports fail
         import dutest
         import electruth
+
+class PrepAppsTest(TestCase):
+    def setUp(self):
+        self.siteDir = commandUtil.getSiteDir()
+        self.ps1 = '%sbuild/app1/prepStatus.txt' % self.siteDir
+        self.ps2 = '%sbuild/app2/prepStatus.txt' % self.siteDir
+        os.unlink(self.ps1)
+        os.unlink(self.ps2)
+
+    def test_prep(self):
+        management.call_command('prepapps')
+        self.assert_(os.path.exists(self.ps1))
+        self.assert_(os.path.exists(self.ps2))
