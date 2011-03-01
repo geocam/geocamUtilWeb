@@ -4,25 +4,28 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from optparse import make_option
-from django.core.management.base import NoArgsCommand, CommandError
-
 import os
+
+from django.core.management.base import NoArgsCommand
+
+from geocamUtil.management import commandUtil
 
 def dosys(cmd):
     print 'running:', cmd
     os.system(cmd)
 
 class Command(NoArgsCommand):
-    help = 'Uses pip to install requirements found in management/requirements.txt'
+    help = 'Use pip to install requirements found in management/requirements.txt'
     
     def handle_noargs(self, **options):
+        if not commandUtil.getConfirmationUseStatus('installreqs', self.help):
+            return
+
         needSudo = not os.environ.has_key('VIRTUALENV')
         if needSudo:
             sudoStr = 'sudo '
         else:
             sudoStr = ''
 
-        siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
-
-        dosys('%spip install -r %s/management/requirements.txt' % (sudoStr, siteDir))
+        siteDir = commandUtil.getSiteDir()
+        dosys('%spip install -r %smanagement/requirements.txt' % (sudoStr, siteDir))

@@ -4,7 +4,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from optparse import make_option
 from django.core.management.base import NoArgsCommand, CommandError
 
 from pip.req import parse_requirements
@@ -13,12 +12,13 @@ import os
 import logging
 
 from geocamUtil.Builder import Builder
+from geocamUtil.management import commandUtil
 
 class Foo(object):
     pass
 
 class Command(NoArgsCommand):
-    help = 'Collects all app requirements.txt files into build/management/appRequirements.txt'
+    help = 'Collect all app requirements.txt files into build/management/appRequirements.txt'
     
     def collect(self, outName, subReqFileList):
         subReqFiles = dict([(os.path.basename(os.path.dirname(f)), f) for f in subReqFileList])
@@ -80,7 +80,7 @@ class Command(NoArgsCommand):
         if os.environ.has_key('TEST_SUPPRESS_STDERR'):
             console.setLevel(logging.ERROR)
 
-        siteDir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
+        siteDir = commandUtil.getSiteDir()
         self.logger.debug('siteDir: %s' % siteDir)
         outName = '%s/build/management/appRequirements.txt' % siteDir
 
