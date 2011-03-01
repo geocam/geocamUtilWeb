@@ -73,22 +73,22 @@ class Installer(object):
             else:
                 shutil.copy(src, dst)
 
-    def installDir0(self, src, dst):
+    def installRecurse0(self, src, dst):
         for f in self.getFiles(src):
             dst1 = self.joinNoTrailingSlash(dst, f)
             src1 = self.joinNoTrailingSlash(src, f)
             self.builder.applyRule(dst1, [src1],
                                    lambda: self.installFile(src1, dst1))
 
-    def installDir(self, src, dst):
-        logging.info('installDir %s %s' % (src, dst))
-        self.installDir0(src, dst)
+    def installRecurse(self, src, dst):
+        logging.info('installRecurse %s %s' % (src, dst))
+        self.installRecurse0(src, dst)
 
-    def installDirs0(self, srcs, dst):
-        logging.debug('installDirs0 srcs=%s dst=%s' % (srcs, dst))
+    def installRecurseGlob0(self, srcs, dst):
+        logging.debug('installRecurseGlob0 srcs=%s dst=%s' % (srcs, dst))
         for src in srcs:
-            self.installDir0(src, os.path.join(dst, os.path.basename(src)))
+            self.installRecurse0(src, os.path.join(dst, os.path.basename(src)))
 
-    def installDirs(self, pat, dst):
-        logging.info('installDirs %s %s' % (pat, dst))
-        self.installDirs0(glob(pat), dst)
+    def installRecurseGlob(self, pat, dst):
+        logging.info('installRecurseGlob %s %s' % (pat, dst))
+        self.installRecurseGlob0(glob(pat), dst)

@@ -31,8 +31,8 @@ class InstallerTest(unittest.TestCase):
         shutil.rmtree(self.dir)
 
     def test_first(self):
-        self.inst.installDirs(r'%s/app[12]/*' % self.dir,
-                              '%s/both' % self.dir)
+        self.inst.installRecurseGlob(r'%s/app[12]/*' % self.dir,
+                                     '%s/both' % self.dir)
         self.assert_(os.path.exists('%s/both/ab/a.txt' % self.dir))
         self.assert_(os.path.exists('%s/both/ab/b.txt' % self.dir))
         self.assert_(os.path.exists('%s/both/xy/x.txt' % self.dir))
