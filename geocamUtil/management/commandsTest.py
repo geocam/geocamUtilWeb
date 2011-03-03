@@ -42,6 +42,22 @@ class InstallReqsTest(TestCase):
         import dutest
         import electruth
 
+class PrepTemplatesTest(TestCase):
+    def assertExists(self, f):
+        self.assert_(os.path.exists(f))
+
+    def setUp(self):
+        self.siteDir = commandUtil.getSiteDir()
+        self.ptDir = '%s/build/preptemplates/' % self.siteDir
+
+    def tearDown(self):
+        os.system('rm -rf %s' % self.ptDir)
+
+    def test_preptemplates(self):
+        management.call_command('preptemplates')
+        self.assertExists('%sfoo.conf' % self.ptDir)
+        self.assertExists('%sbar.conf' % self.ptDir)
+
 class PrepAppsTest(TestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
@@ -63,22 +79,16 @@ class CollectMediaTest(TestCase):
         self.bmediaDir = '%sbuild/media/' % self.siteDir
 
     def tearDown(self):
-        pass #os.system('rm -rf %s' % self.bmediaDir)
+        os.system('rm -rf %s' % self.bmediaDir)
 
     def assertExists(self, f):
         self.assert_(os.path.exists(f))
 
     def test_collect(self):
-        import logging
-        logging.basicConfig(level=logging.DEBUG)
-        import sys
-        print >>sys.stderr, 'before'
         management.call_command('collectmedia')
-        print >>sys.stderr, 'after'
         self.assertExists('%sapp1/js/app1.js' % self.bmediaDir)
         self.assertExists('%sapp2/js/app2.js' % self.bmediaDir)
         self.assertExists('%sexternal/js/lib1.js' % self.bmediaDir)
         self.assertExists('%sexternal/js/lib2.js' % self.bmediaDir)
         self.assertExists('%sexternal/js/sharedlib.js' % self.bmediaDir)
         self.assert_(not os.path.exists('%sshouldNotBeCollected.js' % self.bmediaDir))
-

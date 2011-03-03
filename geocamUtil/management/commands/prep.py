@@ -13,5 +13,6 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         management.call_command('collectreqs')
         management.call_command('installreqs')
+        management.call_command('preptemplates')
         management.call_command('prepapps')
         management.call_command('collectmedia')
