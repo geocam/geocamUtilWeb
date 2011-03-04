@@ -8,7 +8,7 @@ from django.core import management
 from django.core.management.base import NoArgsCommand
 
 class Command(NoArgsCommand):
-    help = 'Runs subcommands: collectreqs, installreqs, prepapps, collectmedia'
+    help = 'Runs subcommands: collectreqs, installreqs, preptemplates, prepapps, collectmedia'
     
     def handle_noargs(self, **options):
         management.call_command('collectreqs')
