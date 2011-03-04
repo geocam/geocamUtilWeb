@@ -10,6 +10,8 @@ from geocamUtil.models.UuidFieldTest import *
 from geocamUtil.models.ExtrasFieldTest import *
 from geocamUtil.BuilderTest import *
 from geocamUtil.InstallerTest import *
+from geocamUtil.icons.rotateTest import *
+from geocamUtil.icons.svgTest import *
 
 # commandsTest is destructive and should only be run in the example site for geocamUtil
 from geocamUtil.management import commandUtil
