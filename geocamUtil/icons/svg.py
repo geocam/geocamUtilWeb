@@ -700,6 +700,10 @@ def renderSvgRsvg(size, src, dst):
     os.unlink(dstUncropped)
 
 def renderSvg(size, src, dst):
+    dstDir = os.path.dirname(dst)
+    if not os.path.exists(dstDir):
+        os.makedirs(dstDir)
+
     if RENDER_BACKEND == None:
         detectSvgBackend()
 

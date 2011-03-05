@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 appPrepMod = None
 
             if not appPrepMod:
-                logging.debug('skipping %s, does not define management/appCommands/prep.py' % prepImpPath)
+                logging.debug('skipping %s, could not import %s (check for __init__.py files in directory hierarchy)' % (impPath, prepImpPath))
                 continue
 
             cmd = appPrepMod.Command()
