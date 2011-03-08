@@ -18,24 +18,30 @@ class Foo(object):
     pass
 
 class Command(NoArgsCommand):
-    help = 'Collect all app requirements.txt files into build/management/appRequirements.txt'
+    help = 'Collect all app requirements.txt files and siteRequirements.txt into allRequirements.txt'
     
+    def getSrcName(self, reqFile):
+        if os.path.basename(reqFile) == 'siteRequirements.txt':
+            return 'site'
+        else:
+            return os.path.basename(os.path.dirname(reqFile))
+
     def collect(self, outName, subReqFileList):
-        subReqFiles = dict([(os.path.basename(os.path.dirname(f)), f) for f in subReqFileList])
+        subReqFiles = dict([(self.getSrcName(f), f) for f in subReqFileList])
         self.logger.debug('subReqFiles: %s' % subReqFiles)
 
         # parse app requirements.txt files
         subReqs = {}
         opts = Foo()
         opts.skip_requirements_regex = None
-        for appName, reqsFile in subReqFiles.iteritems():
+        for srcName, reqsFile in subReqFiles.iteritems():
             reqs = [entry.req for entry in parse_requirements(reqsFile, options=opts)]
-            subReqs[appName] = reqs
+            subReqs[srcName] = reqs
         self.logger.debug('subReqs: %s' % subReqs)
 
         # calculate maximum version requested for each requirement
         maxVersion = {}
-        for appName, reqs in subReqs.iteritems():
+        for srcName, reqs in subReqs.iteritems():
             for req in reqs:
                 version = req.specs
                 maxVersion.setdefault(req.key, version)
@@ -47,17 +53,26 @@ class Command(NoArgsCommand):
         if not os.path.exists(outDir):
             os.makedirs(outDir)
         out = file(outName, 'w')
-        appNames = subReqs.keys()
-        appNames.sort()
+        srcNames = subReqs.keys()
+        srcNames.sort()
+
+        out.write('# This file is auto-generated, do not modify!\n')
+        out.write('#\n')
+        out.write('# source files:\n')
+        out.write('#\n')
+        for srcName in srcNames:
+            out.write('#   %s = %s\n' % (srcName, subReqFiles[srcName]))
+        out.write('\n')
         reqDone = {}
-        for appName in appNames:
-            reqs = subReqs[appName]
-            out.write('\n# >>>>>>>>>> %s <<<<<<<<<<\n\n' % appName)
+        for srcName in srcNames:
+            reqs = list(subReqs[srcName])
+            reqs.sort(key=lambda r: r.key)
+            out.write('\n# >>>>>>>>>> %s <<<<<<<<<<\n\n' % srcName)
             for req in reqs:
                 version = req.specs
                 if version < maxVersion[req.key]:
-                    self.logger.warning('WARNING: conflict -- app %s wants %s at version %s but another app wants version %s'
-                                        % (appName, req.key, version, maxVersion[req.key]))
+                    self.logger.warning('WARNING: conflict -- module %s wants %s at version %s but another module wants version %s'
+                                        % (srcName, req.key, version, maxVersion[req.key]))
                     out.write('# %s ... CONFLICT: another app wants a different version!\n' % str(req))
                 elif reqDone.has_key(req.key):
                     out.write('# %s ... redundant with entry above\n' % str(req))
@@ -82,9 +97,11 @@ class Command(NoArgsCommand):
 
         siteDir = commandUtil.getSiteDir()
         self.logger.debug('siteDir: %s' % siteDir)
-        outName = '%s/build/management/appRequirements.txt' % siteDir
+        outName = '%s/build/management/allRequirements.txt' % siteDir
 
-        subReqFileList = glob('%s/submodules/*/requirements.txt' % siteDir)
+        subReqFileList = (glob('%ssubmodules/*/requirements.txt' % siteDir)
+                          + glob('%sapps/*/management/requirements.txt' % siteDir)
+                          + glob('%smanagement/siteRequirements.txt' % siteDir))
         
         builder = Builder()
         builder.applyRule(outName, subReqFileList,
