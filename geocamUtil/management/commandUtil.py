@@ -7,11 +7,15 @@
 
 import os
 import sys
+import imp
+import re
 
 STATUS_DIR_TEMPLATE = '%(siteDir)s/build/management/commandStatus/'
 
 def getSiteDir():
-    dir = os.path.dirname(os.path.abspath(__import__(os.environ['DJANGO_SETTINGS_MODULE']).__file__))
+    # if DJANGO_SETTINGS_MODULE='geocamShare.settings', modImpPath='geocamShare'
+    modImpPath = re.sub(r'\..*$', '', os.environ['DJANGO_SETTINGS_MODULE'])
+    dir = imp.find_module(modImpPath)[1]
     if dir != '' and not dir.endswith('/'):
         dir += '/'
     return dir
