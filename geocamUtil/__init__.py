@@ -7,7 +7,7 @@
 import django.conf
 
 from geocamUtil.MultiSettings import MultiSettings
-from geocamTrack import defaultSettings
+from geocamUtil import defaultSettings
 
 """
 geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.

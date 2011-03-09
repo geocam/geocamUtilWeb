@@ -5,4 +5,4 @@
 # __END_LICENSE__
 
 from LogErrorsMiddleware import LogErrorsMiddleware
-from SecurityRedirectMiddleware import SecurityRedirectMiddleware
+from SecurityMiddleware import SecurityMiddleware

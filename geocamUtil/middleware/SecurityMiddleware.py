@@ -9,13 +9,14 @@ import sys
 import traceback
 import base64
 
-from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, get_host
 from django.core.urlresolvers import resolve
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.utils.http import urlquote
+
+from geocamUtil import settings
 
 def requestIsSecure(request):
     if request.is_secure():
@@ -32,36 +33,16 @@ def requestIsSecure(request):
 
 # http://stackoverflow.com/questions/2164069/best-way-to-make-djangos-login-required-the-default
 # http://stackoverflow.com/questions/1548210/how-to-force-the-use-of-ssl-for-some-url-of-my-django-application
-class SecurityRedirectMiddleware(object):
-    # can override these built-in defaults with same-name variables in your Django settings
-    SECURITY_REDIRECT_ENABLED = True
-    SECURITY_REDIRECT_SSL_REQUIRED_BY_DEFAULT = True
-    SECURITY_REDIRECT_TURN_OFF_SSL_WHEN_NOT_REQUIRED = False
-
-    # can specify True, False, or 'write'.  if 'write', login is required to access urls that
-    # don't have the 'readOnly' flag.  (but the 'loginRequired' flag always takes precedence.)
-    SECURITY_REDIRECT_LOGIN_REQUIRED_BY_DEFAULT = True
-
-    SECURITY_REDIRECT_DEFAULT_CHALLENGE = 'django'
-    # 'django' auth type always accepted -- leave it out of the list
-    SECURITY_REDIRECT_ACCEPT_AUTH_TYPES = ['digest', 'basic']
-    SECURITY_REDIRECT_REQUIRE_SSL_FOR_CREDENTIALS = True
-
+class SecurityMiddleware(object):
     def __init__(self):
-        if 'digest' in self._getSetting('SECURITY_REDIRECT_ACCEPT_AUTH_TYPES'):
+        if 'digest' in settings.GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES:
             import django_digest
             self._digestAuthenticator = django_digest.HttpDigestAuthenticator()
-
-    def _getSetting(self, name):
-        if hasattr(settings, name):
-            return getattr(settings, name)
-        else:
-            return getattr(self, name)
 
     # http://djangosnippets.org/snippets/243/
     def _basicAuthenticate(self, request):
         # require SSL for basic auth -- avoid clients sending passwords in cleartext
-        if not requestIsSecure(request) and self._getSetting('SECURITY_REDIRECT_REQUIRE_SSL_FOR_CREDENTIALS'):
+        if not requestIsSecure(request) and settings.GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS:
             return False
         
         if 'HTTP_AUTHORIZATION' not in request.META:
@@ -98,7 +79,7 @@ class SecurityRedirectMiddleware(object):
         loginUrlWithoutScriptName = '/' + settings.LOGIN_URL[len(settings.SCRIPT_NAME):]
         loginTuple = resolve(loginUrlWithoutScriptName)
         loginViewKwargs = loginTuple[2]
-        sslRequired = loginViewKwargs.get('sslRequired', self._getSetting('SECURITY_REDIRECT_REQUIRE_SSL_FOR_CREDENTIALS'))
+        sslRequired = loginViewKwargs.get('sslRequired', settings.GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS)
         if sslRequired and not requestIsSecure(request):
             # ssl required for login -- redirect to https and then back
             loginUrl = re.sub('^http:', 'https:', request.build_absolute_uri(settings.LOGIN_URL))
@@ -118,23 +99,23 @@ class SecurityRedirectMiddleware(object):
 
     def process_view(self, request, viewFunc, viewArgs, viewKwargs):
         readOnly = viewKwargs.pop('readOnly', False)
-        sslRequired = viewKwargs.pop('sslRequired', self._getSetting('SECURITY_REDIRECT_SSL_REQUIRED_BY_DEFAULT'))
-        loginRequiredByDefault = self._getSetting('SECURITY_REDIRECT_LOGIN_REQUIRED_BY_DEFAULT')
+        sslRequired = viewKwargs.pop('sslRequired', settings.GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT)
+        loginRequiredByDefault = settings.GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT
         if loginRequiredByDefault == 'write':
             loginRequiredByDefault = not readOnly
         loginRequired = viewKwargs.pop('loginRequired', loginRequiredByDefault)
-        challenge = viewKwargs.pop('challenge', self._getSetting('SECURITY_REDIRECT_DEFAULT_CHALLENGE'))
-        acceptAuthTypes = viewKwargs.pop('acceptAuthTypes', self._getSetting('SECURITY_REDIRECT_ACCEPT_AUTH_TYPES'))
+        challenge = viewKwargs.pop('challenge', settings.GEOCAM_UTIL_SECURITY_DEFAULT_CHALLENGE)
+        acceptAuthTypes = viewKwargs.pop('acceptAuthTypes', settings.GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES)
 
         # must put this after the pop() calls above, otherwise get errors due to unknown viewKwargs
-        if not self._getSetting('SECURITY_REDIRECT_ENABLED'):
+        if not settings.GEOCAM_UTIL_SECURITY_ENABLED:
             return None
 
         isSecure = requestIsSecure(request)
         if sslRequired and not isSecure:
             return self._redirect(request, sslRequired)
 
-        if isSecure and not sslRequired and self._getSetting('SECURITY_REDIRECT_TURN_OFF_SSL_WHEN_NOT_REQUIRED'):
+        if isSecure and not sslRequired and settings.GEOCAM_UTIL_SECURITY_TURN_OFF_SSL_WHEN_NOT_REQUIRED:
             return self._redirect(request, sslRequired)
 
         if loginRequired:
