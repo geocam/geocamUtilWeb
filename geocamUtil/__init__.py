@@ -4,8 +4,13 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+import django.conf
+
+from geocamUtil.MultiSettings import MultiSettings
+from geocamTrack import defaultSettings
+
 """
-geocamUtilWeb -- Utilities used by Django apps in the GeoCam Share app collection.
+geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.
 """
 __version_info__ = {
     'major': 0,
@@ -28,3 +33,5 @@ def get_version():
     return ''.join(vers)
 
 __version__ = get_version()
+
+settings = MultiSettings(django.conf.settings, defaultSettings)

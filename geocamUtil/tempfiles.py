@@ -12,9 +12,8 @@ from glob import glob
 import traceback
 import sys
 
-from django.conf import settings
-
 from geocamUtil import FileUtil
+from geocamUtil import settings
 
 def getTempName(prefix, suffix=''):
     return '%s/%s-%s-%s%s' % (settings.TMP_DIR,
@@ -27,7 +26,7 @@ def deleteStaleFiles():
     files = glob('%s/*' % settings.TMP_DIR)
     now = time.time()
     for f in files:
-        if (now - os.stat(f).st_ctime > settings.DELETE_TMP_FILE_WAIT_SECONDS
+        if (now - os.stat(f).st_ctime > settings.GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS
             and not f.endswith('/README.txt')):
             try:
                 os.unlink(f)
