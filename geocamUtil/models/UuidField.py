@@ -28,7 +28,7 @@ class UuidField(models.CharField):
         super(UuidField, self).__init__(self, *args, **kwargs)
         
     def pre_save(self, model_instance, add):
-        if add:
+        if add and not getattr(model_instance, self.attname):
             value = makeUuid()
             setattr(model_instance, self.attname, value)
             return value
