@@ -14,7 +14,7 @@ class Extras(object):
     # get and set elements in its __dict__ dictionary via dotted
     # notation.  Someday it could do more.
     def __repr__(self):
-        return json.dumps(self.__dict__, indent=4)
+        return json.dumps(self.__dict__, indent=4, sort_keys=True)
 
     # This is here mostly so you can use the "in" keyword.
     def __iter__(self):
