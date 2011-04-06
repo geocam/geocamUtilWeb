@@ -102,7 +102,7 @@ foreach my $filename (<>) {
         while ($file =~ s/\s*\n$//) {};
 
         # append the wrapped license
-        $file = $shebang . $file . "\n\n" . $wrappedLicense;
+        $file = $shebang . $file . "\n\n" . $wrappedLicense . "\n";
     } else {
         # Remove all blank lines from the top of the file
         while ($file =~ s/^\s*\n//) {};
