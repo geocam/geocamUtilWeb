@@ -120,7 +120,7 @@ class SecurityMiddleware(object):
 
         if loginRequired:
             authenticated = False
-            for authType in ['django'] + acceptAuthTypes:
+            for authType in ('django',) + tuple(acceptAuthTypes):
                 if getattr(self, '_%sAuthenticate' % authType)(request):
                     authenticated = True
                     #print >>sys.stderr, 'authenticated via %s' % authType
