@@ -45,7 +45,7 @@ class ExtrasField(models.TextField):
                 values = json.loads(value)
                 assert type(values) == dict, 'expected a dictionary object, found a %s' % type(values).__name__
                 for key in values.keys():
-                    assert type(key) == unicode, 'expected unicode keys, found a %s' % type(key).__name__
+                    assert type(key) in (unicode, str), 'expected unicode keys, found a %s' % type(key).__name__
                 extras.__dict__ = values
             except (ValueError, AssertionError), e:
                 raise ValidationError, 'Invalid JSON data in ExtrasField: %s' % e
