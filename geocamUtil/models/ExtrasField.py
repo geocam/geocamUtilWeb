@@ -53,3 +53,15 @@ class ExtrasField(models.TextField):
 
     def get_db_prep_value(self, value):
         return json.dumps(value.__dict__)
+
+HAVE_SOUTH = False
+try:
+    import south
+    HAVE_SOUTH = True
+except ImportError:
+    pass
+
+if HAVE_SOUTH:
+    # tell south it can freeze this field without any special nonsense
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasField"])

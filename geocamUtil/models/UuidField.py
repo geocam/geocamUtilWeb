@@ -34,3 +34,15 @@ class UuidField(models.CharField):
             return value
         else:
             return super(UuidField, self).pre_save(model_instance, add)
+
+HAVE_SOUTH = False
+try:
+    import south
+    HAVE_SOUTH = True
+except ImportError:
+    pass
+
+if HAVE_SOUTH:
+    # tell south it can freeze this field without any special nonsense
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^geocamUtil\.models\.UuidField"])
