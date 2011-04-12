@@ -22,7 +22,7 @@ class Command(NoArgsCommand):
     
     def getSrcName(self, reqFile):
         if os.path.basename(reqFile) == 'siteRequirements.txt':
-            return 'site'
+            return '00_site'
         else:
             return os.path.basename(os.path.dirname(reqFile))
 
