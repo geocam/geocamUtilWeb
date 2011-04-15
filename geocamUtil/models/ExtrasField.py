@@ -9,6 +9,22 @@ from django.core.exceptions import ValidationError
 
 from geocamUtil import anyjson as json
 
+class DotDict(dict):
+    def __getattr__(self, attr):
+        return self.get(attr, None)
+    __setattr__= dict.__setitem__
+    __delattr__= dict.__delitem__
+
+def convertToDotDictRecurse(struct):
+    if isinstance(struct, dict):
+        for k, v in struct.iteritems():
+            struct[k] = convertToDotDictRecurse(v)
+        return DotDict(struct)
+    elif isinstance(struct, list):
+        return [convertToDotDictRecurse(elt) for elt in struct]
+    else:
+        return struct
+
 class Extras(object):
     # At the moment this object exists pretty much solely to let you
     # get and set elements in its __dict__ dictionary via dotted
@@ -19,6 +35,14 @@ class Extras(object):
     # This is here mostly so you can use the "in" keyword.
     def __iter__(self):
         return self.__dict__.__iter__()
+
+    def toDotDict(self):
+        """
+        Convenience function to use if you want to use dot notation recursively
+        everywhere within the parsed JSON.
+        """
+        return DotDict(dict([(k, convertToDotDictRecurse(v))
+                             for k, v in self.__dict__.iteritems()]))
 
 class ExtrasField(models.TextField):
     '''A Django model field for storing extra schema-free data.  You can 
