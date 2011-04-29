@@ -4,9 +4,30 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import time, datetime, calendar, sys
+import time
+import datetime
+import calendar
+import sys
 import re
+
 import iso8601
+try:
+    import pytz
+except ImportError:
+    # older functions don't use pytz so for backward compatibility
+    # with older installs we shouldn't require it
+    pass
+
+def utcToTimeZone(dt, tz):
+    # returns localized datetime in given timezone
+    if isinstance(tz, (str, unicode)):
+        tz = pytz.timezone(tz)
+    return dt.replace(tzinfo=pytz.utc).astimezone(tz)
+
+def timeZoneToUtc(dt):
+    # returns UTC datetime with no tzinfo so it can be saved without further
+    # modification using Django ORM
+    return dt.astimezone(pytz.utc).replace(tzinfo=None)
 
 def localDateTimeToPosix(localDT):
     return time.mktime(localDT.timetuple()) + 1e-6*localDT.microsecond
