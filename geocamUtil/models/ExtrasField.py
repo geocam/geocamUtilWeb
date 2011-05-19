@@ -75,7 +75,7 @@ class ExtrasField(models.TextField):
                 raise ValidationError, 'Invalid JSON data in ExtrasField: %s' % e
             return extras
 
-    def get_db_prep_value(self, value):
+    def get_db_prep_value(self, value, connection=None, prepared=False):
         return json.dumps(value.__dict__)
 
 HAVE_SOUTH = False
