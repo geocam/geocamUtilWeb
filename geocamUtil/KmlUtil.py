@@ -26,7 +26,10 @@ def wrapKml(text, id=None):
     if id:
         text = re.sub('^<(\w+)>', '<\\1 id="%s">' % id, text)
     return ("""<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://earth.google.com/kml/2.2">
+<kml xmlns="http://earth.google.com/kml/2.2"
+     xmlns:gx="http://www.google.com/kml/ext/2.2"
+     xmlns:kml="http://www.opengis.net/kml/2.2"
+     xmlns:atom="http://www.w3.org/2005/Atom">
   %s
 </kml>
 """ % text)
