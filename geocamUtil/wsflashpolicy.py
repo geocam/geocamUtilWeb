@@ -42,7 +42,7 @@ def main():
         bhost = ''
 
     if options.bport:
-        bport = options.bport
+        bport = int(options.bport)
     else:
         bport = 843
 

@@ -1,4 +1,4 @@
-import json
+from geocamUtil import anyjson as json
 
 class JsonRpc2Keys(object):
     KEY_JSONRPC = 'jsonrpc'
