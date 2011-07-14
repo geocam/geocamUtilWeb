@@ -21,7 +21,7 @@ class Command(NoArgsCommand):
         if not commandUtil.getConfirmationUseStatus('installreqs', self.help):
             return
 
-        needSudo = not os.environ.has_key('VIRTUALENV')
+        needSudo = not os.environ.has_key('VIRTUAL_ENV')
         if needSudo:
             sudoStr = 'sudo '
         else:
