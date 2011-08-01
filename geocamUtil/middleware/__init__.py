@@ -4,5 +4,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+from LogRequestMiddleware import LogRequestMiddleware
 from LogErrorsMiddleware import LogErrorsMiddleware
 from SecurityMiddleware import SecurityMiddleware
