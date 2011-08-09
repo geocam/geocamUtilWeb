@@ -17,6 +17,10 @@ class Command(BaseCommand):
                     action='store_true',
                     default=False,
                     help='Ask user if they want to re-run steps marked as done'),
+        make_option('-y', '--yes',
+                    action='store_true',
+                    default=False,
+                    help='Answer yes to all yes-or-no questions'),
         )
     
     def handle(self, *args, **options):
