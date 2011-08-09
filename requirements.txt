@@ -13,7 +13,9 @@ iso8601
 PIL
 python-digest
 pytz
-rdflib==2.4.2
+
+# used to use rdflib==2.4.2 but it no longer resolves properly in pypi
+-e svn+http://rdflib.googlecode.com/svn/branches/2.4.x/#egg=rdflib
 
 # for testing only
 mocker
