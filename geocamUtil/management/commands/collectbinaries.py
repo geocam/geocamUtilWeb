@@ -30,9 +30,9 @@ class Command(BaseCommand):
             logging.debug('collectbinaries app %s' % impPath)
             appMod = __import__(impPath, fromlist=['dummy'])
             appPath = os.path.dirname(appMod.__file__)
-            binPath = '%s/build/bin' % appPath
+            binPath = '%s/bin' % appPath
             logging.debug('collectbinaries app %s: checking for binaries in %s' % (impPath, binPath))
             if os.path.exists(binPath):
                 siteDir = commandUtil.getSiteDir()
                 inst = Installer()
-                inst.installRecurseGlob('%s/*' % binPath, '%sbin' % siteDir)
+                inst.installRecurseGlob('%s/*' % binPath, '%sbuild/bin' % siteDir)
