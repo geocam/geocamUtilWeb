@@ -14,7 +14,7 @@ from geocamUtil.management import commandUtil
 from geocamUtil.Installer import Installer
 
 class Command(BaseCommand):
-    help = 'Collect binaries from all apps into bin'
+    help = 'Collect binaries from all apps into build/bin'
 
     def handle(self, *args, **options):
         from django.db import models
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             logging.debug('collectbinaries app %s' % impPath)
             appMod = __import__(impPath, fromlist=['dummy'])
             appPath = os.path.dirname(appMod.__file__)
-            binPath = '%s/bin' % appPath
+            binPath = '%s/build/bin' % appPath
             logging.debug('collectbinaries app %s: checking for binaries in %s' % (impPath, binPath))
             if os.path.exists(binPath):
                 siteDir = commandUtil.getSiteDir()
