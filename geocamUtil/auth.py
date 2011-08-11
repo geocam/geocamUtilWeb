@@ -32,16 +32,11 @@ def get_account_widget(request):
                          % dict(SCRIPT_NAME=settings.SCRIPT_NAME,
                                 path=urllib.quote(path)))
         """
-<<<<<<< HEAD
         """
         accountWidget = ('<div id="accountwidget"><a id="login_button" href="%(SCRIPT_NAME)saccounts/login/?next=%(path)s">Login</a> | <a id="join_button" href="%(SCRIPT_NAME)saccounts/register">Join</a></div>'
                         % dict(path=request.path, SCRIPT_NAME=settings.SCRIPT_NAME, username=request.user.username))
         """
         accountWidget = ('<div onclick="go_to_view(\'%(SCRIPT_NAME)saccounts/login/?next=%(path)s\');"><a id="login_button" href="javascript:void(0);">Login</a></div> <div onclick="go_to_view(\'%(SCRIPT_NAME)saccounts/register/\');"><a id="join_button" href="javascript:void(0);">Join</a></div>'
-=======
-        
-        accountWidget = ('<div id="accountwidget"><a id="login_button" href="%(SCRIPT_NAME)saccounts/login?next=%(path)s">Login</a> | <a id="join_button" href="%(SCRIPT_NAME)saccounts/register">Join</a></div>'
->>>>>>> origin/master
                         % dict(path=request.path, SCRIPT_NAME=settings.SCRIPT_NAME, username=request.user.username))
                                 
     return accountWidget
