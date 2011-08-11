@@ -17,7 +17,9 @@ ICON_SIZE_CACHE = {}
 def cacheIcons(dir, mediaDir=settings.MEDIA_ROOT, mediaUrl=settings.MEDIA_URL):
     paths = glob('%s/*' % dir)
     for p in paths:
-        iconPrefix = os.path.splitext(os.path.basename(p))[0]
+        iconPrefix, iconExt = os.path.splitext(os.path.basename(p))
+        if iconExt.lower() not in ('.png', '.jpg', '.jpeg', '.tif', '.tiff', '.gif'):
+            continue
         im = Image.open(p)
         ICON_SIZE_CACHE[iconPrefix] = list(im.size)
         ICON_URL_CACHE[iconPrefix] = re.sub(mediaDir, mediaUrl, p)

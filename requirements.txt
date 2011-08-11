@@ -1,0 +1,22 @@
+# __BEGIN_LICENSE__
+# Copyright (C) 2008-2010 United States Government as represented by
+# the Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+# __END_LICENSE__
+
+# This is a pip requirements file
+# http://pip.openplans.org/requirement-format.html
+
+Django
+django-digest
+iso8601
+PIL
+python-digest
+pytz
+
+# used to use rdflib==2.4.2 but it no longer resolves properly in pypi
+-e svn+http://rdflib.googlecode.com/svn/branches/2.4.x/#egg=rdflib
+
+# for testing only
+mocker
+decorator

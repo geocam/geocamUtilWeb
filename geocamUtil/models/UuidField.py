@@ -25,6 +25,7 @@ class UuidField(models.CharField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 48)
         kwargs.setdefault('editable', False)
+        kwargs.setdefault('db_index', True)
         super(UuidField, self).__init__(self, *args, **kwargs)
         
     def pre_save(self, model_instance, add):

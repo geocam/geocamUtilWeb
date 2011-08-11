@@ -9,12 +9,6 @@ from django.core.exceptions import ValidationError
 
 from geocamUtil import anyjson as json
 
-class DotDict(dict):
-    def __getattr__(self, attr):
-        return self.get(attr, None)
-    __setattr__= dict.__setitem__
-    __delattr__= dict.__delitem__
-
 def convertToDotDictRecurse(struct):
     if isinstance(struct, dict):
         for k, v in struct.iteritems():
@@ -25,26 +19,26 @@ def convertToDotDictRecurse(struct):
     else:
         return struct
 
-class Extras(object):
+class DotDict(dict):
     # At the moment this object exists pretty much solely to let you
     # get and set elements in its __dict__ dictionary via dotted
     # notation.  Someday it could do more.
+
+    # these are fields that must not be defined to avoid causing problems
+    # with Django
+    _badFields = ('prepare_database_save',)
+
     def __repr__(self):
-        return json.dumps(self.__dict__, indent=4, sort_keys=True)
+        return json.dumps(self, sort_keys=True, indent=4)
 
-    # This is here mostly so you can use the "in" keyword.
-    def __iter__(self):
-        return self.__dict__.__iter__()
+    def __getattr__(self, attr):
+        if attr in self._badFields:
+            raise KeyError(attr)
+        return self.get(attr, None)
+    __setattr__= dict.__setitem__
+    __delattr__= dict.__delitem__
 
-    def toDotDict(self):
-        """
-        Convenience function to use if you want to use dot notation recursively
-        everywhere within the parsed JSON.
-        """
-        return DotDict(dict([(k, convertToDotDictRecurse(v))
-                             for k, v in self.__dict__.iteritems()]))
-
-class ExtrasField(models.TextField):
+class ExtrasDotField(models.TextField):
     '''A Django model field for storing extra schema-free data.  You can 
     get and set arbitrary properties on the extra field, which can be 
     comprised of strings, numbers, dictionaries, arrays, booleans, and 
@@ -56,27 +50,27 @@ class ExtrasField(models.TextField):
     def __init__(self, *args, **kwargsin):
         kwargs = dict(blank=True)
         kwargs.update(**kwargsin)
-        super(ExtrasField, self).__init__(*args, **kwargs)
+        super(ExtrasDotField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
         if value == '':
-            return Extras()
-        elif type(value) == Extras:
+            return DotDict()
+        elif type(value) == DotDict:
             return value
         else:
-            extras = Extras()
+            extras = DotDict()
             try:
-                values = json.loads(value)
-                assert type(values) == dict, 'expected a dictionary object, found a %s' % type(values).__name__
-                for key in values.keys():
-                    assert type(key) in (unicode, str), 'expected unicode keys, found a %s' % type(key).__name__
-                extras.__dict__ = values
+                values = convertToDotDictRecurse(json.loads(value))
+                assert isinstance(values, DotDict), 'expected a DotDict object, found a %s' % type(values).__name__
+                for key in values.iterkeys():
+                    assert type(key) in (unicode, str), 'expected unicode or str keys, found a %s' % type(key).__name__
+                extras = values
             except (ValueError, AssertionError), e:
-                raise ValidationError, 'Invalid JSON data in ExtrasField: %s' % e
+                raise ValidationError, 'Invalid JSON data in ExtrasDotField: %s' % e
             return extras
 
     def get_db_prep_value(self, value, connection=None, prepared=False):
-        return json.dumps(value.__dict__)
+        return str(value)
 
 HAVE_SOUTH = False
 try:
@@ -88,4 +82,4 @@ except ImportError:
 if HAVE_SOUTH:
     # tell south it can freeze this field without any special nonsense
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasField"])
+    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasDotField"])
