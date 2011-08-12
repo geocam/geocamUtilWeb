@@ -21,7 +21,7 @@ class JsonRpc2Validator(object):
     def validate(self, dataStr):
         try:
             data = json.loads(dataStr)
-        except ValueError as valerr:
+        except ValueError, valerr:
             print valerr
             raise JsonRpc2ComplianceException( "Could not parse data into json object: %s"%str(valerr) )
         
