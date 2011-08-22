@@ -335,7 +335,7 @@
                 $(".error", $(oAddNewRowForm)).html("");
 
                 _fnSetDisplayStart();
-                properties.fnOnAdded("success");
+                properties.fnOnAdded("success", data);
             }
         }
 
@@ -451,7 +451,7 @@
         }
 
         function fnOnAdding() { return true; }
-        function fnOnAdded(result) { }
+        function fnOnAdded(result, cellId) { }
 
         var oSettings;
         function _fnGetDisplayStart() {
