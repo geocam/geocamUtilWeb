@@ -58,7 +58,7 @@ def copyThumbnails(builder, inDir, outDir, nameTransform=None, reqSize=REQ_SIZE)
 
 def getOutPath(imPath, outputDir, angle):
     base, ext = os.path.splitext(os.path.basename(imPath))
-    base = re.sub(r'Point$', '', base)
+    base = re.sub(r'Point', '', base)
     return os.path.join(outputDir, '%s%03d%s' % (base, angle, ext))
 
 def buildAllDirections(builder, imPath, outputDir):
