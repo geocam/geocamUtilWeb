@@ -40,7 +40,11 @@ class Installer(object):
 
     def getFiles(self, src, suffix=''):
         path = self.joinNoTrailingSlash(src, suffix)
-        pathMode = os.stat(path)[stat.ST_MODE]
+        try:
+            pathMode = os.stat(path)[stat.ST_MODE]
+        except OSError:
+            # couldn't stat file, e.g. broken symlink, ignore it
+            return []
         if stat.S_ISREG(pathMode):
             return [suffix]
         elif stat.S_ISDIR(pathMode):
