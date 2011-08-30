@@ -171,41 +171,37 @@ def parseUploadTime(timeStr):
     # hm, nothing worked
     raise ValueError('could not parse datetime from %s' % timeStr)
 
-def testCase(input, now, intervalStart, correct):
-    nowDT = datetime.datetime.strptime(now, '%Y-%m-%d-%H:%M')
-    correctDT = datetime.datetime.strptime(correct, '%Y-%m-%d-%H:%M')
-    resultDT = parseDateTimeString(input, intervalStart, nowDT)
-    assert equalUpToSeconds(resultDT, correctDT)
+def getTimeShort(utcDt, tz=None, now=None):
+    if now == None:
+        now = datetime.datetime.utcnow()
+    diff = now - utcDt
+    diffSecs = diff.days * 24*60*60 + diff.seconds
+    diffMins = diffSecs // 60
 
-def test():
-    testCase(input = '2009-2-4-9:48',
-             now = '2009-02-04-09:48',
-             intervalStart = True,
-             correct = '2009-02-04-09:48')
-    testCase(input = '2-4-9:48',
-             now = '2009-02-04-09:48',
-             intervalStart = True,
-             correct = '2009-02-04-09:48')
-    testCase(input = '9:48',
-             now = '2009-02-04-09:48',
-             intervalStart = True,
-             correct = '2009-02-04-09:48')
-
-    testCase(input = '2009-2-4',
-             now = '2009-02-04-09:48',
-             intervalStart = True,
-             correct = '2009-02-04-00:00')
-    testCase(input = '2009-2-4',
-             now = '2009-02-04-09:48',
-             intervalStart = False,
-             correct = '2009-02-04-23:59')
-
-    testCase(input = '2009',
-             now = '2009-02-04-09:48',
-             intervalStart = True,
-             correct = '2009-01-01-00:00')
-    testCase(input = '2009',
-             now = '2009-02-04-09:48',
-             intervalStart = False,
-             correct = '2009-12-31-23:59')
-
+    if diffMins < 2:
+        return '1 minute ago'
+    elif diffMins < 60:
+        return '%s minutes ago' % diffMins
+    else:
+        diffHours = diffMins // 60
+        if tz:
+            localizedDt = pytz.utc.localize(utcDt).astimezone(tz)
+        else:
+            localizedDt = utcDt
+        if diffHours < 2:
+            return '1 hour ago'
+        elif diffHours < 24:
+            return '%s hours ago' % diffHours
+        else:
+            # zero out times so difference in days is right
+            utcDay = utcDt.replace(hour=0, minute=0, second=0, microsecond=0)
+            nowDay = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            diffDays = (nowDay - utcDay).days
+            if diffDays < 2:
+                return 'Yesterday'
+            elif diffDays < 5:
+                return '%s days ago' % diffDays
+            elif utcDt.year == now.year:
+                return localizedDt.strftime('%b %e')
+            else:
+                return localizedDt.strftime('%Y-%m-%d');
