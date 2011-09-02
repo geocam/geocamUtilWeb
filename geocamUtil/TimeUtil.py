@@ -184,10 +184,6 @@ def getTimeShort(utcDt, tz=None, now=None):
         return '%s minutes ago' % diffMins
     else:
         diffHours = diffMins // 60
-        if tz:
-            localizedDt = pytz.utc.localize(utcDt).astimezone(tz)
-        else:
-            localizedDt = utcDt
         if diffHours < 2:
             return '1 hour ago'
         elif diffHours < 24:
@@ -201,7 +197,12 @@ def getTimeShort(utcDt, tz=None, now=None):
                 return 'Yesterday'
             elif diffDays < 5:
                 return '%s days ago' % diffDays
-            elif utcDt.year == now.year:
-                return localizedDt.strftime('%b %e')
             else:
-                return localizedDt.strftime('%Y-%m-%d');
+                if tz:
+                    localizedDt = pytz.utc.localize(utcDt).astimezone(tz)
+                else:
+                    localizedDt = utcDt
+                if utcDt.year == now.year:
+                    return localizedDt.strftime('%b %e')
+                else:
+                    return localizedDt.strftime('%Y-%m-%d');
