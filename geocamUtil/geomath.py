@@ -164,3 +164,89 @@ class UtmProjector:
                      *D*D*D*D*D/120)/cos(phi1Rad))
             return (lonOrigin + RAD2DEG * dlon,
                     RAD2DEG * lat)
+
+def transformLonLatAltToEcef(lonLatAlt):
+    """
+    Transform tuple lon,lat,alt (WGS84 degrees, meters) to tuple ECEF
+    x,y,z (meters)
+    """
+    lonDeg, latDeg, alt = lonLatAlt
+    a, e2, f = WGS84_A, WGS84_E2, WGS84_F
+    lon = lonDeg * DEG2RAD
+    lat = latDeg * DEG2RAD
+    chi = sqrt(1-e2*sin(lat)**2)
+    q = (a/chi + alt) * cos(lat)
+    return (q * cos(lon),
+            q * sin(lon),
+            ((a*(1-e2) / chi) + alt) * sin(lat))
+
+def transformEcefToLonLatAlt(ecef):
+    """
+    Transform tuple ECEF x,y,z (meters) to tuple lon,lat,alt
+    (WGS84 degrees, meters)
+    
+    Uses Bowring's method as described on a Mathworks reference page
+    """
+    x, y, z = ecef
+    a, e2, f = WGS84_A, WGS84_E2, WGS84_F
+    lon = atan2(y, x)
+    s = sqrt(x**2 + y**2)
+    MAX_STEPS = 100
+    step = 0
+    latPrev = 0
+    converged = False
+    while not converged:
+        if step == 0:
+            beta = atan2(z, (1-f)*s) # initial guess
+        else:
+            beta = atan2((1-f)*sin(lat), cos(lat)) # improved guess
+        lat = atan2(z + (e2*(1-f)/(1-e2)) * a * sin(beta)**3,
+                    s - e2*a*cos(beta)**3)
+        if (lat-latPrev) < 1e-4:
+            converged = True
+        latPrev = lat
+        step += 1
+        if step > MAX_STEPS:
+            raise Exception("transformEcefToLonLatAlt: failed to converge after %d steps" % MAX_STEPS)
+    N = a / sqrt(1-e2*sin(lat)**2)
+    alt = s*cos(lat) + (z + e2*N*sin(lat))*sin(lat) - N
+    return (lon * RAD2DEG,
+            lat * RAD2DEG,
+            alt)
+
+def transformEcefToEnu(originLonLatAlt, ecef):
+    """
+    Transform tuple ECEF x,y,z (meters) to tuple E,N,U (meters).
+
+    Based on http://en.wikipedia.org/wiki/Geodetic_system
+    """
+    x, y, z = ecef
+    ox, oy, oz = transformLonLatAltToEcef(originLonLatAlt)
+    dx, dy, dz = (x-ox, y-oy, z-oz)
+    lonDeg, latDeg, alt = originLonLatAlt
+    lon = lonDeg * DEG2RAD
+    lat = latDeg * DEG2RAD
+    return (-sin(lon)*dx + cos(lon)*dy,
+            -sin(lat)*cos(lon)*dx - sin(lat)*sin(lon)*dy + cos(lat)*dz,
+            cos(lat)*cos(lon)*dx + cos(lat)*sin(lon)*dy + sin(lat)*dz)
+
+def transformEnuToEcef(originLonLatAlt, enu):
+    """
+    Transform tuple E,N,U (meters) to tuple ECEF x,y,z (meters).
+
+    Based on http://en.wikipedia.org/wiki/Geodetic_system
+    """
+    e, n, u = enu
+    lonDeg, latDeg, alt = originLonLatAlt
+    lon = lonDeg * DEG2RAD
+    lat = latDeg * DEG2RAD
+    ox, oy, oz = transformLonLatAltToEcef(originLonLatAlt)
+    return (ox + -sin(lon)*e - cos(lon)*sin(lat)*n + cos(lon)*cos(lat)*u,
+            oy + cos(lon)*e - sin(lon)*sin(lat)*n + cos(lat)*sin(lon)*u,
+            oz + cos(lat)*n + sin(lat)*u)
+
+def transformLonLatAltToEnu(originLonLatAlt, lonLatAlt):
+    return transformEcefToEnu(originLonLatAlt, transformLonLatAltToEcef(lonLatAlt))
+
+def transformEnuToLonLatAlt(originLonLatAlt, enu):
+    return transformEcefToLonLatAlt(transformEnuToEcef(originLonLatAlt, enu))
