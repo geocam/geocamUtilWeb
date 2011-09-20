@@ -970,4 +970,3 @@ parserG.add_option('-o', '--outputDir',
 
 if __name__ == "__main__":
     main()
-

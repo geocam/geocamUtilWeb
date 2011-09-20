@@ -183,7 +183,7 @@ def parseUploadTime(timeStr):
 
 def getTimeShort(utcDt, tz=None, now=None):
     # tell pylint not to complain about too many branches and return statements
-    # pylint: disable-msg=R0911,R0912
+    # pylint: disable=R0911,R0912
 
     if now == None:
         now = datetime.datetime.utcnow()

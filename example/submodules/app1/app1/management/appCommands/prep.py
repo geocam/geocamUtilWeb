@@ -8,9 +8,10 @@ from django.core.management.base import NoArgsCommand
 
 from geocamUtil.management import commandUtil
 
+
 class Command(NoArgsCommand):
     help = 'Example prep app command'
-    
+
     def handle_noargs(self, **options):
         print 'running app1 prep command'
         siteDir = commandUtil.getSiteDir()

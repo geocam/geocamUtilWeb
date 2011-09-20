@@ -4,7 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, include
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -15,13 +15,13 @@ urlpatterns = patterns('',
     # Example:
     # (r'^example/', include('example.foo.urls')),
 
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
+    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
-    
+
 )
 
 urlpatterns = urlpatterns + patterns('',
@@ -30,4 +30,3 @@ urlpatterns = urlpatterns + patterns('',
 #    (r'^data/(?P<path>.*)$', 'django.views.static.serve',
 #        {'document_root': settings.DATA_ROOT}),
     )
-

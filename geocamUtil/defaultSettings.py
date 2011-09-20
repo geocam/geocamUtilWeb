@@ -5,7 +5,7 @@
 # __END_LICENSE__
 
 # stop pylint from warning that these variable docstrings are "useless"
-# pylint: disable-msg=W0105
+# pylint: disable=W0105
 
 GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60 * 60
 """

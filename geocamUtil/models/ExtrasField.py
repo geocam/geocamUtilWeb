@@ -66,7 +66,7 @@ class ExtrasField(models.TextField):
                 assert type(values) == dict, 'expected a dictionary object, found a %s' % type(values).__name__
                 for key in values.keys():
                     assert type(key) in (unicode, str), 'expected unicode keys, found a %s' % type(key).__name__
-                extras.__dict__ = values  # pylint: disable-msg=W0201
+                extras.__dict__ = values  # pylint: disable=W0201
             except (ValueError, AssertionError), e:
                 raise ValidationError('Invalid JSON data in ExtrasField: %s' % e)
             return extras

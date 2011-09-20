@@ -5,7 +5,7 @@
 # __END_LICENSE__
 
 # stop pylint from warning us that we "aren't using" imported test cases
-# pylint: disable-msg=W0611
+# pylint: disable=W0611
 
 from geocamUtil.MultiSettingsTest import MultiSettingsTest
 from geocamUtil.anyjsonTest import AnyJsonTest

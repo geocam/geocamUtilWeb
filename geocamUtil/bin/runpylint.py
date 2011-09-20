@@ -5,9 +5,13 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+import sys
 import os
 
 from geocamUtil import settings
+
+CONFIG_FILE = os.path.join(settings.CHECKOUT_DIR, 'management', 'pylintrc.txt')
+DEFAULT_FLAGS = '-i y -r n -f parseable'
 
 
 def dosys(cmd):
@@ -19,12 +23,23 @@ def dosys(cmd):
 
 
 def runpylint(paths):
-    pylintrcPath = os.path.join(settings.CHECKOUT_DIR, 'management', 'pylintrc.txt')
-    if os.path.exists(pylintrcPath):
-        pylintrcFlag = ' --rcfile %s ' % pylintrcPath
+    if not paths:
+        paths = ['.']
+
+    # give helpful error if pylint is not installed
+    ret = os.system('pylint --help > /dev/null')
+    if ret != 0:
+        print >> sys.stderr, "\nWARNING: can't run pylint command -- try 'pip install pylint'\n"
+        sys.exit(1)
+
+    # use <site>/management/pylintrc.txt as rcfile if it exists
+    print 'checking for pylint flags in %s' % CONFIG_FILE
+    if os.path.exists(CONFIG_FILE):
+        flags = '--rcfile %s' % CONFIG_FILE
     else:
-        pylintrcFlag = ''
-    cmd = 'pylint -i y -r n -f parseable %s' % pylintrcFlag
+        flags = DEFAULT_FLAGS
+
+    cmd = 'pylint %s' % flags
     for path in paths:
         path = os.path.relpath(path)
         if os.path.isdir(path):
@@ -36,11 +51,7 @@ def runpylint(paths):
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog [dir1] [file2.py] ...')
-    opts, args = parser.parse_args()
-    if len(args) == 0:
-        paths = ['.']
-    else:
-        paths = args
+    _opts, args = parser.parse_args()
     runpylint(paths)
 
 if __name__ == '__main__':

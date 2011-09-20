@@ -7,6 +7,7 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read_file(filename):
     """Read a file into a string"""
     path = os.path.abspath(os.path.dirname(__file__))
@@ -20,19 +21,19 @@ def read_file(filename):
 DESC = " ".join(__import__('geocamUtil').__doc__.splitlines()).strip()
 
 setup(
-    name = "geocamUtilWeb",
-    version = __import__('geocamUtil').get_version().replace(' ', '-'),
-    url = 'http://github.com/geocam/geocamUtilWeb',
-    author = 'Trey Smith',
-    author_email = 'trey.smith@nasa.gov',
-    description = DESC,
-    long_description = read_file('README'),
-    packages = find_packages(),
-    include_package_data = True,
+    name="geocamUtilWeb",
+    version=__import__('geocamUtil').get_version().replace(' ', '-'),
+    url='http://github.com/geocam/geocamUtilWeb',
+    author='Trey Smith',
+    author_email='trey.smith@nasa.gov',
+    description=DESC,
+    long_description=read_file('README'),
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=read_file('requirements.txt'),
-    classifiers = [
+    classifiers=[
         'License :: OSI Approved :: NASA Open Source Agreement',
         'Framework :: Django',
     ],
-    test_suite = 'geocamUtil.tests',
+    test_suite='geocamUtil.tests',
 )

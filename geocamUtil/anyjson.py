@@ -12,7 +12,7 @@ from geocamUtil import anyjson as json
 """
 
 # tell pylint it's ok that we're importing wildcards
-# pylint: disable-msg=W0401
+# pylint: disable=W0401
 
 try:
     # user explicitly installed some version of simplejson module,

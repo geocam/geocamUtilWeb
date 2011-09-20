@@ -19,7 +19,7 @@ from geocamUtil import settings
 
 # stop pylint from warning about too many return statements; it's good
 # style in this case
-# pylint: disable-msg=R0911
+# pylint: disable=R0911
 
 
 def requestIsSecure(request):
@@ -142,7 +142,7 @@ class SecurityMiddleware(object):
         if isinstance(response, HttpResponseRedirect) and request.method == "POST":
             try:
                 redirectTo = request.POST.get('next', None)
-            except:  # pylint: disable-msg=W0702
+            except:  # pylint: disable=W0702
                 # probably badly formed request content -- log error and don't worry about it
                 errClass, errObject, errTB = sys.exc_info()[:3]
                 traceback.print_tb(errTB)
