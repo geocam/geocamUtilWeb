@@ -16,10 +16,12 @@ if uuid:
         return str(uuid.uuid4())
 else:
     import random
+
     def makeUuid():
         return '%04x-%02x-%02x-%02x-%06x' % (random.getrandbits(32), random.getrandbits(8),
                                              random.getrandbits(8), random.getrandbits(8),
                                              random.getrandbits(48))
+
 
 class UuidField(models.CharField):
     def __init__(self, *args, **kwargs):
@@ -27,7 +29,7 @@ class UuidField(models.CharField):
         kwargs.setdefault('editable', False)
         kwargs.setdefault('db_index', True)
         super(UuidField, self).__init__(self, *args, **kwargs)
-        
+
     def pre_save(self, model_instance, add):
         if add and not getattr(model_instance, self.attname):
             value = makeUuid()
@@ -36,14 +38,9 @@ class UuidField(models.CharField):
         else:
             return super(UuidField, self).pre_save(model_instance, add)
 
-HAVE_SOUTH = False
 try:
-    import south
-    HAVE_SOUTH = True
+    from south.modelsinspector import add_introspection_rules
+    # tell south it can freeze this field without any special nonsense
+    add_introspection_rules([], ["^geocamUtil\.models\.UuidField"])
 except ImportError:
     pass
-
-if HAVE_SOUTH:
-    # tell south it can freeze this field without any special nonsense
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^geocamUtil\.models\.UuidField"])

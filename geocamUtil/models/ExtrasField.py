@@ -8,22 +8,15 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from geocamUtil import anyjson as json
+from geocamUtil.models.ExtrasDotField import convertToDotDictRecurse
+
 
 class DotDict(dict):
     def __getattr__(self, attr):
         return self.get(attr, None)
-    __setattr__= dict.__setitem__
-    __delattr__= dict.__delitem__
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
 
-def convertToDotDictRecurse(struct):
-    if isinstance(struct, dict):
-        for k, v in struct.iteritems():
-            struct[k] = convertToDotDictRecurse(v)
-        return DotDict(struct)
-    elif isinstance(struct, list):
-        return [convertToDotDictRecurse(elt) for elt in struct]
-    else:
-        return struct
 
 class Extras(object):
     # At the moment this object exists pretty much solely to let you
@@ -44,12 +37,15 @@ class Extras(object):
         return DotDict(dict([(k, convertToDotDictRecurse(v))
                              for k, v in self.__dict__.iteritems()]))
 
+
 class ExtrasField(models.TextField):
-    '''A Django model field for storing extra schema-free data.  You can 
-    get and set arbitrary properties on the extra field, which can be 
-    comprised of strings, numbers, dictionaries, arrays, booleans, and 
-    None.  These properties are stored in the database as a JSON-encoded 
-    set of key-value pairs.'''
+    """
+    A Django model field for storing extra schema-free data.  You can
+    get and set arbitrary properties on the extra field, which can be
+    comprised of strings, numbers, dictionaries, arrays, booleans, and
+    None.  These properties are stored in the database as a JSON-encoded
+    set of key-value pairs.
+    """
 
     __metaclass__ = models.SubfieldBase
 
@@ -70,22 +66,17 @@ class ExtrasField(models.TextField):
                 assert type(values) == dict, 'expected a dictionary object, found a %s' % type(values).__name__
                 for key in values.keys():
                     assert type(key) in (unicode, str), 'expected unicode keys, found a %s' % type(key).__name__
-                extras.__dict__ = values
+                extras.__dict__ = values  # pylint: disable-msg=W0201
             except (ValueError, AssertionError), e:
-                raise ValidationError, 'Invalid JSON data in ExtrasField: %s' % e
+                raise ValidationError('Invalid JSON data in ExtrasField: %s' % e)
             return extras
 
     def get_db_prep_value(self, value, connection=None, prepared=False):
         return json.dumps(value.__dict__)
 
-HAVE_SOUTH = False
 try:
-    import south
-    HAVE_SOUTH = True
+    from south.modelsinspector import add_introspection_rules
+    # tell south it can freeze this field without any special nonsense
+    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasField"])
 except ImportError:
     pass
-
-if HAVE_SOUTH:
-    # tell south it can freeze this field without any special nonsense
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasField"])

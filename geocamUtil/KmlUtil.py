@@ -7,6 +7,7 @@
 import re
 from django.http import HttpResponse
 
+
 def wrapKmlHttp(text):
     wrapped = wrapKml(text)
     return ("""HTTP/1.0 200 OK\r
@@ -16,15 +17,18 @@ Expires: -1
 %s
 """ % wrapped)
 
+
 def wrapKmlDjango(text):
     return djangoResponse(wrapKml(text))
+
 
 def djangoResponse(wrappedText):
     return HttpResponse(wrappedText, mimetype='application/vnd.google-earth.kml+xml')
 
-def wrapKml(text, id=None):
-    if id:
-        text = re.sub('^<(\w+)>', '<\\1 id="%s">' % id, text)
+
+def wrapKml(text, docId=None):
+    if docId:
+        text = re.sub('^<(\w+)>', '<\\1 id="%s">' % docId, text)
     return ("""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.2"
      xmlns:gx="http://www.google.com/kml/ext/2.2"
@@ -34,18 +38,18 @@ def wrapKml(text, id=None):
 </kml>
 """ % text)
 
-def wrapKmlDocument(text, id=None):
-    if id:
+
+def wrapKmlDocument(text, docId=None):
+    if docId:
         return wrapKml("""
-  <Document id="%(id)s">
-    <name>%(id)s</name>
+  <Document id="%(docId)s">
+    <name>%(docId)s</name>
     %(text)s
   </Document>
-""" % dict(id=id, text=text))
+""" % dict(docId=docId, text=text))
     else:
         return wrapKml("""
   <Document>
     %s
   </Document>
 """ % text)
-

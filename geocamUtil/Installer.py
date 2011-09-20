@@ -16,6 +16,7 @@ from geocamUtil.Builder import Builder
 
 USE_SYMLINKS = True
 
+
 class Installer(object):
     def __init__(self, builder=None, logger=None):
         if builder == None:
@@ -52,7 +53,7 @@ class Installer(object):
                                    *[self.getFiles(src, os.path.join(suffix, f))
                                      for f in os.listdir(path)])
         else:
-            return [] # not a dir or regular file, ignore
+            return []  # not a dir or regular file, ignore
 
     def installFile(self, src, dst):
         if os.path.isdir(src):
@@ -85,14 +86,14 @@ class Installer(object):
                                    lambda: self.installFile(src1, dst1))
 
     def installRecurse(self, src, dst):
-        logging.info('installRecurse %s %s' % (src, dst))
+        logging.info('installRecurse %s %s', src, dst)
         self.installRecurse0(src, dst)
 
     def installRecurseGlob0(self, srcs, dst):
-        logging.debug('installRecurseGlob0 srcs=%s dst=%s' % (srcs, dst))
+        logging.debug('installRecurseGlob0 srcs=%s dst=%s', srcs, dst)
         for src in srcs:
             self.installRecurse0(src, os.path.join(dst, os.path.basename(src)))
 
     def installRecurseGlob(self, pat, dst):
-        logging.info('installRecurseGlob %s %s' % (pat, dst))
+        logging.info('installRecurseGlob %s %s', pat, dst)
         self.installRecurseGlob0(glob(pat), dst)

@@ -6,7 +6,8 @@
 
 import unittest
 
-from geomath import *
+import geomath
+
 
 class GeoMathTest(unittest.TestCase):
     def assertVectorAlmostEqual(self, v1, v2):
@@ -17,7 +18,7 @@ class GeoMathTest(unittest.TestCase):
     def test1(self):
         originLonLatAlt = (-121, 37, 0)
         enu = (1000, 1000, 1000)
-        lonLatAlt = transformEnuToLonLatAlt(originLonLatAlt, enu)
+        lonLatAlt = geomath.transformEnuToLonLatAlt(originLonLatAlt, enu)
         correct = (-120.98876595195931, 37.00900886849891, 1000.1569072734565)
         self.assertVectorAlmostEqual(lonLatAlt, correct)
 

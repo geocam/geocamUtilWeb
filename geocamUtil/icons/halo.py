@@ -10,9 +10,11 @@ from PIL import Image, ImageOps, ImageFilter
 
 DEFAULT_HALO_WIDTH = 0.1
 
+
 def autocrop(img):
-    r, g, b, a = img.split()
+    _, _, _, a = img.split()
     return img.crop(a.getbbox())
+
 
 def thresholdFunc(v, thresh):
     if v >= thresh:
@@ -20,23 +22,25 @@ def thresholdFunc(v, thresh):
     else:
         return 0
 
+
 def thresholdImage(img, thresh):
     return img.point(lambda v: thresholdFunc(v, thresh))
+
 
 def doAddHalo(inPath, outPath, width):
     im = Image.open(inPath)
     im.load()
     n = max(im.size)
     widthPixels = int(n * width)
-    padded = ImageOps.expand(im, border=3*widthPixels)
+    padded = ImageOps.expand(im, border=3 * widthPixels)
     _, _, _, paddedA = padded.split()
 
     halo = paddedA.copy()
-    numBlurIterations = int(widthPixels/2.5 + 0.5)
-    for i in xrange(0, numBlurIterations):
+    numBlurIterations = int(widthPixels / 2.5 + 0.5)
+    for _ in xrange(0, numBlurIterations):
         halo = halo.filter(ImageFilter.BLUR)
         halo = thresholdImage(halo, 20)
-        
+
     zero = Image.new('L', paddedA.size, 0)
     one = Image.new('L', paddedA.size, 256)
     result = Image.merge('RGBA', [one, zero, zero, halo])
@@ -48,6 +52,7 @@ def doAddHalo(inPath, outPath, width):
 
     autocrop(result).save(outPath)
 
+
 def addHalo(builder, inPath, outPath, width=DEFAULT_HALO_WIDTH):
     """
     Runs a builder rule that reads the image at inPath, which must be an
@@ -57,6 +62,7 @@ def addHalo(builder, inPath, outPath, width=DEFAULT_HALO_WIDTH):
     size (0..1).
     """
     builder.applyRule(outPath, [inPath], lambda: doAddHalo(inPath, outPath, width))
+
 
 def main():
     import optparse

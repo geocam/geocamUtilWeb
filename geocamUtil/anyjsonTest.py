@@ -11,6 +11,7 @@ import anyjson
 JSON_STRING = '{"a": 1, "b": "foo"}'
 JSON_OBJECT = dict(a=1, b='foo')
 
+
 class AnyJsonTest(unittest.TestCase):
     def test_dumps(self):
         self.assertEqual(JSON_STRING, anyjson.dumps(JSON_OBJECT))

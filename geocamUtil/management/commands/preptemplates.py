@@ -15,12 +15,14 @@ from django.conf import settings
 from geocamUtil.management import commandUtil
 from geocamUtil.Builder import Builder
 
+
 def dosys(cmd):
     print 'running:', cmd
     os.system(cmd)
 
+
 def fillTemplate(inputFile, outputFile, context):
-    logging.debug('rendering template %s to %s' % (inputFile, outputFile))
+    logging.debug('rendering template %s to %s', inputFile, outputFile)
     tmpl = Template(file(inputFile, 'r').read())
     text = tmpl.render(Context(context))
     outDir = os.path.dirname(outputFile)
@@ -28,9 +30,10 @@ def fillTemplate(inputFile, outputFile, context):
         os.makedirs(outDir)
     file(outputFile, 'w').write(text)
 
+
 class Command(NoArgsCommand):
     help = "Render site's management/preptemplates/* into build/preptemplates"
-    
+
     def handle_noargs(self, **options):
         siteDir = commandUtil.getSiteDir()
         builder = Builder()

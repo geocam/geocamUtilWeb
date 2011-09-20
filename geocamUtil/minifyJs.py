@@ -7,6 +7,7 @@
 import os
 import logging
 
+
 def minifyJsExecute(dst, srcPairs):
     # don't import unless minifyJsExecute is actually called (usually won't be)
     from slimit import minify
@@ -20,15 +21,16 @@ def minifyJsExecute(dst, srcPairs):
     for src, doMinify in srcPairs:
         text = file(src, 'r').read()
         if doMinify:
-            logging.debug('adding %s (with minify)' % src)
+            logging.debug('adding %s (with minify)', src)
             # mangling sometimes messes up exported identifiers, oh well
             out.write(minify(text, mangle=False))
         else:
-            logging.debug('adding %s (without minify)' % src)
+            logging.debug('adding %s (without minify)', src)
             out.write(text)
         out.write(';')
     out.close()
     os.rename(dstPart, dst)
+
 
 def minifyJs(builder, dst, srcPairs):
     srcs = [pr[0] for pr in srcPairs]

@@ -10,15 +10,19 @@ import sys
 import imp
 import re
 
+from django.core.management.base import BaseCommand
+
 STATUS_DIR_TEMPLATE = '%(siteDir)s/build/management/commandStatus/'
+
 
 def getSiteDir():
     # if DJANGO_SETTINGS_MODULE='geocamShare.settings', modImpPath='geocamShare'
     modImpPath = re.sub(r'\..*$', '', os.environ['DJANGO_SETTINGS_MODULE'])
-    dir = imp.find_module(modImpPath)[1]
-    if dir != '' and not dir.endswith('/'):
-        dir += '/'
-    return dir
+    d = imp.find_module(modImpPath)[1]
+    if d != '' and not d.endswith('/'):
+        d += '/'
+    return d
+
 
 def getConfirmation(description, default=True, auto=False):
     if default == True:
@@ -47,10 +51,11 @@ def getConfirmation(description, default=True, auto=False):
             elif response == 'n':
                 return False
 
+
 def getCommandStatusFileName(commandName):
     statusDir = STATUS_DIR_TEMPLATE % dict(siteDir=getSiteDir())
     return '%s%sStatus.txt' % (statusDir, commandName)
-    
+
 
 def getCommandStatus(commandName):
     statusName = getCommandStatusFileName(commandName)
@@ -59,17 +64,20 @@ def getCommandStatus(commandName):
     else:
         return None
 
+
 def writeStatusFile(path, text):
-    dir = os.path.dirname(path)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+    d = os.path.dirname(path)
+    if not os.path.exists(d):
+        os.makedirs(d)
     f = file(path, 'w')
     f.write(text + '\n')
     f.close()
 
+
 def writeCommandStatus(commandName, text):
     statusName = getCommandStatusFileName(commandName)
     writeStatusFile(statusName, text)
+
 
 def getConfirmationUseStatus(commandName, description):
     if getCommandStatus(commandName) == None:
@@ -78,3 +86,18 @@ def getConfirmationUseStatus(commandName, description):
         print ('Looks like command %s has finished already, based on file %s'
                % (commandName, getCommandStatusFileName(commandName)))
         return getConfirmation('%s (%s) anyway' % (description, commandName), default=False)
+
+
+class PathCommand(BaseCommand):
+    def handle(self, *args, **options):
+        if args:
+            # user specified apps to prep
+            impPaths = args
+        else:
+            # user did not specify, default to all apps in INSTALLED_APPS
+            from django.conf import settings
+            impPaths = settings.INSTALLED_APPS
+        self.handleImportPaths(impPaths, options)
+
+    def handleImportPaths(self, impPaths, options):
+        pass  # override in derived classes

@@ -9,9 +9,11 @@ from django.db import models
 from UuidField import UuidField
 from ExtrasField import ExtrasField
 
+
 class UuidExample(models.Model):
     """The sole purpose of this model is to test the UuidField class."""
     uuid = UuidField()
+
 
 class ExtrasExample(models.Model):
     """The sole purpose of this model is to test the ExtrasField class."""

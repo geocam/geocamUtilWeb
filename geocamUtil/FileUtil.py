@@ -6,18 +6,12 @@
 
 import os
 import glob
-import re
 import errno
-import datetime
-import time
-import tempfile
 
-import pytz
-
-from django.conf import settings
 
 class NoDataError(Exception):
     pass
+
 
 def importModuleByName(name):
     mod = __import__(name)
@@ -25,6 +19,7 @@ def importModuleByName(name):
     for comp in components[1:]:
         mod = getattr(mod, comp)
     return mod
+
 
 def getMiddleFileWithExtension(ext, path):
     allMatches = glob.glob('%s/*.%s' % (path, ext))
@@ -34,11 +29,12 @@ def getMiddleFileWithExtension(ext, path):
         raise NoDataError('no %s files in %s' % (ext, path))
     allMatches.sort()
     assert len(allMatches) > 0
-    return allMatches[len(allMatches)//2]
-    
-def mkdirP(dir):
+    return allMatches[len(allMatches) // 2]
+
+
+def mkdirP(d):
     try:
-        os.makedirs(dir)
+        os.makedirs(d)
     except OSError, err:
         if err.errno != errno.EEXIST:
             raise

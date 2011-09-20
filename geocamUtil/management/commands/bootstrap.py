@@ -6,8 +6,8 @@
 
 from optparse import make_option
 
-from django.core import management
 from django.core.management.base import BaseCommand
+
 
 class Command(BaseCommand):
     help = 'Bootstrap submodules and requirements'
@@ -22,7 +22,7 @@ class Command(BaseCommand):
                     default=False,
                     help='Answer yes to all yes-or-no questions'),
         )
-    
+
     def handle(self, *args, **options):
         # no op, by the time we get here bootstrapping is done
         pass

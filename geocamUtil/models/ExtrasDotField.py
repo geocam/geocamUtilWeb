@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 
 from geocamUtil import anyjson as json
 
+
 def convertToDotDictRecurse(struct):
     if isinstance(struct, dict):
         for k, v in struct.iteritems():
@@ -18,6 +19,7 @@ def convertToDotDictRecurse(struct):
         return [convertToDotDictRecurse(elt) for elt in struct]
     else:
         return struct
+
 
 class DotDict(dict):
     # At the moment this object exists pretty much solely to let you
@@ -35,15 +37,18 @@ class DotDict(dict):
         if attr in self._badFields:
             raise KeyError(attr)
         return self.get(attr, None)
-    __setattr__= dict.__setitem__
-    __delattr__= dict.__delitem__
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
 
 class ExtrasDotField(models.TextField):
-    '''A Django model field for storing extra schema-free data.  You can 
-    get and set arbitrary properties on the extra field, which can be 
-    comprised of strings, numbers, dictionaries, arrays, booleans, and 
-    None.  These properties are stored in the database as a JSON-encoded 
-    set of key-value pairs.'''
+    """
+    A Django model field for storing extra schema-free data.  You can
+    get and set arbitrary properties on the extra field, which can be
+    comprised of strings, numbers, dictionaries, arrays, booleans, and
+    None.  These properties are stored in the database as a JSON-encoded
+    set of key-value pairs.
+    """
 
     __metaclass__ = models.SubfieldBase
 
@@ -66,20 +71,15 @@ class ExtrasDotField(models.TextField):
                     assert type(key) in (unicode, str), 'expected unicode or str keys, found a %s' % type(key).__name__
                 extras = values
             except (ValueError, AssertionError), e:
-                raise ValidationError, 'Invalid JSON data in ExtrasDotField: %s' % e
+                raise ValidationError('Invalid JSON data in ExtrasDotField: %s' % e)
             return extras
 
     def get_db_prep_value(self, value, connection=None, prepared=False):
         return str(value)
 
-HAVE_SOUTH = False
 try:
-    import south
-    HAVE_SOUTH = True
+    from south.modelsinspector import add_introspection_rules
+    # tell south it can freeze this field without any special nonsense
+    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasDotField"])
 except ImportError:
     pass
-
-if HAVE_SOUTH:
-    # tell south it can freeze this field without any special nonsense
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasDotField"])

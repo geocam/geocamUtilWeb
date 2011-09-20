@@ -7,7 +7,6 @@
 import time
 import datetime
 import calendar
-import sys
 import re
 
 import iso8601
@@ -18,29 +17,35 @@ except ImportError:
     # with older installs we shouldn't require it
     pass
 
+
 def utcToTimeZone(dt, tz):
     # returns localized datetime in given timezone
     if isinstance(tz, (str, unicode)):
         tz = pytz.timezone(tz)
     return dt.replace(tzinfo=pytz.utc).astimezone(tz)
 
+
 def timeZoneToUtc(dt):
     # returns UTC datetime with no tzinfo so it can be saved without further
     # modification using Django ORM
     return dt.astimezone(pytz.utc).replace(tzinfo=None)
 
+
 def localDateTimeToPosix(localDT):
-    return time.mktime(localDT.timetuple()) + 1e-6*localDT.microsecond
+    return time.mktime(localDT.timetuple()) + 1e-6 * localDT.microsecond
+
 
 def utcDateTimeToPosix(utcDT):
-    return calendar.timegm(utcDT.timetuple()) + 1e-6*utcDT.microsecond
+    return calendar.timegm(utcDT.timetuple()) + 1e-6 * utcDT.microsecond
+
 
 def posixToUtcDateTime(posixTime):
     return datetime.datetime.utcfromtimestamp(posixTime)
 
+
 def posixToLocalDateTime(posixTime):
     return datetime.datetime.fromtimestamp(posixTime)
-    
+
 
 def localToUtcTime(localDT):
     """for the record, this is ridiculous"""
@@ -48,14 +53,17 @@ def localToUtcTime(localDT):
     utcDT = posixToUtcDateTime(posixTime)
     return utcDT
 
+
 def utcToLocalTime(utcDT):
     """let's see how many time-related modules we can import"""
     posixTime = utcDateTimeToPosix(utcDT)
     localDT = posixToLocalDateTime(posixTime)
     return localDT
 
+
 def utcNow():
     return posixToUtcDateTime(time.time())
+
 
 def formatUtcTimeAsAbbreviatedLocalTime(utcDT):
     try:
@@ -67,7 +75,7 @@ def formatUtcTimeAsAbbreviatedLocalTime(utcDT):
     if localDT.toordinal() == now.toordinal():
         # if today, leave off date
         return 'Today %s' % localDT.strftime('%H:%M')
-    elif localDT.toordinal() == now.toordinal()-1:
+    elif localDT.toordinal() == now.toordinal() - 1:
         # if yesterday, express date as 'Yesterday'
         return 'Yesterday %s' % localDT.strftime('%H:%M')
     elif localDT.year == now.year:
@@ -77,11 +85,13 @@ def formatUtcTimeAsAbbreviatedLocalTime(utcDT):
         # if different year, express date as '2007 Jan 01'
         return localDT.strftime('%Y %b %d %H:%M')
 
+
 def parse0(s):
     try:
         return datetime.datetime.strptime(s, '%Y-%m-%d-%H:%M')
     except ValueError:
         return None
+
 
 def stringToLocalDT(s, intervalStart=True, now=None):
     """Converts @s to corresponding local datetime.  Legal string
@@ -98,7 +108,7 @@ def stringToLocalDT(s, intervalStart=True, now=None):
     bigDefaults = now
     if intervalStart:
         # 1901 is min valid value for strftime
-        littleDefaults = datetime.datetime.min.replace(year = 1901)
+        littleDefaults = datetime.datetime.min.replace(year=1901)
     else:
         littleDefaults = datetime.datetime.max
 
@@ -133,12 +143,10 @@ def stringToLocalDT(s, intervalStart=True, now=None):
 
     raise ValueError("times must be formatted as YYYY-mm-dd-HH:MM, mm-dd-HH:MM, HH:MM, YYYY-mm-dd, or YYYY")
 
+
 def stringToUtcDT(s, intervalStart=True, now=None):
     return localToUtcTime(stringToLocalDT(s, intervalStart, now))
 
-def equalUpToSeconds(a, b):
-    return (a.replace(second=0, microsecond=0)
-            == b.replace(second=0, microsecond=0))
 
 def parseCsvTime(timeStr):
     '''Parse times GeoCam Share 2009 placed in export CSV files.  The
@@ -146,6 +154,7 @@ def parseCsvTime(timeStr):
     # strip microseconds if present
     timeStr = re.sub(r'\.\d+$', '', timeStr)
     return datetime.datetime.strptime(timeStr, '%Y-%m-%d %H:%M:%S')
+
 
 def parseUploadTime(timeStr):
     try:
@@ -171,11 +180,15 @@ def parseUploadTime(timeStr):
     # hm, nothing worked
     raise ValueError('could not parse datetime from %s' % timeStr)
 
+
 def getTimeShort(utcDt, tz=None, now=None):
+    # tell pylint not to complain about too many branches and return statements
+    # pylint: disable-msg=R0911,R0912
+
     if now == None:
         now = datetime.datetime.utcnow()
     diff = now - utcDt
-    diffSecs = diff.days * 24*60*60 + diff.seconds
+    diffSecs = diff.days * 24 * 60 * 60 + diff.seconds
     diffMins = diffSecs // 60
 
     if diffMins < 2:
@@ -205,4 +218,4 @@ def getTimeShort(utcDt, tz=None, now=None):
                 if utcDt.year == now.year:
                     return localizedDt.strftime('%b %e')
                 else:
-                    return localizedDt.strftime('%Y-%m-%d');
+                    return localizedDt.strftime('%Y-%m-%d')

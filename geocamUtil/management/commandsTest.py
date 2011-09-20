@@ -11,9 +11,11 @@ from django.core import management
 
 from geocamUtil.management import commandUtil
 
+
 def dosys(cmd):
     print 'running:', cmd
     os.system(cmd)
+
 
 class CollectReqsTest(TestCase):
     def setUp(self):
@@ -21,26 +23,28 @@ class CollectReqsTest(TestCase):
         self.rfile = '%s/build/management/appRequirements.txt' % self.siteDir
         os.system('rm -f %s' % self.rfile)
         os.environ['TEST_SUPPRESS_STDERR'] = '1'
-    
+
     def test_collect(self):
         management.call_command('collectreqs')
         self.assert_(os.path.exists(self.rfile))
         self.assertEquals(9, len(file(self.rfile, 'r').read().splitlines()))
 
+
 class InstallReqsTest(TestCase):
     def tearDown(self):
-        needSudo = not os.environ.has_key('VIRTUALENV')
+        needSudo = 'VIRTUALENV' not in os.environ
         if needSudo:
             sudoStr = 'sudo '
         else:
             sudoStr = ''
         dosys('%spip uninstall dutest electruth' % sudoStr)
-    
+
     def test_install(self):
         management.call_command('installreqs')
         # test fails if the following imports fail
-        import dutest
-        import electruth
+        import dutest as _
+        import electruth as _
+
 
 class PrepTemplatesTest(TestCase):
     def assertExists(self, f):
@@ -58,6 +62,7 @@ class PrepTemplatesTest(TestCase):
         self.assertExists('%sfoo.conf' % self.ptDir)
         self.assertExists('%sbar.conf' % self.ptDir)
 
+
 class PrepAppsTest(TestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
@@ -72,6 +77,7 @@ class PrepAppsTest(TestCase):
         management.call_command('prepapps')
         self.assert_(os.path.exists(self.ps1))
         self.assert_(os.path.exists(self.ps2))
+
 
 class CollectMediaTest(TestCase):
     def setUp(self):

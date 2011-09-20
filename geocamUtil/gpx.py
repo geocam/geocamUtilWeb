@@ -11,9 +11,11 @@ import iso8601
 
 from geocamUtil import anyjson as json
 
+
 class RaiseValueError:
     pass
 RAISE_VALUE_ERROR = RaiseValueError()
+
 
 def getChild(node, name, dflt=RAISE_VALUE_ERROR, ns=None):
     # getElementsByTagName() returns a list of descendant nodes with
@@ -34,6 +36,7 @@ def getChild(node, name, dflt=RAISE_VALUE_ERROR, ns=None):
     else:
         return dflt
 
+
 def getChildText(node, name, dflt=RAISE_VALUE_ERROR, ns=None):
     try:
         child = getChild(node, name, ns=ns)
@@ -45,35 +48,41 @@ def getChildText(node, name, dflt=RAISE_VALUE_ERROR, ns=None):
     else:
         return getText(child)
 
+
 def getText(node):
     rc = ""
     for node in node.childNodes:
         if node.nodeType == node.TEXT_NODE:
             rc = rc + node.data
     return rc
-        
+
+
 def getFloat(node):
     return float(getText(node))
 
-def floatOrNone(str):
-    if str == None:
+
+def floatOrNone(s):
+    if s == None:
         return None
     else:
-        return float(str)
+        return float(s)
+
 
 def getFloatFromAttr(node, name):
     return float(node.attributes[name].value)
+
 
 class RoundingEncoder(json.JSONEncoder):
     def __init__(self, decimalPlaces=6, **kwargs):
         self.roundingFormat = '%%.%df' % decimalPlaces
         super(RoundingEncoder, self).__init__(**kwargs)
-        
+
     def _iterencode(self, o, markers=None):
         if isinstance(o, float):
             return self.roundingFormat % o
         else:
-            return super(RoundingEncoder, self)._iterencode(o, markers);
+            return super(RoundingEncoder, self)._iterencode(o, markers)
+
 
 class Bbox:
     def __init__(self, dim=2):
@@ -93,6 +102,7 @@ class Bbox:
 
     def asList(self):
         return self.minVal + self.maxVal
+
 
 class TimeRange:
     def __init__(self):
@@ -117,6 +127,7 @@ class TimeRange:
             return [self.minTime, self.maxTime]
         else:
             return None
+
 
 class TrackLog:
     def __init__(self, tracks=None):
@@ -148,7 +159,6 @@ class TrackLog:
         return rng
 
     def debugPrint(self):
-        print 'icon=%s lineStyle=%s lineColor=%s' % (self.icon, self.lineStyle, self.lineColor)
         print 'timeRange=%s' % (self.getTimeRange().asList())
         print 'bbox=%s' % (self.getBbox().asList())
         print self.geoJsonString()
@@ -186,7 +196,8 @@ class TrackLog:
 
     @staticmethod
     def parseGpxFile(gpxPath):
-        return TrackLog.parseGpxString(file(gpxPath, 'r').read())        
+        return TrackLog.parseGpxString(file(gpxPath, 'r').read())
+
 
 class Track:
     def __init__(self, icon=None, lineColor=None, lineStyle=None, pts=None):
@@ -210,6 +221,7 @@ class Track:
             rng.addTime(p.timestamp)
         return rng
 
+
 class TrackPoint:
     def __init__(self, lat=None, lon=None, ele=None, timestamp=None):
         self.lat = lat
@@ -220,15 +232,16 @@ class TrackPoint:
     def geoJson(self):
         return [self.lon, self.lat, self.ele]
 
+
 def main():
     import optparse
     parser = optparse.OptionParser('usage: gpx <1.gpx> [2.gpx ...]')
-    opts, args = parser.parse_args()
+    _, args = parser.parse_args()
     if not args:
         parser.error('please specify a file to parse')
     for arg in args:
         TrackLog.parseGpxFile(arg).debugPrint()
-        
+
 
 if __name__ == '__main__':
     main()

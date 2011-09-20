@@ -4,14 +4,15 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+"""
+geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.
+"""
+
 import django.conf
 
 from geocamUtil.MultiSettings import MultiSettings
 from geocamUtil import defaultSettings
 
-"""
-geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.
-"""
 __version_info__ = {
     'major': 0,
     'minor': 1,
@@ -20,12 +21,13 @@ __version_info__ = {
     'serial': 1
 }
 
+
 def get_version():
     """
     Return the formatted version information
     """
     vers = ["%(major)i.%(minor)i" % __version_info__, ]
-    
+
     if __version_info__['micro']:
         vers.append(".%(micro)i" % __version_info__)
     if __version_info__['releaselevel'] != 'final':

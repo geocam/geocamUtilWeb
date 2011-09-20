@@ -6,30 +6,20 @@
 
 import logging
 import unittest
-import tempfile
-import shutil
 import os
 
 from geocamUtil.icons import svg
 from geocamUtil.Builder import Builder
+from geocamUtil.icons import rotateTest
 
-class IconsRotateTest(unittest.TestCase):
-    def setUp(self):
-        self.outDir = tempfile.mkdtemp() + os.path.sep
 
-    def tearDown(self):
-        shutil.rmtree(self.outDir)
-
-    def assertExists(self, path):
-        logging.debug('assertExists %s' % path)
-        self.assert_(os.path.exists(path))
-    
+class IconsSvgTest(rotateTest.IconsTest):
     def test_buildIcon(self):
         thisDir = os.path.dirname(os.path.abspath(__file__))
         srcImage = '%s/media_src/icons/example.svg' % os.path.dirname(thisDir)
 
         builder = Builder()
-        logging.debug('buildIcon srcImage=%s outDir=%s' % (srcImage, self.outDir))
+        logging.debug('buildIcon srcImage=%s outDir=%s', srcImage, self.outDir)
         svg.buildIcon(builder, srcImage, outputDir=self.outDir)
         self.assertExists('%sexample.png' % self.outDir)
         self.assertExists('%sexamplePoint.png' % self.outDir)

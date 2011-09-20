@@ -4,21 +4,28 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import random, StringIO
+import random
+import StringIO
+
 
 class MimeMultipartFormData:
     def __init__(self, **kwargs):
         self._boundary = '%032x' % random.getrandbits(128)
         self._fields = kwargs.get('fields', {})
         self._files = kwargs.get('files', [])
+
     def __getitem__(self, k):
         return self._fields[k]
+
     def __setitem__(self, k, v):
         self._fields[k] = v
+
     def getHeaders(self):
         return {'Content-Type': 'multipart/form-data; boundary=%s' % self._boundary}
+
     def addFile(self, name, filename, data, contentType='text/plain'):
         self._files.append((name, filename, data, contentType))
+
     def writePostData(self, stream):
         for k, v in self._fields.iteritems():
             stream.write('\r\n--%s\r\n' % self._boundary)
@@ -34,6 +41,7 @@ class MimeMultipartFormData:
             stream.write('\r\n')
             stream.write(data)
         stream.write('\r\n--%s--\r\n' % self._boundary)
+
     def getPostData(self):
         stream = StringIO.StringIO()
         self.writePostData(stream)

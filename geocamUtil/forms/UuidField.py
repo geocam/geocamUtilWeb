@@ -5,8 +5,9 @@
 # __END_LICENSE__
 
 import re
-from django.forms import fields, widgets
+from django.forms import fields
 from django.core.exceptions import ValidationError
+
 
 class UuidField(fields.CharField):
     """Accepts an input UUID in the format you would get

@@ -6,44 +6,51 @@
 
 import unittest
 import pytz
+import datetime
 
-from geocamUtil.TimeUtil import *
+from geocamUtil.TimeUtil import getTimeShort, stringToLocalDT
+
+
+def equalUpToSeconds(a, b):
+    return (a.replace(second=0, microsecond=0)
+            == b.replace(second=0, microsecond=0))
+
 
 class TimeUtilTest(unittest.TestCase):
-    def parseCase(self, input, now, intervalStart, correct):
+    def parseCase(self, inp, now, intervalStart, correct):
         nowDT = datetime.datetime.strptime(now, '%Y-%m-%d-%H:%M')
         correctDT = datetime.datetime.strptime(correct, '%Y-%m-%d-%H:%M')
-        resultDT = stringToLocalDT(input, intervalStart, nowDT)
+        resultDT = stringToLocalDT(inp, intervalStart, nowDT)
         self.assert_(equalUpToSeconds(resultDT, correctDT))
 
     def test_stringToLocalDT(self):
-        self.parseCase(input='2009-2-4-9:48',
+        self.parseCase(inp='2009-2-4-9:48',
                        now='2009-02-04-09:48',
                        intervalStart=True,
                        correct='2009-02-04-09:48')
-        self.parseCase(input='2-4-9:48',
+        self.parseCase(inp='2-4-9:48',
                        now='2009-02-04-09:48',
                        intervalStart=True,
                        correct='2009-02-04-09:48')
-        self.parseCase(input='9:48',
+        self.parseCase(inp='9:48',
                        now='2009-02-04-09:48',
                        intervalStart=True,
                        correct='2009-02-04-09:48')
-        
-        self.parseCase(input='2009-2-4',
+
+        self.parseCase(inp='2009-2-4',
                        now='2009-02-04-09:48',
                        intervalStart=True,
                        correct='2009-02-04-00:00')
-        self.parseCase(input='2009-2-4',
+        self.parseCase(inp='2009-2-4',
                        now='2009-02-04-09:48',
                        intervalStart=False,
                        correct='2009-02-04-23:59')
-        
-        self.parseCase(input='2009',
+
+        self.parseCase(inp='2009',
                        now='2009-02-04-09:48',
                        intervalStart=True,
                        correct='2009-01-01-00:00')
-        self.parseCase(input='2009',
+        self.parseCase(inp='2009',
                        now='2009-02-04-09:48',
                        intervalStart=False,
                        correct='2009-12-31-23:59')

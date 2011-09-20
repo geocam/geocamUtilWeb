@@ -5,25 +5,14 @@
 # __END_LICENSE__
 
 import logging
-from glob import glob
-
-from django.core.management.base import BaseCommand
 
 from geocamUtil.management import commandUtil
 
-class Command(BaseCommand):
+
+class Command(commandUtil.PathCommand):
     help = 'Execute management/appCommands/prep.py for each app in the site'
 
-    def handle(self, *args, **options):
-        from django.db import models
-        if args:
-            # user specified apps to prep
-            impPaths = args
-        else:
-            # user did not specify, default to all apps in INSTALLED_APPS
-            from django.conf import settings
-            impPaths = settings.INSTALLED_APPS
-
+    def handleImportPaths(self, impPaths, options):
         for impPath in impPaths:
             prepImpPath = '%s.management.appCommands.prep' % impPath
 
@@ -33,7 +22,8 @@ class Command(BaseCommand):
                 appPrepMod = None
 
             if not appPrepMod:
-                logging.debug('skipping %s, could not import %s (check for __init__.py files in directory hierarchy)' % (impPath, prepImpPath))
+                logging.debug('skipping %s, could not import %s (check for __init__.py files in directory hierarchy)',
+                              impPath, prepImpPath)
                 continue
 
             cmd = appPrepMod.Command()

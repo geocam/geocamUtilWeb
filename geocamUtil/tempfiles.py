@@ -15,12 +15,14 @@ import sys
 from geocamUtil import FileUtil
 from geocamUtil import settings
 
+
 def getTempName(prefix, suffix=''):
     return '%s/%s-%s-%s%s' % (settings.TMP_DIR,
                               prefix,
                               time.strftime('%Y-%m-%d-%H%M'),
                               '%04x' % random.getrandbits(16),
                               suffix)
+
 
 def deleteStaleFiles():
     files = glob('%s/*' % settings.TMP_DIR)
@@ -30,21 +32,24 @@ def deleteStaleFiles():
             and not f.endswith('/README.txt')):
             try:
                 os.unlink(f)
-            except OSError, e:
+            except OSError:
                 traceback.print_exc()
-                print >>sys.stderr, '[tempfiles.deleteStaleFiles: could not unlink %s]' % f
+                print >> sys.stderr, '[tempfiles.deleteStaleFiles: could not unlink %s]' % f
+
 
 def makeTempDir(prefix):
-    dir = getTempName(prefix)
+    d = getTempName(prefix)
     if not os.path.exists(settings.TMP_DIR):
         FileUtil.mkdirP(settings.TMP_DIR)
         os.system('chmod go+rw %s' % settings.TMP_DIR)
     deleteStaleFiles()
-    FileUtil.mkdirP(dir)
-    return dir
+    FileUtil.mkdirP(d)
+    return d
+
 
 def initZipDir(prefix):
     return makeTempDir(prefix)
+
 
 def finishZipDir(zipDir):
     zipFile = '%s.zip' % zipDir

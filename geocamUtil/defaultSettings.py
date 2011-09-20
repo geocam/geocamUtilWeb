@@ -4,7 +4,10 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60*60
+# stop pylint from warning that these variable docstrings are "useless"
+# pylint: disable-msg=W0105
+
+GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60 * 60
 """
 The age at which a geocamUtil.tempfiles file becomes "stale".  When
 tempfiles detects a stale file in its directory it will be deleted.

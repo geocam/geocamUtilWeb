@@ -8,10 +8,12 @@ import unittest
 
 from MultiSettings import MultiSettings
 
+
 class Container(object):
     def __init__(self, **kwargs):
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
+
 
 class MultiSettingsTest(unittest.TestCase):
     def setUp(self):

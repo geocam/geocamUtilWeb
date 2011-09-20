@@ -11,11 +11,13 @@ import tempfile
 
 from Installer import Installer
 
+
 def touchFile(path):
-    dir = os.path.dirname(path)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+    d = os.path.dirname(path)
+    if not os.path.exists(d):
+        os.makedirs(d)
     file(path, 'w').close()
+
 
 class InstallerTest(unittest.TestCase):
     def setUp(self):

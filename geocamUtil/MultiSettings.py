@@ -6,6 +6,7 @@
 
 import itertools
 
+
 class MultiSettings(object):
     """
     A settings container object built out of an ordered list of

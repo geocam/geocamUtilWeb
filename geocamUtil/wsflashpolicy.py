@@ -3,13 +3,17 @@
 import optparse
 import sys
 import signal
-import socket
 import SocketServer
 
-class FlashPolicyServer(SocketServer.BaseRequestHandler):    
+
+class FlashPolicyServer(SocketServer.BaseRequestHandler):
+    def __init__(self, *args, **kwargs):
+        SocketServer.BaseRequestHandler.__init__(self, *args, **kwargs)
+        self.data = None
+
     def handle(self):
         policyText = '<?xml version="1.0"?><cross-domain-policy><allow-access-from domain="%s" to-ports="%s" /></cross-domain-policy>' % (FlashPolicyServer.allowedDomain, FlashPolicyServer.allowedPort)
-        
+
         self.data = self.request.recv(1024).strip()
         print "%s wrote:" % self.client_address[0]
         print self.data
@@ -20,9 +24,12 @@ class FlashPolicyServer(SocketServer.BaseRequestHandler):
             print 'sending policy: %s' % policyText
             self.request.send(policyText)
 
+
 class Usage(Exception):
-    def __init__(self,msg):
+    def __init__(self, msg):
+        super(Usage, self).__init__()
         self.msg = msg
+
 
 def main():
     try:
@@ -32,7 +39,7 @@ def main():
         parser.add_option('-p', '--bind-port', dest='bport', help="Port to which server should bind")
         parser.add_option('-d', '--allowed-domains', dest='ahosts', help="List of domains to which flash is allowed to connect")
         parser.add_option('-o', '--allowed-ports', dest='aports', help="List of ports to which flash is allowed to connect")
-        (options, args) = parser.parse_args()
+        options, _ = parser.parse_args()
     except optparse.OptionError, msg:
         raise Usage(msg)
 
@@ -61,7 +68,7 @@ def main():
 
     server = SocketServer.TCPServer((bhost, bport), FlashPolicyServer)
 
-    def signal_handler(signal, frame):
+    def signal_handler(sig, frame):
         print "Caught Ctrl+C, shutting down..."
         sys.exit()
     signal.signal(signal.SIGINT, signal_handler)

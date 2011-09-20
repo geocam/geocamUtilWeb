@@ -9,16 +9,18 @@ import tempfile
 import unittest
 import shutil
 import time
-import logging
 
 from Builder import Builder
+
 
 def catFiles(dst, srcs):
     srcStr = ' '.join(srcs)
     os.system('cat %s > %s' % (srcStr, dst))
 
+
 def countLines(path):
     return len(file(path, 'r').read().splitlines())
+
 
 class BuilderTest(unittest.TestCase):
     def getPath(self, name):
@@ -38,11 +40,11 @@ class BuilderTest(unittest.TestCase):
 
         # make x appear to be written in the past so it needs to be built
         file(self.getPath('x'), 'w').write('x\n')
-        os.utime(self.getPath('x'), (now-1000, now-1000))
+        os.utime(self.getPath('x'), (now - 1000, now - 1000))
 
         # make y appear to be written in the future so it is definitely up to date
         file(self.getPath('y'), 'w').write('y\n')
-        os.utime(self.getPath('y'), (now+1000, now+1000))
+        os.utime(self.getPath('y'), (now + 1000, now + 1000))
 
     def tearDown(self):
         shutil.rmtree(self.tmpDir)

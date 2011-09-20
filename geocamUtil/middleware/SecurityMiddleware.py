@@ -10,7 +10,6 @@ import traceback
 import base64
 
 from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, get_host
 from django.core.urlresolvers import resolve
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -18,10 +17,15 @@ from django.utils.http import urlquote
 
 from geocamUtil import settings
 
+# stop pylint from warning about too many return statements; it's good
+# style in this case
+# pylint: disable-msg=R0911
+
+
 def requestIsSecure(request):
     if request.is_secure():
         return True
-    
+
     # Handle forwarded SSL (used at Webfaction)
     if 'HTTP_X_FORWARDED_SSL' in request.META:
         return request.META['HTTP_X_FORWARDED_SSL'] == 'on'
@@ -30,6 +34,7 @@ def requestIsSecure(request):
         return request.META['HTTP_X_SSL_REQUEST'] == '1'
 
     return False
+
 
 # http://stackoverflow.com/questions/2164069/best-way-to-make-djangos-login-required-the-default
 # http://stackoverflow.com/questions/1548210/how-to-force-the-use-of-ssl-for-some-url-of-my-django-application
@@ -44,7 +49,7 @@ class SecurityMiddleware(object):
         # require SSL for basic auth -- avoid clients sending passwords in cleartext
         if not requestIsSecure(request) and settings.GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS:
             return False
-        
+
         if 'HTTP_AUTHORIZATION' not in request.META:
             return False
 
@@ -74,7 +79,7 @@ class SecurityMiddleware(object):
 
     def _djangoAuthenticate(self, request):
         return request.user.is_authenticated()
-    
+
     def _djangoChallenge(self, request):
         loginUrlWithoutScriptName = '/' + settings.LOGIN_URL[len(settings.SCRIPT_NAME):]
         loginTuple = resolve(loginUrlWithoutScriptName)
@@ -93,7 +98,7 @@ class SecurityMiddleware(object):
 
     def _digestAuthenticate(self, request):
         return self._digestAuthenticator.authenticate(request)
-    
+
     def _digestChallenge(self, request):
         return self._digestAuthenticator.build_challenge_response()
 
@@ -137,13 +142,13 @@ class SecurityMiddleware(object):
         if isinstance(response, HttpResponseRedirect) and request.method == "POST":
             try:
                 redirectTo = request.POST.get('next', None)
-            except:
+            except:  # pylint: disable-msg=W0702
                 # probably badly formed request content -- log error and don't worry about it
                 errClass, errObject, errTB = sys.exc_info()[:3]
                 traceback.print_tb(errTB)
-                print >>sys.stderr, '%s.%s: %s' % (errClass.__module__,
-                                                   errClass.__name__,
-                                                   str(errObject))
+                print >> sys.stderr, '%s.%s: %s' % (errClass.__module__,
+                                                    errClass.__name__,
+                                                    str(errObject))
                 return response
             if (redirectTo and redirectTo.endswith('?protocol=http')):
                 initUrl = response['Location']
@@ -151,7 +156,7 @@ class SecurityMiddleware(object):
                 url = re.sub(r'^https:', 'http:', url)
                 url = re.sub(r'\?protocol=http$', '', url)
                 response['Location'] = url
-                print >>sys.stderr, 'process_response: redirectTo=%s initUrl=%s url=%s' % (redirectTo, initUrl, url)
+                print >> sys.stderr, 'process_response: redirectTo=%s initUrl=%s url=%s' % (redirectTo, initUrl, url)
         return response
 
     def _redirect(self, request, secure):
@@ -159,8 +164,8 @@ class SecurityMiddleware(object):
             raise RuntimeError(
                 """Django can't perform a SSL redirect while maintaining POST data.
                 Please structure your views so that redirects only occur during GETs.""")
-        
+
         protocol = secure and "https" or "http"
-        
+
         newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
         return HttpResponsePermanentRedirect(newurl)

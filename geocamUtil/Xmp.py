@@ -4,10 +4,12 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+import sys
 import os
 import re
 from cStringIO import StringIO
 import tempfile
+import traceback
 
 import rdflib
 from rdflib.Graph import Graph
@@ -19,12 +21,14 @@ from django.conf import settings
 
 IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png')
 
+
 def findImageName(xmpName):
     base = os.path.splitext(xmpName)[0]
     for ext in IMAGE_EXTENSIONS:
         if os.path.exists(base + ext):
             return base + ext
     raise Exception('no image corresponding to xmp file %s' % xmpName)
+
 
 class Xmp:
     def __init__(self, fname):
@@ -34,7 +38,7 @@ class Xmp:
         else:
             self.parseXmp(fname)
             self.xmpName = fname
-            
+
     def parseImageHeader(self, fname):
         fd, xmpFname = tempfile.mkstemp('-parseImageHeader.xmp')
         os.close(fd)
@@ -43,9 +47,9 @@ class Xmp:
         self.parseXmp(xmpFname)
         try:
             os.unlink(xmpFname)
-        except OSError, e:
+        except OSError:
             traceback.print_exc()
-            print >>sys.stderr, '[parseImageHeader: could not delete %s]' % xmpFname
+            print >> sys.stderr, '[parseImageHeader: could not delete %s]' % xmpFname
 
     def parseXmp(self, xmpFile):
         xmp = file(xmpFile, 'r').read()
@@ -54,7 +58,7 @@ class Xmp:
         self.graph.parse(StringIO(xmp))
 
     def _getPredicate(self, field):
-        prefix, attr = field.split(':',1)
+        prefix, attr = field.split(':', 1)
         nsuri = self.graph.namespace_manager.store.namespace(prefix)
         if nsuri == None:
             return None
@@ -80,7 +84,7 @@ class Xmp:
         degMin = val[:-1]
         degS, minS = degMin.split(',')
         deg = float(degS)
-        min = float(minS)
+        minutes = float(minS)
         dirS = val[-1]
         if dirS == dirValues[0]:
             sign = 1
@@ -88,7 +92,7 @@ class Xmp:
             sign = -1
         else:
             raise ValueError('expected dir in %s, got %s' % (dirValues, dirS))
-        return sign * (deg + min/60.)
+        return sign * (deg + minutes / 60.)
 
     @staticmethod
     def getRational(s):
@@ -99,10 +103,9 @@ class Xmp:
             if denom == 0:
                 return None
             else:
-                return float(num)/denom
+                return float(num) / denom
         else:
             return float(s)
-            
 
     @staticmethod
     def normalizeYaw(yaw, yawRef):
@@ -158,7 +161,7 @@ class Xmp:
 
     def getAltitude(self):
         altitudeStr = self.get('exif:GPSAltitude', None)
-        altitudeRefStr = 'S' # EXIF always uses sea-level as reference
+        altitudeRefStr = 'S'  # EXIF always uses sea-level as reference
         return self.normalizeAltitude(altitudeStr, altitudeRefStr)
 
     @staticmethod
@@ -174,8 +177,8 @@ class Xmp:
             return None
         t = iso8601.parse_date(timeStr,
                                default_timezone=pytz.timezone(settings.TIME_ZONE))
-        return t.replace(tzinfo=None) - t.utcoffset() # normalize to utc
-        
+        return t.replace(tzinfo=None) - t.utcoffset()  # normalize to utc
+
     def getDict(self):
         timestamp = self.getTime('exif:DateTimeOriginal')
         lat = self.checkMissing(self.getDegMin('exif:GPSLatitude', 'NS'))
@@ -202,11 +205,10 @@ class Xmp:
                      widthPixels=widthPixels,
                      heightPixels=heightPixels)
 
-        return dict([(k,v) for k, v in vals0.iteritems()
+        return dict([(k, v) for k, v in vals0.iteritems()
                      if self.checkMissing(v) != None])
 
     def copyToPlacemark(self, td):
         vals = self.getDict()
         for k, v in vals.iteritems():
             setattr(td, k, v)
-

@@ -12,6 +12,7 @@ import django.core.exceptions
 
 REPR_OUTPUT_SIZE = 20
 
+
 class ChainQuerySet:
     """ChainQuerySet is modeled on Django QuerySet but runs the same
     query on multiple derived classes of the same abstract parent class
@@ -54,7 +55,7 @@ class ChainQuerySet:
     def _clone(self):
         c = ChainQuerySet(self.model, self._classes)
         for name, val in vars(self).iteritems():
-            setattr(c, name, getattr(self, name))
+            setattr(c, name, val)
         c._resultCache = None
         return c
 
@@ -69,7 +70,7 @@ class ChainQuerySet:
                     srFields, srKwargs = self._selectRelated
                     qs = qs.select_related(*srFields, **srKwargs)
                 subQueries.append(qs)
-            self._resultCache = list(itertools.chain(*subQueries)) # flatten
+            self._resultCache = list(itertools.chain(*subQueries))  # flatten
             if self._orderBy:
                 if self._orderBy[0] == '-':
                     reverse = True
@@ -133,6 +134,7 @@ class ChainQuerySet:
         for obj in self._resultCache:
             obj.delete()
 
+
 class FinalModelManager(models.Manager):
     def __init__(self, parentModel):
         super(FinalModelManager, self).__init__()
@@ -143,6 +145,7 @@ class FinalModelManager(models.Manager):
             self._parentModel._default_manager.registerChildClass(model)
         del self._parentModel
         super(FinalModelManager, self).contribute_to_class(model, name)
+
 
 class AbstractModelManager(FinalModelManager):
     def __init__(self, parentModel):

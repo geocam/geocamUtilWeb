@@ -4,18 +4,18 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import unittest
 import re
 
 from django.test import TestCase
 
-from geocamUtil.models import *
+from geocamUtil.models import UuidExample
+
 
 class UuidFieldTest(TestCase):
     def setUp(self):
         self.u = UuidExample()
         self.u.save()
-    
+
     def test_format(self):
         self.assert_(re.match(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', self.u.uuid))
 

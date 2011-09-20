@@ -6,6 +6,7 @@
 
 from geocamUtil import settings
 
+
 def AuthUrlsContextProcessor(request):
     """
     Adds login and logout urls to the context.
