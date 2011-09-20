@@ -18,27 +18,30 @@ def dosys(cmd):
     return ret
 
 
-def runpylint(root):
-    root = os.path.relpath(root)
+def runpylint(paths):
     pylintrcPath = os.path.join(settings.CHECKOUT_DIR, 'management', 'pylintrc.txt')
     if os.path.exists(pylintrcPath):
         pylintrcFlag = ' --rcfile %s ' % pylintrcPath
     else:
         pylintrcFlag = ''
-    dosys('find %s -name "*.py" | xargs -n 50 pylint -i y -r n -f parseable %s' % (root, pylintrcFlag))
+    cmd = 'pylint -i y -r n -f parseable %s' % pylintrcFlag
+    for path in paths:
+        path = os.path.relpath(path)
+        if os.path.isdir(path):
+            dosys('find %s -name "*.py" | xargs -n 50 %s' % (path, cmd))
+        else:
+            dosys('%s %s' % (cmd, path))
 
 
 def main():
     import optparse
-    parser = optparse.OptionParser('usage: %prog [dir]')
+    parser = optparse.OptionParser('usage: %prog [dir1] [file2.py] ...')
     opts, args = parser.parse_args()
     if len(args) == 0:
-        root = '.'
-    elif len(args) == 1:
-        root = args[0]
+        paths = ['.']
     else:
-        parser.error('expected 0 or 1 args')
-    runpylint(root)
+        paths = args
+    runpylint(paths)
 
 if __name__ == '__main__':
     main()

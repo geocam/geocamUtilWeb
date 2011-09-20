@@ -18,22 +18,24 @@ def dosys(cmd):
     return ret
 
 
-def runpep8(root):
-    root = os.path.relpath(root)
-    dosys('find %s -name "*.py" | xargs -n 50 pep8 --ignore=E501 --show-pep8 --repeat' % root)
-
+def runpep8(dirs):
+    for d in dirs:
+        d = os.path.relpath(d)
+        cmd = 'pep8 --ignore=E501 --show-pep8 --repeat'
+        if os.path.isdir(d):
+            dosys('find %s -name "*.py" | xargs -n 50 %s' % (d, cmd))
+        else:
+            dosys('%s %s' % (cmd, d))
 
 def main():
     import optparse
-    parser = optparse.OptionParser('usage: %prog [dir]')
+    parser = optparse.OptionParser('usage: %prog [dir1] [file2.py] ...')
     opts, args = parser.parse_args()
     if len(args) == 0:
-        root = '.'
-    elif len(args) == 1:
-        root = args[0]
+        dirs = ['.']
     else:
-        parser.error('expected 0 or 1 args')
-    runpep8(root)
+        dirs = args
+    runpep8(dirs)
 
 if __name__ == '__main__':
     main()
