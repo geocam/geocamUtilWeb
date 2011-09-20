@@ -32,7 +32,7 @@ class CollectReqsTest(TestCase):
 
 class InstallReqsTest(TestCase):
     def tearDown(self):
-        needSudo = 'VIRTUALENV' not in os.environ
+        needSudo = 'VIRTUAL_ENV' not in os.environ
         if needSudo:
             sudoStr = 'sudo '
         else:
