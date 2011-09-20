@@ -9,10 +9,10 @@ import sys
 import os
 import re
 
-from geocamUtil import settings
+from geocamUtil.management.commandUtil import getSiteDir
 
 STRIP_COMMENT = re.compile(r'#.*$')
-CONFIG_FILE = os.path.join(settings.CHECKOUT_DIR, 'management', 'pep8Flags.txt')
+CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pep8Flags.txt')
 DEFAULT_FLAGS = '--ignore=E501 --show-pep8 --repeat'
 
 

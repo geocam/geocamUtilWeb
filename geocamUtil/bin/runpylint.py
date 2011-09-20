@@ -8,9 +8,9 @@
 import sys
 import os
 
-from geocamUtil import settings
+from geocamUtil.management.commandUtil import getSiteDir
 
-CONFIG_FILE = os.path.join(settings.CHECKOUT_DIR, 'management', 'pylintrc.txt')
+CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pylintrc.txt')
 DEFAULT_FLAGS = '-i y -r n -f parseable'
 
 
