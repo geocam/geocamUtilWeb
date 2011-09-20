@@ -16,5 +16,5 @@ class Command(BaseCommand):
     help = 'Run pylint and pep8 on Python files'
 
     def handle(self, *args, **options):
-        runpylint(settings.CHECKOUT_DIR)
-        runpep8(settings.CHECKOUT_DIR)
+        runpylint([settings.CHECKOUT_DIR])
+        runpep8([settings.CHECKOUT_DIR])
