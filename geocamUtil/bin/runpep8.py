@@ -65,7 +65,7 @@ def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog [dir1] [file2.py] ...')
     _opts, args = parser.parse_args()
-    runpep8(paths)
+    runpep8(args)
 
 if __name__ == '__main__':
     main()

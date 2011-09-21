@@ -52,7 +52,7 @@ def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog [dir1] [file2.py] ...')
     _opts, args = parser.parse_args()
-    runpylint(paths)
+    runpylint(args)
 
 if __name__ == '__main__':
     main()
