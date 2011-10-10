@@ -6,9 +6,8 @@
 
 """
 Creates a new management command 'lint', which runs code checkers to
-identify potential problems. Right now it runs pylint and pep8 on
-Python files. In the future it could run Javascript Lint (jsl) on
-JavaScript files as well.
+identify potential problems. Currently it runs pylint and pep8 on
+Python files and JavaScript Lint (jsl) on JavaScript files.
 
 Example usage:
 
@@ -20,6 +19,7 @@ Example usage:
 Requirements:
 
  Needs the pep8 and pylint modules available through 'pip install'.
+ JavaScript Lint is available at http://www.javascriptlint.com/ .
 
 Configuration:
 
@@ -28,6 +28,7 @@ Configuration:
 
  mySite/management/pylintrc.txt
  mySite/management/pep8Flags.txt
+ mySite/management/jslrc.txt
 
 Tips:
 
@@ -56,11 +57,13 @@ from django.core.management.base import BaseCommand
 
 from geocamUtil.bin.runpylint import runpylint
 from geocamUtil.bin.runpep8 import runpep8
+from geocamUtil.bin.runjsl import runjsl
 
 
 class Command(BaseCommand):
-    help = 'Run code checks (currently runs pylint and pep8 on Python files)'
+    help = 'Run code checks (run pylint, pep8 on Python files and jsl on JavaScript files)'
 
     def handle(self, *args, **options):
         runpylint(args)
         runpep8(args)
+        runjsl(args)
