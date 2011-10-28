@@ -141,7 +141,7 @@ class SecurityMiddleware(object):
         if needed.  Note "?protocol=http" added in _djangoChallenge().'''
         if isinstance(response, HttpResponseRedirect) and request.method == "POST":
             try:
-                redirectTo = request.POST.get('next', None)
+                redirectTo = request.REQUEST.get('next', None)
             except:  # pylint: disable=W0702
                 # probably badly formed request content -- log error and don't worry about it
                 errClass, errObject, errTB = sys.exc_info()[:3]
@@ -150,6 +150,8 @@ class SecurityMiddleware(object):
                                                     errClass.__name__,
                                                     str(errObject))
                 return response
+            print >> sys.stderr, 'redirectTo:', redirectTo
+            print >> sys.stderr, 'next:', request.GET.get('next')
             if (redirectTo and redirectTo.endswith('?protocol=http')):
                 initUrl = response['Location']
                 url = request.build_absolute_uri(initUrl)

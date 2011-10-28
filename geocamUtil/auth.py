@@ -15,14 +15,11 @@ def getAccountWidget(request):
     else:
         path = request.get_full_path()
         if requestIsSecure(request):
-            protocol = ''
-        else:
-            protocol = '&protocol=http'  # redirect back to http after login
+            path += '?protocol=http'  # redirect back to http after login
 
-        accountWidget = ('<div id="accountwidget"><a id="login_button" href="%(SCRIPT_NAME)saccounts/login?next=%(path)s%(protocol)s">Login</a> | <a id="join_button" href="%(SCRIPT_NAME)saccounts/register">Join</a></div>'
+        accountWidget = ('<div id="accountwidget"><a id="login_button" href="%(SCRIPT_NAME)saccounts/login?next=%(path)s">Login</a> | <a id="join_button" href="%(SCRIPT_NAME)saccounts/register">Join</a></div>'
                         % dict(path=path,
                                SCRIPT_NAME=settings.SCRIPT_NAME,
-                               username=request.user.username,
-                               protocol=protocol))
+                               username=request.user.username))
 
     return accountWidget
