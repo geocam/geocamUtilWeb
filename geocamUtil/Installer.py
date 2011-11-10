@@ -13,8 +13,7 @@ import shutil
 import itertools
 
 from geocamUtil.Builder import Builder
-
-USE_SYMLINKS = True
+from geocamUtil import settings
 
 
 class Installer(object):
@@ -69,7 +68,7 @@ class Installer(object):
             # install plain file
             if not os.path.exists(os.path.dirname(dst)):
                 os.makedirs(os.path.dirname(dst))
-            if USE_SYMLINKS:
+            if settings.GEOCAM_UTIL_INSTALLER_USE_SYMLINKS:
                 if os.path.isdir(dst):
                     dst = os.path.join(dst, os.path.basename(src))
                 if os.path.lexists(dst):

@@ -13,6 +13,8 @@ The age at which a geocamUtil.tempfiles file becomes "stale".  When
 tempfiles detects a stale file in its directory it will be deleted.
 """
 
+GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = False
+
 ######################################################################
 # GEOCAM_UTIL_SECURITY_* -- settings for geocamUtil.middleware.SecurityMiddleware
 
