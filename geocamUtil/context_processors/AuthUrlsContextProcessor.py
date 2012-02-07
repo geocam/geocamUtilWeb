@@ -12,7 +12,12 @@ def AuthUrlsContextProcessor(request):
     Adds login and logout urls to the context.
     """
     if hasattr(settings, 'LOGIN_DEFAULT_NEXT_URL'):
+        # deprecated. we originally chose LOGIN_DEFAULT_NEXT_URL because we did not know about LOGIN_REDIRECT_URL.
         loginSuffix = '?next=' + settings.LOGIN_DEFAULT_NEXT_URL
+    elif hasattr(settings, 'LOGIN_REDIRECT_URL'):
+        # LOGIN_REDIRECT_URL is the settings field that Django's auth module uses for this purpose
+        # https://docs.djangoproject.com/en/dev/ref/settings/
+        loginSuffix = '?next=' + settings.LOGIN_REDIRECT_URL
     else:
         loginSuffix = ''
 
