@@ -358,12 +358,10 @@ def UTMtoUSNG(utmEasting, utmNorthing, utmZoneNumber, utmLatBand, precision):
     # REVISIT: Modify to incorporate dynamic precision ?
     for _i in xrange(len(str(usngEasting)), precision):
         usng += "0"
-
-        usng += str(usngEasting) + " "
+    usng += str(usngEasting) + " "
 
     for _i in xrange(len(str(usngNorthing)), precision):
         usng += "0"
-
     usng += str(usngNorthing)
 
     return usng

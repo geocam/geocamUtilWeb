@@ -192,6 +192,20 @@ def getGridLine(srcUtm, dstUtm, clipLines):
 """ % dict(slat=slat, slon=slon, tlat=tlat, tlon=tlon))
 
 
+def degMinString(val):
+    val = abs(val)
+    degrees = int(val)
+    minutes = 60.0 * (val - degrees)
+    return u'%d&deg; %.4f\'' % (degrees, minutes)
+
+def degMinSecString(val):
+    val = abs(val)
+    degrees = int(val)
+    minutesFloat = 60.0 * (val - degrees)
+    minutes = int(minutesFloat)
+    seconds = 60.0 * (minutesFloat - minutes)
+    return u'%d&deg; %d\' %.2f"' % (degrees, minutes, seconds)
+
 def makeGridLinesBlock(parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, resIndex, skipEdges=False):
     #print 'makeGridLinesBlock %s %s %s %s %s %s' % (utmZone, utmLatBand, bounds, x0, y0, resIndex)
     blockSize = GRIDS[resIndex][0]
@@ -241,8 +255,13 @@ def makeGridLinesBlock(parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, re
                 lat, lon = usng.UTMtoLL(x, y, utmZone, utmLatBand)
                 precision = 5 - int(math.floor(math.log10(res)))
                 usngCoords = usng.UTMtoUSNG(x, y, utmZone, utmLatBand, precision)
-                description = ('USNG: %s<br/>Lat/lon: %.6f, %.6f<br/>'
-                               % (usngCoords, lat, lon))
+                latDir = 'N' if lat >= 0 else 'S'
+                lonDir = 'E' if lon >= 0 else 'W'
+                description = ('USNG: %s<br/>\n' % usngCoords
+                               + 'Lat/lon:<br/>\n'
+                               + '%.6f, %.6f<br/>\n' % (lat, lon)
+                               + '%s %s, %s %s<br/>\n' % (degMinString(lat), latDir, degMinString(lon), lonDir)
+                               + '%s %s, %s %s<br/>\n' % (degMinSecString(lat), latDir, degMinSecString(lon), lonDir))
                 description = urllib.quote(description)
                 icon = os.path.relpath(os.path.join(outDirG, 'corner.png'),
                                        os.path.dirname(thisFile))
@@ -314,16 +333,12 @@ def getRegion(utmSW, utmNE, utmZone, utmLatBand):
 def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
     north, west, south, east = ullr
 
-    # use arbitrary letter in the correct hemisphere
-    if isNorth:
-        utmLatBand = 'X'
-    else:
-        utmLatBand = 'C'
+    utmLatBand = usng.LLtoUTM(north, east, utmZone)[3]
 
-    utmNE = usng.LLtoUTM(north, east, utmZone, utmLatBand)[:2]
-    utmNW = usng.LLtoUTM(north, west, utmZone, utmLatBand)[:2]
-    utmSW = usng.LLtoUTM(south, west, utmZone, utmLatBand)[:2]
-    utmSE = usng.LLtoUTM(south, east, utmZone, utmLatBand)[:2]
+    utmNE = usng.LLtoUTM(north, east, utmZone)[:2]
+    utmNW = usng.LLtoUTM(north, west, utmZone)[:2]
+    utmSW = usng.LLtoUTM(south, west, utmZone)[:2]
+    utmSE = usng.LLtoUTM(south, east, utmZone)[:2]
 
     bounds = []
 
@@ -335,15 +350,15 @@ def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
 
     # add bounds for utm zone
     wzLon = -180 + 6 * (utmZone - 1)
-    bounds.append(LineSegment(usng.LLtoUTM(north, wzLon, utmZone, utmLatBand)[:2],
-                              usng.LLtoUTM(south, wzLon, utmZone, utmLatBand)[:2]))
+    bounds.append(LineSegment(usng.LLtoUTM(north, wzLon, utmZone)[:2],
+                              usng.LLtoUTM(south, wzLon, utmZone)[:2]))
     ezLon = wzLon + 6
-    bounds.append(LineSegment(usng.LLtoUTM(south, ezLon, utmZone, utmLatBand)[:2],
-                              usng.LLtoUTM(north, ezLon, utmZone, utmLatBand)[:2]))
+    bounds.append(LineSegment(usng.LLtoUTM(south, ezLon, utmZone)[:2],
+                              usng.LLtoUTM(north, ezLon, utmZone)[:2]))
 
     # add bounds for hemisphere
-    eqWest = usng.LLtoUTM(0, west, utmZone, utmLatBand)[:2]
-    eqEast = usng.LLtoUTM(0, east, utmZone, utmLatBand)[:2]
+    eqWest = usng.LLtoUTM(0, west, utmZone)[:2]
+    eqEast = usng.LLtoUTM(0, east, utmZone)[:2]
     if isNorth:
         bounds.append(LineSegment(eqWest, eqEast))
     else:
