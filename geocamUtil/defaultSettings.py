@@ -18,19 +18,28 @@ GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = False
 ######################################################################
 # GEOCAM_UTIL_SECURITY_* -- settings for geocamUtil.middleware.SecurityMiddleware
 
+"""
+You can find copious documentation for these settings with::
+
+  from geocamUtil.middleware import SecurityMiddleware
+  help(SecurityMiddleware)
+"""
+
 GEOCAM_UTIL_SECURITY_ENABLED = True
 """
 If False, turn off all SecurityMiddleware security checks and
-redirects.  This flag is handy because taking SecurityMiddleware
-out of settings.MIDDLEWARE_CLASSES altogether will cause errors if you're
-using any per-url flags.
+redirects.
 """
 
-GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = True
+GEOCAM_UTIL_SECURITY_DEFAULT_POLICY = None
 """
-If True, SSL connections are required by default for all urls.
-You can override this setting on a per-url basis by setting the
-'sslRequired' flag.
+The default security policy to which other rules are added.
+"""
+
+GEOCAM_UTIL_SECURITY_RULES = ()
+"""
+A tuple of rules that change the default security policy depending on
+the URL pattern the request matches.
 """
 
 GEOCAM_UTIL_SECURITY_TURN_OFF_SSL_WHEN_NOT_REQUIRED = False
@@ -39,50 +48,38 @@ Controls what happens when users use SSL to connect to a URL where it is
 not required.  If True, they will be redirected to the non-SSL version.
 """
 
+GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = True
+"""
+If True, only accept encrypted or hashed passwords.
+"""
+
+GEOCAM_UTIL_SECURITY_SECRET_URL_REGEX = None
+"""
+If the request path matches this regex and the security policy
+permits 'secretUrl' authentication, the request is authenticated.
+"""
+
+GEOCAM_UTIL_SECURITY_DEPRECATED_BEHAVIOR = 'warn'
+"""
+Changes how geocamUtil responds to use of deprecated features.
+"""
+
+GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = True
+"""
+DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY sslRequired instead.
+"""
+
 GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT = True
 """
-Set to True, False, or 'write'.  If 'write', login is required to access
-urls that don't have the 'readOnly' flag.  You can override this setting
-on a per-url basis by setting the 'loginRequired' flag.
+DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY loginRequired instead.
 """
 
 GEOCAM_UTIL_SECURITY_DEFAULT_CHALLENGE = 'django'
 """
-Set to 'django', 'digest', or 'basic'.  Controls what challenge the
-server sends to a non-authenticated user who requests a page that
-requires authentication.
-
-If 'django', use the default Django challenge, an HTML form asking for
-user/password.  If the user successfully logs in their credentials will
-be stored in a session cookie until they log out.
-
-If 'digest' or 'basic', send an HTTP digest or basic authentication
-challenge, an HTTP response 401 with a header that causes compatible
-browsers to prompt the user for a username and password. If the user
-successfully logs in the browser will cache their credentials until it
-is restarted.  'basic' sends the password unencrypted so it must only be
-used over SSL connections.
-
-You can override this setting on a per-url basis by setting the
-'challenge' flag.
+DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY challenge instead.
 """
 
 GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES = ('digest', 'basic')
 """
-List of types of authentication that should be accepted (in addition to
-the built-in Django authentication, which is always accepted).
-
-Options are: 'digest', 'basic'.  See GEOCAM_UTIL_SECURITY_DEFAULT_CHALLENGE
-for more information.
-
-You can override this setting on a per-url basis by setting the
-'acceptAuthTypes' flag.
-"""
-
-GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = True
-"""
-If True, only accept encrypted or hashed passwords.  This will cause the
-'django' password form and 'basic' credentials to be rejected unless
-they are posted via SSL.  It has no effect on 'digest' which uses hashed
-credentials.
+DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY acceptAuthTypes instead.
 """
