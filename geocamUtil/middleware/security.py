@@ -100,18 +100,19 @@ class SecurityMiddleware(object):
     Installation
     ============
 
-    Install dependencies::
+     * Install dependencies::
 
-      pip install django-digest python-digest
+         pip install django-digest python-digest
 
-    Install `geocamUtil` in your `PYTHONPATH` and add to your
-    `settings.py`::
+     * Install `geocamUtil` in your `PYTHONPATH`.
 
-      MIDDLEWARE_CLASSES = (
-        ...
-        'geocamUtil.middleware.SecurityMiddleware',
-        ...
-      )
+     * Add the middleware to your `settings.py`::
+
+         MIDDLEWARE_CLASSES = (
+           ...
+           'geocamUtil.middleware.SecurityMiddleware',
+           ...
+         )
 
     Getting Started
     ===============
