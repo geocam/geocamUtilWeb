@@ -11,6 +11,7 @@ import math
 import tempfile
 import os
 import urllib
+import sys
 
 import usng
 
@@ -206,7 +207,7 @@ def degMinSecString(val):
     seconds = 60.0 * (minutesFloat - minutes)
     return u'%d&deg; %d\' %.2f"' % (degrees, minutes, seconds)
 
-def makeGridLinesBlock(parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, resIndex, skipEdges=False):
+def makeGridLinesBlock(opts, parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, resIndex, skipEdges=False):
     #print 'makeGridLinesBlock %s %s %s %s %s %s' % (utmZone, utmLatBand, bounds, x0, y0, resIndex)
     blockSize = GRIDS[resIndex][0]
     res, style = GRIDS[resIndex + 1]
@@ -217,8 +218,12 @@ def makeGridLinesBlock(parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, re
     ymax = y0 + n * res
 
     for bound in bounds:
-        if not bound.blockMightBeInBounds([x0, y0], [xmax, ymax]):
-            return ''
+         if not bound.blockMightBeInBounds([x0, y0], [xmax, ymax]):
+             if opts.verbose:
+                 print >> sys.stderr, 'out of bounds 1:'
+                 print >> sys.stderr, '   bound %s..%s %s..%s' % (bound.s[0], bound.t[0], bound.s[1], bound.t[1])
+                 print >> sys.stderr, '   block %s..%s %s..%s' % (x0, xmax, y0, ymax)
+             return ''
 
     content = ''
     for k in xrange(0, n + 1):
@@ -286,7 +291,7 @@ def makeGridLinesBlock(parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, re
                             % dict(lat=lat, lon=lon, icon=icon, description=description))
             if (resIndex + 2) < len(GRIDS):
                 # recurse
-                content += makeGridLinesBlock(thisFile, utmZone, utmLatBand, bounds,
+                content += makeGridLinesBlock(opts, thisFile, utmZone, utmLatBand, bounds,
                                               ii, jj, x, y, resIndex + 1, skipEdges=True)
 
     region = getRegion([x0, y0], [xmax, ymax], utmZone, utmLatBand)
@@ -330,7 +335,10 @@ def getRegion(utmSW, utmNE, utmZone, utmLatBand):
 """ % dict(north=north, south=south, east=east, west=west))
 
 
-def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
+def makeGridLinesForZone(opts, parentFile, ullr, utmZone, isNorth):
+    if opts.verbose:
+        print >> sys.stderr, 'zone=%s isNorth=%s' % (utmZone, isNorth)
+
     north, west, south, east = ullr
 
     utmLatBand = usng.LLtoUTM(north, east, utmZone)[3]
@@ -339,6 +347,9 @@ def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
     utmNW = usng.LLtoUTM(north, west, utmZone)[:2]
     utmSW = usng.LLtoUTM(south, west, utmZone)[:2]
     utmSE = usng.LLtoUTM(south, east, utmZone)[:2]
+
+    if opts.verbose:
+        print >> sys.stderr, 'utmNE=%s\nutmNW=%s\nutmSW=%s\nutmSE=%s' % (utmNE, utmNW, utmSW, utmSE)
 
     bounds = []
 
@@ -362,7 +373,8 @@ def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
     if isNorth:
         bounds.append(LineSegment(eqWest, eqEast))
     else:
-        bounds.append(LineSegment(eqEast, eqWest))
+        # FIX this doesn't work for some reason for lake lander area
+        pass #bounds.append(LineSegment(eqEast, eqWest))
 
     utmWest = min(utmSW[0], utmNW[0])
     utmSouth = min(utmSW[1], utmSE[1])
@@ -376,6 +388,8 @@ def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
     thisFile = os.path.join(os.path.dirname(parentFile),
                             '%s%s' % (utmZone, hemi),
                             'a.kml')
+    if opts.verbose:
+        print >> sys.stderr, 'thisFile:', thisFile
 
     # iterate through all the top-level blocks for this zone/hemisphere
     userBlockSize = max(utmEast - utmWest, utmNorth - utmSouth)
@@ -393,13 +407,13 @@ def makeGridLinesForZone(parentFile, ullr, utmZone, isNorth):
     gridLines = ''
     for i, x in enumerate(xrange(x0, xmax, res)):
         for j, y in enumerate(xrange(y0, ymax, res)):
-            gridLines += makeGridLinesBlock(thisFile, utmZone, utmLatBand, bounds, i, j, x, y, maxSizeIndex)
+            gridLines += makeGridLinesBlock(opts, thisFile, utmZone, utmLatBand, bounds, i, j, x, y, maxSizeIndex)
 
     region = getRegion(utmSW, utmNE, utmZone, utmLatBand)
     return makeNetworkLink(parentFile, thisFile, gridLines, region)
 
 
-def makeGridLines(parentFile, ullr):
+def makeGridLines(opts, parentFile, ullr):
     north, west, south, east = ullr
 
     gridLines = ''
@@ -408,24 +422,24 @@ def makeGridLines(parentFile, ullr):
         zoneEast = zoneWest + 6
         if zoneWest <= east and west <= zoneEast:
             if south <= 0:
-                gridLines += makeGridLinesForZone(parentFile, ullr, zone, isNorth=False)
+                gridLines += makeGridLinesForZone(opts, parentFile, ullr, zone, isNorth=False)
             if north >= 0:
-                gridLines += makeGridLinesForZone(parentFile, ullr, zone, isNorth=True)
+                gridLines += makeGridLinesForZone(opts, parentFile, ullr, zone, isNorth=True)
     return gridLines
 
 
-def getZoneLines(ullr):
+def getZoneLines(opts, ullr):
     north, west, south, east = ullr
     zoneLines = ''
 
     # draw boundaries between utm zones
     for zone in xrange(1, 61):
         lon = -180 + 6 * (zone - 1)
-        if west < lon and lon < east:
+        if west < lon < east:
             zoneLines += getLineString([south, lon], [north, lon], **ZONE_STYLE)
 
     # draw equator
-    if south < 0 and 0 < north:
+    if south < 0 < north:
         zoneLines += getLineString([0, west], [0, east], **ZONE_STYLE)
 
     return zoneLines
@@ -441,13 +455,15 @@ def usngGrid(opts, boundsName, kmzName):
     GRIDS = [g for g in GRIDS if g[0] >= opts.minres]
 
     ullr = getUllrFromKml(boundsName)
+    if opts.verbose:
+        print >> sys.stderr, 'ullr:', ullr
     global outDirG
     outDirG = tempfile.mkdtemp()
     dosys('cp %s/corner.png %s' % (os.path.dirname(__file__), outDirG))
     topFile = os.path.join(outDirG, 'doc.kml')
     contents = ''
-    contents += getZoneLines(ullr)
-    contents += makeGridLines(topFile, ullr)
+    contents += getZoneLines(opts, ullr)
+    contents += makeGridLines(opts, topFile, ullr)
     writeFile(topFile, wrapKml(wrapFolder(contents)))
 
     kmzFullPath = os.path.abspath(kmzName)
@@ -464,6 +480,9 @@ def main():
     parser.add_option('-m', '--minres',
                       type='int', default=50,
                       help='Minimum resolution to render [%default]')
+    parser.add_option('-v', '--verbose',
+                      action='store_true', default=False,
+                      help='Turn on debugging output')
     opts, args = parser.parse_args()
     if len(args) != 2:
         parser.error('expected exactly 2 args')
