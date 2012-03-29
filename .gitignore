@@ -2,8 +2,8 @@
 dev.db
 local_settings.py
 media/ugc
-docs/_build/
-src/
+/docs/_build/
+/src/
 pip-log.txt
 media/js/*.r*.js
 media/css/*.r*.css
@@ -11,4 +11,5 @@ media/css/*.r*.css
 *.egg-info
 *~
 example/build
-
+/build/
+/dist/
