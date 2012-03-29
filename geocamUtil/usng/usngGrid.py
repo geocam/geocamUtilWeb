@@ -199,6 +199,7 @@ def degMinString(val):
     minutes = 60.0 * (val - degrees)
     return u'%d&deg; %.4f\'' % (degrees, minutes)
 
+
 def degMinSecString(val):
     val = abs(val)
     degrees = int(val)
@@ -206,6 +207,7 @@ def degMinSecString(val):
     minutes = int(minutesFloat)
     seconds = 60.0 * (minutesFloat - minutes)
     return u'%d&deg; %d\' %.2f"' % (degrees, minutes, seconds)
+
 
 def makeGridLinesBlock(opts, parentFile, utmZone, utmLatBand, bounds, i, j, x0, y0, resIndex, skipEdges=False):
     #print 'makeGridLinesBlock %s %s %s %s %s %s' % (utmZone, utmLatBand, bounds, x0, y0, resIndex)
@@ -218,12 +220,12 @@ def makeGridLinesBlock(opts, parentFile, utmZone, utmLatBand, bounds, i, j, x0, 
     ymax = y0 + n * res
 
     for bound in bounds:
-         if not bound.blockMightBeInBounds([x0, y0], [xmax, ymax]):
-             if opts.verbose:
-                 print >> sys.stderr, 'out of bounds 1:'
-                 print >> sys.stderr, '   bound %s..%s %s..%s' % (bound.s[0], bound.t[0], bound.s[1], bound.t[1])
-                 print >> sys.stderr, '   block %s..%s %s..%s' % (x0, xmax, y0, ymax)
-             return ''
+        if not bound.blockMightBeInBounds([x0, y0], [xmax, ymax]):
+            if opts.verbose:
+                print >> sys.stderr, 'out of bounds 1:'
+                print >> sys.stderr, '   bound %s..%s %s..%s' % (bound.s[0], bound.t[0], bound.s[1], bound.t[1])
+                print >> sys.stderr, '   block %s..%s %s..%s' % (x0, xmax, y0, ymax)
+            return ''
 
     content = ''
     for k in xrange(0, n + 1):
@@ -374,7 +376,7 @@ def makeGridLinesForZone(opts, parentFile, ullr, utmZone, isNorth):
         bounds.append(LineSegment(eqWest, eqEast))
     else:
         # FIX this doesn't work for some reason for lake lander area
-        pass #bounds.append(LineSegment(eqEast, eqWest))
+        pass  # bounds.append(LineSegment(eqEast, eqWest))
 
     utmWest = min(utmSW[0], utmNW[0])
     utmSouth = min(utmSW[1], utmSE[1])

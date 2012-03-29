@@ -16,17 +16,18 @@ placemark descriptions include USNG coordinates.
 """
 
 import csv
-import re
 
 from geocamUtil.usng import usng
 from geocamUtil import KmlUtil
+
 
 def parseDegMinSec(val):
     valDeg, valMin, valSec = val.split(' ')
     sgn = -1 if float(valDeg) < 0 else 1
     return sgn * (abs(float(valDeg))
-                  + float(valMin)/60.0
-                  + float(valSec)/3600.0)
+                  + float(valMin) / 60.0
+                  + float(valSec) / 3600.0)
+
 
 def convertUsngCsv(opts, inPath):
     inFile = file(inPath, 'r')
@@ -60,6 +61,7 @@ def convertUsngCsv(opts, inPath):
         kbits.append('</Folder>')
         text = ''.join(kbits)
         file(opts.kml, 'w').write(KmlUtil.wrapKml(text))
+
 
 def main():
     import optparse
