@@ -8,6 +8,7 @@ from django.db import models
 
 from UuidField import UuidField
 from ExtrasField import ExtrasField
+from dateTimeUtc import DateTimeUtcField
 
 
 class UuidExample(models.Model):
@@ -18,3 +19,8 @@ class UuidExample(models.Model):
 class ExtrasExample(models.Model):
     """The sole purpose of this model is to test the ExtrasField class."""
     extras = ExtrasField()
+
+
+class DateTimeUtcExample(models.Model):
+    """The sole purpose of this model is to test the DateTimeUtcField class."""
+    timestamp = DateTimeUtcField()
