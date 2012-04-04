@@ -4,7 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from geocamUtil.middleware.SecurityMiddleware import requestIsSecure
+from geocamUtil.middleware.security import requestIsSecure
 from geocamAware import settings
 
 
