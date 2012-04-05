@@ -5,12 +5,14 @@
 # __END_LICENSE__
 
 import os
+import re
 import logging
 
 import django
 
 from geocamUtil.management import commandUtil
 from geocamUtil.Installer import Installer
+from geocamUtil import settings
 
 
 class Command(commandUtil.PathCommand):
@@ -20,10 +22,18 @@ class Command(commandUtil.PathCommand):
         inst = Installer()
         siteDir = commandUtil.getSiteDir()
 
+        # make new-style static and media setup
+        staticRoot = getattr(settings, 'STATIC_ROOT', '%sbuild/static' % siteDir)
+        if not os.path.exists(staticRoot):
+            os.makedirs(staticRoot)
+        if not os.path.exists(settings.MEDIA_ROOT):
+            mediaRootNoTrailingSlash = re.sub('/$', '', settings.MEDIA_ROOT)
+            os.symlink(staticRoot, mediaRootNoTrailingSlash)
+
         # install admin media
         djangoDir = os.path.dirname(os.path.realpath(django.__file__))
         adminMediaDir = os.path.join(djangoDir, 'contrib', 'admin', 'media')
-        inst.installRecurse(adminMediaDir, '%sbuild/media/admin' % siteDir)
+        inst.installRecurse(adminMediaDir, os.path.join(staticRoot, 'admin'))
 
         for impPath in impPaths:
             logging.debug('collectmedia app %s', impPath)
