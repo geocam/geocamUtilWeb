@@ -16,7 +16,7 @@ from geocamUtil import settings
 
 
 class Command(commandUtil.PathCommand):
-    help = 'Collect media from all apps into build/media'
+    help = 'Collect static files from all apps into STATIC_ROOT'
 
     def handleImportPaths(self, impPaths, options):
         inst = Installer()
@@ -39,7 +39,8 @@ class Command(commandUtil.PathCommand):
             logging.debug('collectmedia app %s', impPath)
             appMod = __import__(impPath, fromlist=['dummy'])
             appPath = os.path.dirname(appMod.__file__)
-            tryMediaPaths = ['%s/build/media' % appPath,
+            tryMediaPaths = ['%s/build/static' % appPath,
+                             '%s/build/media' % appPath,  # legacy support
                              '%s/static' % appPath]
             for mediaPath in tryMediaPaths:
                 logging.debug('collectmedia app %s: checking for media in %s', impPath, mediaPath)
