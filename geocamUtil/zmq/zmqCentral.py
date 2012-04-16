@@ -25,9 +25,6 @@ THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_MS = 10000
 
 
-class UtcFormatter(logging.Formatter):
-    converter = time.gmtime
-
 class ZmqCentral(object):
     def __init__(self, opts):
         self.opts = opts
@@ -178,7 +175,8 @@ class ZmqCentral(object):
 
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
-        fmt = UtcFormatter('%(asctime)s - %(levelname)-5s - %(message)s')
+        fmt = logging.Formatter('%(asctime)s - %(levelname)-5s - %(message)s')
+        fmt.converter = time.gmtime
         fh = logging.FileHandler(self.consoleLogPath)
         fh.setFormatter(fmt)
         fh.setLevel(logging.DEBUG)
