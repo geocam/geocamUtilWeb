@@ -19,15 +19,14 @@ from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import DEFAULT_CENTRAL_RPC_PORT
+from geocamUtil.zmq.util import DEFAULT_CENTRAL_RPC_PORT, getTimestamp
 
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_MS = 10000
 
 
-def getTimestamp():
-    return int(time.time() * 1000)
-
+class UtcFormatter(logging.Formatter):
+    converter = time.gmtime
 
 class ZmqCentral(object):
     def __init__(self, opts):
@@ -179,12 +178,15 @@ class ZmqCentral(object):
 
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
+        fmt = UtcFormatter('%(asctime)s - %(levelname)-5s - %(message)s')
         fh = logging.FileHandler(self.consoleLogPath)
+        fh.setFormatter(fmt)
         fh.setLevel(logging.DEBUG)
         rootLogger.addHandler(fh)
         if self.opts.foreground:
             ch = logging.StreamHandler()
             ch.setLevel(logging.DEBUG)
+            ch.setFormatter(fmt)
             rootLogger.addHandler(ch)
 
         # daemonize
