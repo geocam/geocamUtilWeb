@@ -2,40 +2,38 @@
 
 import logging
 
-import zmq
 from zmq.eventloop import ioloop
 ioloop.install()
 
-from geocamUtil.zmq.zmqPublisher import ZmqPublisher
+from geocamUtil.zmq.publisher import ZmqPublisher
+from geocamUtil.zmq.util import zmqLoop
 
-PUBLISH_PORT = 'tcp://127.0.0.1:8750'
 
-
-def pubMessage(sock, msg):
-    logging.debug('publishing: %s', msg)
-    sock.send(msg)
+def pubMessage(p):
+    topic = 'geocamUtil.greeting'
+    body = 'hello'
+    logging.debug('publishing: %s', [(topic, body)])
+    p.send(topic, body)
 
 
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog')
-    _opts, args = parser.parse_args()
+    ZmqPublisher.addOptions(parser, 'testPublisher')
+    opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')
     logging.basicConfig(level=logging.DEBUG)
 
-    # initialize publish socket
-    context = zmq.Context()
-    h = ZmqPublisher(context, 'testPublisher', {'pub': [PUBLISH_PORT]})
-    h.start()
+    # set up networking
+    p = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
+    p.start()
 
     # start publishing an arbitrary message that central should forward
-    sock = context.socket(zmq.PUB)
-    sock.bind(PUBLISH_PORT)
-    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(sock, 'hello'), 1000)
+    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(p), 1000)
     pubTimer.start()
 
-    ioloop.IOLoop.instance().start()
+    zmqLoop()
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@ from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil import anyjson as json
+from geocamUtil.zmq.util import DEFAULT_CENTRAL_RPC_PORT
 
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_MS = 10000
@@ -37,51 +38,68 @@ class ZmqCentral(object):
         self.rpcStream = None
         self.pubStream = None
 
-    def subscribeIfNeeded(self, moduleName, modulePublishEndpoint):
+    def connect(self, moduleName, params, announceConnect=True):
+        if announceConnect:
+            logging.debug('module %s connected', moduleName)
+            self.publishAndLog(THIS_MODULE,
+                               'central.connect.%s:%s'
+                               % (moduleName, json.dumps(params)))
+        publishEndpoint = params.get('pub', None)
+        if publishEndpoint:
+            logging.info('subscribing to messages from %s on endpoint %s',
+                         moduleName, publishEndpoint)
+            stream = ZMQStream(self.context.socket(zmq.SUB))
+            stream.connect(publishEndpoint)
+            stream.setsockopt(zmq.SUBSCRIBE, '')
+            stream.on_recv(lambda messages: self.handleMessages(moduleName, messages))
+            self.subStreams[moduleName] = (publishEndpoint, stream)
+
+    def disconnect(self, moduleName, announceDisconnect=True):
+        if announceDisconnect:
+            logging.info('module %s disconnected', moduleName)
+            self.publishAndLog(THIS_MODULE,
+                               'central.disconnect.%s:%s'
+                               % (moduleName,
+                                  json.dumps({'timestamp': getTimestamp()})))
         if moduleName in self.subStreams:
-            oldPublishEndpoint, _oldStream = self.subStreams[moduleName]
-            if oldPublishEndpoint == modulePublishEndpoint:
-                # already connected, nothing to do
-                return False
-            else:
-                # must disconnect before connecting to new publish endpoint
-                self.unsubModule(moduleName)
-        logging.info('subscribing to messages from %s on endpoint %s',
-                     moduleName, modulePublishEndpoint)
-        stream = ZMQStream(self.context.socket(zmq.SUB))
-        stream.connect(modulePublishEndpoint)
-        stream.setsockopt(zmq.SUBSCRIBE, '')
-        stream.on_recv(lambda messages: self.handleMessages(moduleName, messages))
-        self.subStreams[moduleName] = (modulePublishEndpoint, stream)
-        return True
+            moduleEndpoint, stream = self.subStreams.pop(moduleName)
+            logging.info('unsubscribing from module %s on %s',
+                         moduleName, moduleEndpoint)
+            stream.close()
 
     def publishAndLog(self, moduleName, msg):
         timestamp = getTimestamp()
         self.pubStream.send(msg)
-        self.messageLog.write('@@@ %s %d %d\n' % (moduleName, timestamp, len(msg)))
+        self.messageLog.write('@@@ %s %d %d ' % (moduleName, timestamp, len(msg)))
         self.messageLog.write(msg)
         self.messageLog.write('\n')
 
     def handleHeartbeat(self, params):
-        moduleName = params['moduleName']
+        moduleName = params['moduleName'].encode('utf-8')
         now = getTimestamp()
         params['centralTimestamp'] = now
-        if moduleName not in self.info:
-            logging.debug('module %s connected', moduleName)
-            self.publishAndLog(THIS_MODULE, 'central.connect.%s:' % moduleName
-                               + json.dumps({'timestamp': now}))
-        self.info[moduleName] = params
-        config = params.get('config', None)
-        if config:
-            endpoints = config.get('pub', None)
-            if endpoints:
-                endpoint = endpoints[0]
-                self.subscribeIfNeeded(moduleName, endpoint)
-            keepalive = config.get('keepalive', DEFAULT_KEEPALIVE_MS)
-        else:
-            keepalive = DEFAULT_KEEPALIVE_MS
-        self.publishAndLog(THIS_MODULE, 'central.heartbeat.%s:' % moduleName
-                           + json.dumps(params))
+
+        publishEndpoint = params.get('pub', None)
+        if publishEndpoint:
+            alreadyConnected = False
+            subStream = self.subStreams.get(moduleName, None)
+            if subStream:
+                oldEndpoint, _oldStream = subStream
+                if oldEndpoint == publishEndpoint:
+                    # nothing to do
+                    alreadyConnected = True
+                else:
+                    # must disconnect before connecting to new publish endpoint
+                    self.disconnect(moduleName)
+                    alreadyConnected = False
+
+            if not alreadyConnected:
+                self.connect(moduleName, params)
+
+        keepalive = params.get('keepalive', DEFAULT_KEEPALIVE_MS)
+        self.publishAndLog(THIS_MODULE,
+                           'central.heartbeat.%s:%s'
+                           % (moduleName, json.dumps(params)))
         params['timeout'] = now + keepalive
         return 'ok'
 
@@ -124,13 +142,6 @@ class ZmqCentral(object):
                                                 'error': errText,
                                                 'id': callId}))
 
-    def unsubModule(self, moduleName):
-        if moduleName in self.subStreams:
-            moduleEndpoint, stream = self.subStreams.pop(moduleName)
-            logging.info('unsubscribing from module %s on %s',
-                         moduleName, moduleEndpoint)
-            stream.close()
-
     def handleDisconnectTimer(self):
         now = getTimestamp()
         disconnectModules = []
@@ -139,10 +150,7 @@ class ZmqCentral(object):
             if timeout is not None and now > timeout:
                 disconnectModules.append(moduleName)
         for moduleName in disconnectModules:
-            logging.info('module %s disconnected', moduleName)
-            self.publishAndLog(THIS_MODULE, 'central.disconnect.%s:' % moduleName
-                               + json.dumps({'timestamp': now}))
-            self.unsubModule(moduleName)
+            self.disconnect(moduleName)
             del self.info[moduleName]
 
     def readyLog(self, pathTemplate, timestamp):
@@ -204,10 +212,11 @@ class ZmqCentral(object):
         self.rpcStream.bind(self.opts.rpcEndpoint)
         self.rpcStream.on_recv(self.handleRpcCall)
         self.pubStream = ZMQStream(self.context.socket(zmq.PUB))
+        self.pubStream.setsockopt(zmq.HWM, self.opts.highWaterMark)
         self.pubStream.bind(self.opts.publishEndpoint)
         for entry in self.opts.subscribeEndpoint:
             moduleName, endpoint = entry.split('@')
-            self.subscribeIfNeeded(moduleName, endpoint)
+            self.connect(moduleName, endpoint, announceConnect=False)
 
         self.disconnectTimer = ioloop.PeriodicCallback(self.handleDisconnectTimer, 5000)
         self.disconnectTimer.start()
@@ -220,10 +229,10 @@ def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog')
     parser.add_option('-r', '--rpcEndpoint',
-                      default='tcp://127.0.0.1:7814',
+                      default='tcp://127.0.0.1:%s' % DEFAULT_CENTRAL_RPC_PORT,
                       help='Endpoint to listen on for RPC requests [%default]')
     parser.add_option('-p', '--publishEndpoint',
-                      default='tcp://127.0.0.1:7815',
+                      default='tcp://127.0.0.1:%s' % (DEFAULT_CENTRAL_RPC_PORT + 1),
                       help='Endpoint for publishing messages [%default]')
     parser.add_option('-s', '--subscribeEndpoint',
                       default=[],
@@ -241,6 +250,9 @@ def main():
     parser.add_option('-f', '--foreground',
                       action='store_true', default=False,
                       help='Do not daemonize zmqCentral on startup')
+    parser.add_option('--highWaterMark',
+                      default=10000, type='int',
+                      help='High-water mark for publish socket (see 0MQ docs) [%default]')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')

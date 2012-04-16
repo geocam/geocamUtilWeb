@@ -7,40 +7,90 @@
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 
-from zmq.eventloop import ioloop
-
 from geocamUtil import anyjson as json
+from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_RPC_PORT
+
+SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
+                           'centralPublishEndpoint': 'tcp://127.0.0.1:%d'
+                           % (DEFAULT_CENTRAL_RPC_PORT + 1)}
 
 
 class ZmqSubscriber(object):
-    def __init__(self, sock):
-        self.sock = sock
+    def __init__(self,
+                 moduleName,
+                 context=None,
+                 centralPublishEndpoint=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint']):
+        self.moduleName = moduleName
+
+        if context is None:
+            context = zmq.Context()
+        self.context = context
+
+        self.centralPublishEndpoint = parseEndpoint(centralPublishEndpoint,
+                                                    defaultPort=DEFAULT_CENTRAL_RPC_PORT + 1)
+
         self.handlers = {}
-        self.stream = ZMQStream(self.sock)
+        self.counter = 0
+
+    @classmethod
+    def addOptions(cls, parser, defaultModuleName,
+                   defaults=None):
+        if defaults is None:
+            defaults = SUBSCRIBER_OPT_DEFAULTS
+        parser.add_option('--moduleName',
+                          default=defaultModuleName,
+                          help='Name to use for this module [%default]')
+        parser.add_option('--centralPublishEndpoint',
+                          default=defaults['centralPublishEndpoint'],
+                          help='Endpoint where central publishes messages [%default]')
+
+    @classmethod
+    def getOptionValues(cls, opts):
+        result = {}
+        for key in SUBSCRIBER_OPT_DEFAULTS.iterkeys():
+            val = getattr(opts, key, None)
+            if val is not None:
+                result[key] = val
+        return result
+
+    def start(self):
+        sock = self.context.socket(zmq.SUB)
+        self.stream = ZMQStream(sock)
+        self.stream.setsockopt(zmq.IDENTITY, self.moduleName)
+        self.stream.connect(self.centralPublishEndpoint)
         self.stream.on_recv(self.routeMessage)
 
     def routeMessage(self, messages):
         for msg in messages:
-            topic, body = msg.split(':', 1)
+            colonIndex = msg.find(':')
+            topic = msg[:(colonIndex + 1)]
+            body = msg[(colonIndex + 1):]
             obj = json.loads(body)
-            topicRegistry = self.handlers[topic]
+
+            # fast exact match
+            topicRegistry = self.handlers.get(topic, None)
+
+            # prefix match
+            if topicRegistry is None:
+                for topicPrefix, registry in self.handlers.iteritems():
+                    if topic.startswith(topicPrefix):
+                        topicRegistry = registry
+                        break
+
             for handler in topicRegistry.itervalues():
                 handler(topic, obj)
 
-    def subscribe(self, topic, handler, handlerId=None):
+    def subscribe(self, topic, handler):
         topicRegistry = self.handlers.setdefault(topic, {})
-        if handlerId is None:
-            handlerId = len(topicRegistry)
         if not topicRegistry:
-            self.sock.setsockopt(zmq.SUBSCRIBE, topic + ':')
+            self.stream.setsockopt(zmq.SUBSCRIBE, topic)
+        handlerId = self.counter
+        self.counter += 1
         topicRegistry[handlerId] = handler
+        return handlerId
 
     def unsubscribe(self, topic, handlerId):
         topicRegistry = self.handlers[topic]
         del topicRegistry[handlerId]
         if not topicRegistry:
-            self.sock.setsockopt(zmq.UNSUBSCRIBE, topic + ':')
-
-
-def zmqLoop():
-    ioloop.IOLoop.instance().start()
+            self.stream.setsockopt(zmq.UNSUBSCRIBE, topic)

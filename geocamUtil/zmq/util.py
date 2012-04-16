@@ -6,20 +6,43 @@
 # __END_LICENSE__
 
 import re
+import time
+
+from zmq.eventloop import ioloop
+
+DEFAULT_CENTRAL_RPC_PORT = 7814
+DEFAULT_CENTRAL_PUBLISH_PORT = 7815
 
 
-def parseEndpoint(endpoint, defaultPort=None):
+def getTimestamp():
+    return int(time.time() * 1000)
+
+
+def parseEndpoint(endpoint,
+                  defaultPort=None,
+                  defaultHost='127.0.0.1',
+                  defaultProto='tcp://'):
+    # tcp://host:port
     if '://' in endpoint:
         return endpoint
-    if re.match('\d+', endpoint):
-        return 'tcp://127.0.0.1:%d' % endpoint
-    m = re.match('([\w\.]+):(\d+)', endpoint)
-    if m:
-        host = m.group(1)
-        port = m.group(2)
-        return 'tcp://%s:%d' % (host, port)
-    if defaultPort is not None:
-        m = re.match('[\w\.]+', endpoint)
-        if m:
-            return 'tcp://%s:%d' % (endpoint, defaultPort)
-    raise ValueError('endpoint format "%s" not supported' % endpoint)
+
+    # host:port
+    if re.match(r'^([\w\.]+):(random|\d+)$', endpoint):
+        return '%s%s' % (defaultProto, endpoint)
+
+    # host
+    if re.match(r'^[\w\.]+$', endpoint):
+        if defaultPort is None:
+            raise ValueError('endpoint format %s has no port' % endpoint)
+        else:
+            return '%s%s:%s' % (defaultProto, endpoint, defaultPort)
+
+    # :port
+    if re.match(r'^:(random|\d+)$', endpoint):
+        return '%s%s%s' % (defaultProto, defaultHost, endpoint)
+
+    raise ValueError('can\'t resolve endpoint format "%s"' % endpoint)
+
+
+def zmqLoop():
+    ioloop.IOLoop.instance().start()

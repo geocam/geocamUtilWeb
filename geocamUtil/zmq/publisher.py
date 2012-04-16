@@ -6,82 +6,107 @@
 # __END_LICENSE__
 
 import logging
-import time
+import re
 
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop import ioloop
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import parseEndpoint
+from geocamUtil.zmq.util import getTimestamp, parseEndpoint, DEFAULT_CENTRAL_RPC_PORT
 
-DEFAULT_CENTRAL_RPC_ENDPOINT = 'tcp://127.0.0.1:7814'
-
-
-
-def addPublisherOptions(parser):
-    parser.add_option('--moduleName',
-                      help='Name to use for this module')
-    parser.add_option('--centralRpcEndpoint',
-                      default=DEFAULT_CENTRAL_RPC_ENDPOINT,
-                      help='Endpoint to use for RPC calls to central [%default]')
-    parser.add_option('--publishEndpoint',
-                      default='random',
-                      help='Endpoint to publish messages on [%default]')
-    parser.add_option('--heartbeatPeriodMsecs',
-                      default=5000, type='int',
-                      help='Period for sending heartbeats to central [%default]'))
+PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
+                          'centralRpcEndpoint': 'tcp://127.0.0.1:%s' % DEFAULT_CENTRAL_RPC_PORT,
+                          'publishEndpoint': 'tcp://127.0.0.1:random',
+                          'heartbeatPeriodMsecs': 5000}
 
 
 class ZmqPublisher(object):
     def __init__(self,
-                 moduleName,
-                 ioloop=None,
+                 moduleName=None,
                  context=None,
-                 publishEndpoint=None,
-                 centralRpcEndpoint='tcp://127.0.0.1:7814',
-                 heartbeatPeriodMsecs=5000):
-        if ioloop is None:
-            from zmq.eventloop import ioloop
-            ioloop.install()
-        self.ioloop = ioloop
+                 centralRpcEndpoint=PUBLISHER_OPT_DEFAULTS['centralRpcEndpoint'],
+                 publishEndpoint=PUBLISHER_OPT_DEFAULTS['publishEndpoint'],
+                 heartbeatPeriodMsecs=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs']):
+        self.moduleName = moduleName
 
         if context is None:
             context = zmq.Context()
         self.context = context
 
-        self.moduleName = moduleName
-        self.centralRpcEndpoint = parseEndpoint(centralRpcEndpoint)
-        self.periodMilliseconds = periodMilliseconds
-        if config is None:
-            config = {}
-        self.config = config
+        self.centralRpcEndpoint = parseEndpoint(centralRpcEndpoint,
+                                                defaultPort=DEFAULT_CENTRAL_RPC_PORT)
+        self.publishEndpoint = parseEndpoint(publishEndpoint,
+                                             defaultPort='random')
+        self.heartbeatPeriodMsecs = heartbeatPeriodMsecs
 
-        self.reqSocket = None
         self.reqStream = None
+        self.pubStream = None
         self.heartbeatTimer = None
         self.counter = 0
+
+    @classmethod
+    def addOptions(cls, parser, defaultModuleName,
+                   defaults=None):
+        if defaults is None:
+            defaults = PUBLISHER_OPT_DEFAULTS
+        parser.add_option('--moduleName',
+                          default=defaultModuleName,
+                          help='Name to use for this module [%default]')
+        parser.add_option('--centralRpcEndpoint',
+                          default=defaults['centralRpcEndpoint'],
+                          help='Endpoint where central listens for RPC calls [%default]')
+        parser.add_option('--publishEndpoint',
+                          default=defaults['publishEndpoint'],
+                          help='Endpoint to publish messages on [%default]')
+        parser.add_option('--heartbeatPeriodMsecs',
+                          default=defaults['heartbeatPeriodMsecs'],
+                          type='int',
+                          help='Period for sending heartbeats to central [%default]')
+
+    @classmethod
+    def getOptionValues(cls, opts):
+        result = {}
+        for key in PUBLISHER_OPT_DEFAULTS.iterkeys():
+            val = getattr(opts, key, None)
+            if val is not None:
+                result[key] = val
+        return result
 
     def heartbeat(self):
         logging.debug('ZmqPublisher: heartbeat')
         msg = json.dumps({'method': 'heartbeat',
                           'id': self.counter,
                           'params': [{'moduleName': self.moduleName,
-                                      'timestamp': int(time.time() * 1000),
-                                      'config': self.config}]})
-        self.reqSocket.send(msg)
+                                      'timestamp': getTimestamp(),
+                                      'pub': self.publishEndpoint}]})
+        self.reqStream.send(msg)
         self.counter += 1
 
     def handleHeartbeatAck(self, messages):
         for msg in messages:
             logging.debug('ZmqPublisher: heartbeatAck %s', msg)
 
+    def send(self, topic, obj):
+        self.pubStream.send('%s:%s' % (topic, json.dumps(obj)))
+
     def start(self):
-        self.reqSocket = self.context.socket(zmq.REQ)
-        self.reqSocket.connect(self.centralRpcEndpoint)
-        self.reqStream = ZMQStream(self.reqSocket)
+        reqSocket = self.context.socket(zmq.REQ)
+        self.reqStream = ZMQStream(reqSocket)
+        self.reqStream.connect(self.centralRpcEndpoint)
         self.reqStream.on_recv(self.handleHeartbeatAck)
+
+        pubSocket = self.context.socket(zmq.PUB)
+        self.pubStream = ZMQStream(pubSocket)
+
+        if self.publishEndpoint.endswith(':random'):
+            endpointWithoutPort = re.sub(r':random$', '', self.publishEndpoint)
+            port = self.pubStream.bind_to_random_port(endpointWithoutPort)
+            self.publishEndpoint = '%s:%d' % (endpointWithoutPort, port)
+        else:
+            self.pubStream.bind(self.publishEndpoint)
+
         self.heartbeatTimer = ioloop.PeriodicCallback(self.heartbeat,
-                                                      self.periodMilliseconds)
+                                                      self.heartbeatPeriodMsecs)
         self.heartbeatTimer.start()
         self.heartbeat()
