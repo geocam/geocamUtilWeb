@@ -46,23 +46,24 @@ class ZmqPublisher(object):
         self.counter = 0
 
     @classmethod
-    def addOptions(cls, parser, defaultModuleName,
-                   defaults=None):
-        if defaults is None:
-            defaults = PUBLISHER_OPT_DEFAULTS
-        parser.add_option('--moduleName',
-                          default=defaultModuleName,
-                          help='Name to use for this module [%default]')
-        parser.add_option('--centralRpcEndpoint',
-                          default=defaults['centralRpcEndpoint'],
-                          help='Endpoint where central listens for RPC calls [%default]')
-        parser.add_option('--publishEndpoint',
-                          default=defaults['publishEndpoint'],
-                          help='Endpoint to publish messages on [%default]')
-        parser.add_option('--heartbeatPeriodMsecs',
-                          default=defaults['heartbeatPeriodMsecs'],
-                          type='int',
-                          help='Period for sending heartbeats to central [%default]')
+    def addOptions(cls, parser, defaultModuleName):
+        if not parser.has_option('--moduleName'):
+            parser.add_option('--moduleName',
+                              default=defaultModuleName,
+                              help='Name to use for this module [%default]')
+        if not parser.has_option('--centralRpcEndpoint'):
+            parser.add_option('--centralRpcEndpoint',
+                              default=PUBLISHER_OPT_DEFAULTS['centralRpcEndpoint'],
+                              help='Endpoint where central listens for RPC calls [%default]')
+        if not parser.has_option('--publishEndpoint'):
+            parser.add_option('--publishEndpoint',
+                              default=PUBLISHER_OPT_DEFAULTS['publishEndpoint'],
+                              help='Endpoint to publish messages on [%default]')
+        if not parser.has_option('--heartbeatPeriodMsecs'):
+            parser.add_option('--heartbeatPeriodMsecs',
+                              default=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs'],
+                              type='int',
+                              help='Period for sending heartbeats to central [%default]')
 
     @classmethod
     def getOptionValues(cls, opts):

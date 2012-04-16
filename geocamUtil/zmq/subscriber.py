@@ -33,16 +33,15 @@ class ZmqSubscriber(object):
         self.counter = 0
 
     @classmethod
-    def addOptions(cls, parser, defaultModuleName,
-                   defaults=None):
-        if defaults is None:
-            defaults = SUBSCRIBER_OPT_DEFAULTS
-        parser.add_option('--moduleName',
-                          default=defaultModuleName,
-                          help='Name to use for this module [%default]')
-        parser.add_option('--centralPublishEndpoint',
-                          default=defaults['centralPublishEndpoint'],
-                          help='Endpoint where central publishes messages [%default]')
+    def addOptions(cls, parser, defaultModuleName):
+        if not parser.has_option('--moduleName'):
+            parser.add_option('--moduleName',
+                              default=defaultModuleName,
+                              help='Name to use for this module [%default]')
+        if not parser.has_option('--centralPublishEndpoint'):
+            parser.add_option('--centralPublishEndpoint',
+                              default=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint'],
+                              help='Endpoint where central publishes messages [%default]')
 
     @classmethod
     def getOptionValues(cls, opts):
