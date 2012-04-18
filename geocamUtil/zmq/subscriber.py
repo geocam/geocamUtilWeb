@@ -8,11 +8,11 @@ import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_RPC_PORT
+from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT
 
 SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
                            'centralPublishEndpoint': 'tcp://127.0.0.1:%d'
-                           % (DEFAULT_CENTRAL_RPC_PORT + 1)}
+                           % DEFAULT_CENTRAL_PUBLISH_PORT}
 
 
 class ZmqSubscriber(object):
@@ -27,7 +27,7 @@ class ZmqSubscriber(object):
         self.context = context
 
         self.centralPublishEndpoint = parseEndpoint(centralPublishEndpoint,
-                                                    defaultPort=DEFAULT_CENTRAL_RPC_PORT + 1)
+                                                    defaultPort=DEFAULT_CENTRAL_PUBLISH_PORT)
 
         self.handlers = {}
         self.counter = 0
@@ -93,3 +93,6 @@ class ZmqSubscriber(object):
         del topicRegistry[handlerId]
         if not topicRegistry:
             self.stream.setsockopt(zmq.UNSUBSCRIBE, topic)
+
+    def connect(self, endpoint):
+        self.stream.connect(endpoint)
