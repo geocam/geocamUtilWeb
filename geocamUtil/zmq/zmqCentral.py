@@ -39,24 +39,20 @@ class ZmqCentral(object):
 
     def announceConnect(self, moduleName, params):
         logging.info('module %s connected', moduleName)
-        self.publishAndLog('central.connect.%s:%s'
-                           % (moduleName, json.dumps(params)))
+        self.injectStream.send('central.connect.%s:%s'
+                               % (moduleName, json.dumps(params)))
 
     def announceDisconnect(self, moduleName):
         logging.info('module %s disconnected', moduleName)
-        self.publishAndLog('central.disconnect.%s:%s'
-                           % (moduleName,
-                              json.dumps({'timestamp': getTimestamp()})))
+        self.injectStream.send('central.disconnect.%s:%s'
+                               % (moduleName,
+                                  json.dumps({'timestamp': getTimestamp()})))
 
     def logMessage(self, msg):
         mlog = self.messageLog
         mlog.write('@@@ %d %d ' % (getTimestamp(), len(msg)))
         mlog.write(msg)
         mlog.write('\n')
-
-    def publishAndLog(self, msg):
-        self.injectStream.send(msg)
-        self.logMessage(msg)
 
     def handleHeartbeat(self, params):
         moduleName = params['moduleName'].encode('utf-8')
@@ -106,7 +102,7 @@ class ZmqCentral(object):
 
             try:
                 method = call['method']
-                params = call['params']
+                _params = call['params']
                 if method == 'info':
                     result = self.handleInfo()
                 else:
@@ -121,7 +117,7 @@ class ZmqCentral(object):
                                          str(errObject))
                 logging.warning(''.join(traceback.format_tb(errTB)))
                 logging.warning(errText)
-                logging.warning('while handling rpc message: %s' % msg)
+                logging.warning('while handling rpc message: %s', msg)
                 self.rpcStream.send(json.dumps({'result': None,
                                                 'error': errText,
                                                 'id': callId}))
