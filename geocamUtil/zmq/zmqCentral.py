@@ -24,7 +24,8 @@ from geocamUtil.zmq.util import \
      DEFAULT_CENTRAL_RPC_PORT, \
      DEFAULT_CENTRAL_SUBSCRIBE_PORT, \
      DEFAULT_CENTRAL_PUBLISH_PORT, \
-     getTimestamp
+     getTimestamp, \
+     parseEndpoint
 
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_MS = 10000
@@ -206,6 +207,15 @@ class ZmqCentral(object):
             self.forwarder.bind_in(INJECT_ENDPOINT)
             self.forwarder.bind_out(self.opts.publishEndpoint)
             self.forwarder.bind_out(MONITOR_ENDPOINT)
+            for entry in self.opts.subscribeTo:
+                try:
+                    moduleName, endpoint = entry.split('@')
+                    endpoint = parseEndpoint(endpoint)
+                except ValueError:
+                    raise ValueError('--subscribeTo argument "%s" is not in the format <moduleName>@<endpoint>' % entry)
+                self.forwarder.connect_in(endpoint)
+                self.info[moduleName] = {'moduleName': moduleName,
+                                         'pub': endpoint}
             self.forwarder.start()
             time.sleep(0.1)  # wait for forwarder to bind sockets
 
@@ -216,15 +226,6 @@ class ZmqCentral(object):
 
             self.injectStream = ZMQStream(self.context.socket(zmq.PUB))
             self.injectStream.connect(INJECT_ENDPOINT)
-
-            for entry in self.opts.subscribeTo:
-                try:
-                    moduleName, endpoint = entry.split('@')
-                except ValueError:
-                    raise ValueError('--subscribeTo argument "%s" is not in the format <moduleName>@<endpoint>' % entry)
-                self.forwarder.connect_in(endpoint)
-                self.info[moduleName] = {'moduleName': moduleName,
-                                         'pub': endpoint}
 
             self.disconnectTimer = ioloop.PeriodicCallback(self.handleDisconnectTimer, 5000)
             self.disconnectTimer.start()
