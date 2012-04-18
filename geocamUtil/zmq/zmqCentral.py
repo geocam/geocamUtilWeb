@@ -15,6 +15,7 @@ import atexit
 
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
+from zmq.devices import ThreadDevice
 from zmq.eventloop import ioloop
 ioloop.install()
 
@@ -27,6 +28,8 @@ from geocamUtil.zmq.util import \
 
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_MS = 10000
+MONITOR_ENDPOINT = 'inproc://monitor'
+INJECT_ENDPOINT = 'inproc://inject'
 
 
 class ZmqCentral(object):
@@ -35,7 +38,7 @@ class ZmqCentral(object):
         self.info = {}
 
     def announceConnect(self, moduleName, params):
-        logging.debug('module %s connected', moduleName)
+        logging.info('module %s connected', moduleName)
         self.publishAndLog('central.connect.%s:%s'
                            % (moduleName, json.dumps(params)))
 
@@ -45,12 +48,15 @@ class ZmqCentral(object):
                            % (moduleName,
                               json.dumps({'timestamp': getTimestamp()})))
 
+    def logMessage(self, msg):
+        mlog = self.messageLog
+        mlog.write('@@@ %d %d ' % (getTimestamp(), len(msg)))
+        mlog.write(msg)
+        mlog.write('\n')
+
     def publishAndLog(self, msg):
-        timestamp = getTimestamp()
-        self.pubStream.send(msg)
-        self.messageLog.write('@@@ %d %d ' % (timestamp, len(msg)))
-        self.messageLog.write(msg)
-        self.messageLog.write('\n')
+        self.injectStream.send(msg)
+        self.logMessage(msg)
 
     def handleHeartbeat(self, params):
         moduleName = params['moduleName'].encode('utf-8')
@@ -70,11 +76,12 @@ class ZmqCentral(object):
         params['timeout'] = now + keepalive
         return 'ok'
 
-    def handleInfo(self, params):
+    def handleInfo(self):
         return self.info
 
     def handleMessages(self, messages):
         for msg in messages:
+            self.logMessage(msg)
             if msg.startswith('central.heartbeat.'):
                 try:
                     _topic, body = msg.split(':', 1)
@@ -87,7 +94,6 @@ class ZmqCentral(object):
                     logging.warning(''.join(traceback.format_tb(errTB)))
                     logging.warning(errText)
                     logging.warning('[error while handling heartbeat %s]', msg)
-            self.publishAndLog(msg)
 
     def handleRpcCall(self, messages):
         for msg in messages:
@@ -102,7 +108,7 @@ class ZmqCentral(object):
                 method = call['method']
                 params = call['params']
                 if method == 'info':
-                    result = self.handleInfo(*params)
+                    result = self.handleInfo()
                 else:
                     raise ValueError('unknown method %s' % method)
                 self.rpcStream.send(json.dumps({'result': result,
@@ -113,8 +119,9 @@ class ZmqCentral(object):
                 errText = '%s.%s: %s' % (errClass.__module__,
                                          errClass.__name__,
                                          str(errObject))
-                logging.debug(''.join(traceback.format_tb(errTB)))
-                logging.debug(errText)
+                logging.warning(''.join(traceback.format_tb(errTB)))
+                logging.warning(errText)
+                logging.warning('while handling rpc message: %s' % msg)
                 self.rpcStream.send(json.dumps({'result': None,
                                                 'error': errText,
                                                 'id': callId}))
@@ -188,21 +195,34 @@ class ZmqCentral(object):
             os.dup2(nullFd, 2)
 
         # set up zmq
-        self.context = zmq.Context()
+        self.context = zmq.Context.instance()
         self.rpcStream = ZMQStream(self.context.socket(zmq.REP))
         self.rpcStream.bind(self.opts.rpcEndpoint)
         self.rpcStream.on_recv(self.handleRpcCall)
-        self.pubStream = ZMQStream(self.context.socket(zmq.PUB))
-        self.pubStream.setsockopt(zmq.HWM, self.opts.highWaterMark)
-        self.pubStream.bind(self.opts.publishEndpoint)
 
-        self.subStream = ZMQStream(self.context.socket(zmq.SUB))
-        self.subStream.bind(self.opts.subscribeEndpoint)
-        self.subStream.setsockopt(zmq.SUBSCRIBE, '')
-        self.subStream.on_recv(self.handleMessages)
+        self.forwarder = ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
+        self.forwarder.setsockopt_in(zmq.IDENTITY, THIS_MODULE)
+        self.forwarder.setsockopt_out(zmq.IDENTITY, THIS_MODULE)
+        self.forwarder.setsockopt_in(zmq.SUBSCRIBE, '')
+        self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
+        self.forwarder.bind_in(self.opts.subscribeEndpoint)
+        self.forwarder.bind_in(INJECT_ENDPOINT)
+        self.forwarder.bind_out(self.opts.publishEndpoint)
+        self.forwarder.bind_out(MONITOR_ENDPOINT)
+        self.forwarder.start()
+        time.sleep(0.1)  # wait for forwarder to bind sockets
+
+        self.monStream = ZMQStream(self.context.socket(zmq.SUB))
+        self.monStream.setsockopt(zmq.SUBSCRIBE, '')
+        self.monStream.connect(MONITOR_ENDPOINT)
+        self.monStream.on_recv(self.handleMessages)
+
+        self.injectStream = ZMQStream(self.context.socket(zmq.PUB))
+        self.injectStream.connect(INJECT_ENDPOINT)
+
         for entry in self.opts.subscribeTo:
             moduleName, endpoint = entry.split('@')
-            self.subStream.connect(endpoint)
+            self.forwarder.connect_in(endpoint)
             self.info[moduleName] = {'moduleName': moduleName,
                                      'pub': endpoint}
 

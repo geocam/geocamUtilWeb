@@ -23,7 +23,7 @@ class ZmqSubscriber(object):
         self.moduleName = moduleName
 
         if context is None:
-            context = zmq.Context()
+            context = zmq.Context.instance()
         self.context = context
 
         self.centralPublishEndpoint = parseEndpoint(centralPublishEndpoint,
