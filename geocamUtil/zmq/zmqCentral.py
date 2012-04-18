@@ -190,40 +190,54 @@ class ZmqCentral(object):
             os.dup2(nullFd, 1)
             os.dup2(nullFd, 2)
 
-        # set up zmq
-        self.context = zmq.Context.instance()
-        self.rpcStream = ZMQStream(self.context.socket(zmq.REP))
-        self.rpcStream.bind(self.opts.rpcEndpoint)
-        self.rpcStream.on_recv(self.handleRpcCall)
+        try:
+            # set up zmq
+            self.context = zmq.Context.instance()
+            self.rpcStream = ZMQStream(self.context.socket(zmq.REP))
+            self.rpcStream.bind(self.opts.rpcEndpoint)
+            self.rpcStream.on_recv(self.handleRpcCall)
 
-        self.forwarder = ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
-        self.forwarder.setsockopt_in(zmq.IDENTITY, THIS_MODULE)
-        self.forwarder.setsockopt_out(zmq.IDENTITY, THIS_MODULE)
-        self.forwarder.setsockopt_in(zmq.SUBSCRIBE, '')
-        self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
-        self.forwarder.bind_in(self.opts.subscribeEndpoint)
-        self.forwarder.bind_in(INJECT_ENDPOINT)
-        self.forwarder.bind_out(self.opts.publishEndpoint)
-        self.forwarder.bind_out(MONITOR_ENDPOINT)
-        self.forwarder.start()
-        time.sleep(0.1)  # wait for forwarder to bind sockets
+            self.forwarder = ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
+            self.forwarder.setsockopt_in(zmq.IDENTITY, THIS_MODULE)
+            self.forwarder.setsockopt_out(zmq.IDENTITY, THIS_MODULE)
+            self.forwarder.setsockopt_in(zmq.SUBSCRIBE, '')
+            self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
+            self.forwarder.bind_in(self.opts.subscribeEndpoint)
+            self.forwarder.bind_in(INJECT_ENDPOINT)
+            self.forwarder.bind_out(self.opts.publishEndpoint)
+            self.forwarder.bind_out(MONITOR_ENDPOINT)
+            self.forwarder.start()
+            time.sleep(0.1)  # wait for forwarder to bind sockets
 
-        self.monStream = ZMQStream(self.context.socket(zmq.SUB))
-        self.monStream.setsockopt(zmq.SUBSCRIBE, '')
-        self.monStream.connect(MONITOR_ENDPOINT)
-        self.monStream.on_recv(self.handleMessages)
+            self.monStream = ZMQStream(self.context.socket(zmq.SUB))
+            self.monStream.setsockopt(zmq.SUBSCRIBE, '')
+            self.monStream.connect(MONITOR_ENDPOINT)
+            self.monStream.on_recv(self.handleMessages)
 
-        self.injectStream = ZMQStream(self.context.socket(zmq.PUB))
-        self.injectStream.connect(INJECT_ENDPOINT)
+            self.injectStream = ZMQStream(self.context.socket(zmq.PUB))
+            self.injectStream.connect(INJECT_ENDPOINT)
 
-        for entry in self.opts.subscribeTo:
-            moduleName, endpoint = entry.split('@')
-            self.forwarder.connect_in(endpoint)
-            self.info[moduleName] = {'moduleName': moduleName,
-                                     'pub': endpoint}
+            for entry in self.opts.subscribeTo:
+                try:
+                    moduleName, endpoint = entry.split('@')
+                except ValueError:
+                    raise ValueError('--subscribeTo argument "%s" is not in the format <moduleName>@<endpoint>' % entry)
+                self.forwarder.connect_in(endpoint)
+                self.info[moduleName] = {'moduleName': moduleName,
+                                         'pub': endpoint}
 
-        self.disconnectTimer = ioloop.PeriodicCallback(self.handleDisconnectTimer, 5000)
-        self.disconnectTimer.start()
+            self.disconnectTimer = ioloop.PeriodicCallback(self.handleDisconnectTimer, 5000)
+            self.disconnectTimer.start()
+
+        except:  # pylint: disable=W0702
+            errClass, errObject, errTB = sys.exc_info()[:3]
+            errText = '%s.%s: %s' % (errClass.__module__,
+                                     errClass.__name__,
+                                     str(errObject))
+            logging.error(''.join(traceback.format_tb(errTB)))
+            logging.error(errText)
+            logging.error('[error during startup -- exiting]')
+            sys.exit(1)
 
     def shutdown(self):
         self.messageLog.flush()
