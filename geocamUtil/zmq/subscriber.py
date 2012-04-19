@@ -66,18 +66,13 @@ class ZmqSubscriber(object):
             body = msg[(colonIndex + 1):]
             obj = json.loads(body)
 
-            # fast exact match
-            topicRegistry = self.handlers.get(topic, None)
-
-            # prefix match
-            if topicRegistry is None:
-                for topicPrefix, registry in self.handlers.iteritems():
-                    if topic.startswith(topicPrefix):
-                        topicRegistry = registry
-                        break
+            for topicPrefix, registry in self.handlers.iteritems():
+                if topic.startswith(topicPrefix):
+                    topicRegistry = registry
+                    break
 
             for handler in topicRegistry.itervalues():
-                handler(topic, obj)
+                handler(topic[:-1], obj)
 
     def subscribe(self, topic, handler):
         topicRegistry = self.handlers.setdefault(topic, {})
