@@ -7,6 +7,7 @@
 
 import re
 import time
+import platform
 
 from zmq.eventloop import ioloop
 
@@ -17,6 +18,11 @@ DEFAULT_CENTRAL_PUBLISH_PORT = 7816
 
 def getTimestamp():
     return int(time.time() * 1000)
+
+
+def getShortHostName():
+    node = platform.node()
+    return node.split('.', 1)[0]
 
 
 def parseEndpoint(endpoint,

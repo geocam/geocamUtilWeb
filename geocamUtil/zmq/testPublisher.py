@@ -11,7 +11,7 @@ from geocamUtil.zmq.util import zmqLoop
 
 def pubMessage(p):
     topic = 'geocamUtil.greeting'
-    body = 'hello'
+    body = {'text': 'hello'}
     logging.debug('publishing: %s:%s', topic, body)
     p.send(topic, body)
 

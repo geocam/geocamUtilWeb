@@ -13,22 +13,28 @@ from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop import ioloop
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import getTimestamp, parseEndpoint, DEFAULT_CENTRAL_SUBSCRIBE_PORT
+from geocamUtil.zmq.util import \
+     getTimestamp, \
+     parseEndpoint, \
+     getShortHostName, \
+     DEFAULT_CENTRAL_SUBSCRIBE_PORT
 
 PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
                           'centralSubscribeEndpoint': 'tcp://127.0.0.1:%s'
                           % DEFAULT_CENTRAL_SUBSCRIBE_PORT,
                           'publishEndpoint': 'tcp://127.0.0.1:random',
-                          'heartbeatPeriodMsecs': 5000}
+                          'heartbeatPeriodMsecs': 5000,
+                          'highWaterMark': 100}
 
 
 class ZmqPublisher(object):
     def __init__(self,
-                 moduleName=None,
+                 moduleName,
                  context=None,
                  centralSubscribeEndpoint=PUBLISHER_OPT_DEFAULTS['centralSubscribeEndpoint'],
                  publishEndpoint=PUBLISHER_OPT_DEFAULTS['publishEndpoint'],
-                 heartbeatPeriodMsecs=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs']):
+                 heartbeatPeriodMsecs=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs'],
+                 highWaterMark=PUBLISHER_OPT_DEFAULTS['highWaterMark']):
         self.moduleName = moduleName
 
         if context is None:
@@ -40,6 +46,7 @@ class ZmqPublisher(object):
         self.publishEndpoint = parseEndpoint(publishEndpoint,
                                              defaultPort='random')
         self.heartbeatPeriodMsecs = heartbeatPeriodMsecs
+        self.highWaterMark = highWaterMark
 
         self.pubStream = None
         self.heartbeatTimer = None
@@ -63,6 +70,11 @@ class ZmqPublisher(object):
                               default=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs'],
                               type='int',
                               help='Period for sending heartbeats to central [%default]')
+        if not parser.has_option('--highWaterMark'):
+            parser.add_option('--highWaterMark',
+                              default=PUBLISHER_OPT_DEFAULTS['highWaterMark'],
+                              type='int',
+                              help='High-water mark for publish socket (see 0MQ docs) [%default]')
 
     @classmethod
     def getOptionValues(cls, opts):
@@ -76,17 +88,20 @@ class ZmqPublisher(object):
     def heartbeat(self):
         logging.debug('ZmqPublisher: heartbeat')
         self.send('central.heartbeat.%s' % self.moduleName,
-                  {'pub': self.publishEndpoint})
+                  {'host': getShortHostName(),
+                   'pub': self.publishEndpoint})
 
     def send(self, topic, obj):
         if isinstance(obj, dict):
-            obj.setdefault('moduleName', self.moduleName)
+            obj.setdefault('module', self.moduleName)
             obj.setdefault('timestamp', getTimestamp())
         self.pubStream.send('%s:%s' % (topic, json.dumps(obj)))
 
     def start(self):
         pubSocket = self.context.socket(zmq.PUB)
         self.pubStream = ZMQStream(pubSocket)
+        self.pubStream.setsockopt(zmq.IDENTITY, self.moduleName)
+        self.pubStream.setsockopt(zmq.HWM, self.highWaterMark)
         self.pubStream.connect(self.centralSubscribeEndpoint)
 
         if self.publishEndpoint.endswith(':random'):

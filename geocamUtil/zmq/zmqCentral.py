@@ -56,7 +56,7 @@ class ZmqCentral(object):
         mlog.write('\n')
 
     def handleHeartbeat(self, params):
-        moduleName = params['moduleName'].encode('utf-8')
+        moduleName = params['module'].encode('utf-8')
         now = getTimestamp()
         params['centralTimestamp'] = now
 
@@ -212,9 +212,9 @@ class ZmqCentral(object):
                     moduleName, endpoint = entry.split('@')
                     endpoint = parseEndpoint(endpoint)
                 except ValueError:
-                    raise ValueError('--subscribeTo argument "%s" is not in the format <moduleName>@<endpoint>' % entry)
+                    raise ValueError('--subscribeTo argument "%s" is not in the format "<moduleName>@<endpoint>"' % entry)
                 self.forwarder.connect_in(endpoint)
-                self.info[moduleName] = {'moduleName': moduleName,
+                self.info[moduleName] = {'module': moduleName,
                                          'pub': endpoint}
             self.forwarder.start()
             time.sleep(0.1)  # wait for forwarder to bind sockets
@@ -259,7 +259,7 @@ def main():
     parser.add_option('--subscribeTo',
                       default=[],
                       action='append',
-                      help='Non-central-aware publisher to subscribe to (format "moduleName@endpoint"; can specify multiple times)')
+                      help='Non-central-aware publisher to subscribe to (format "<moduleName>@<endpoint>"; can specify multiple times)')
     parser.add_option('-d', '--logDir',
                       default='log',
                       help='Directory to place logs in [%default]')
