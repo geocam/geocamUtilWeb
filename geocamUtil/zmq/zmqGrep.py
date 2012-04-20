@@ -14,14 +14,13 @@ from geocamUtil.zmq.util import zmqLoop
 from geocamUtil.zmq.subscriber import ZmqSubscriber
 from geocamUtil import anyjson as json
 
-prettyPrintG = False
+def handleMessagePretty(topic, obj):
+    print topic
+    print json.dumps(obj, sort_keys=True, indent=4)
 
-def handleMessage(topic, body):
-    if prettyPrintG:
-        print topic
-        print json.dumps(body, sort_keys=True, indent=4)
-    else:
-        print '%s: %s' % (topic, json.dumps(body))
+
+def handleMessageSimple(topic, body):
+    print '%s: %s' % (topic, body)
 
 
 def main():
@@ -41,9 +40,11 @@ def main():
     s.start()
 
     # subscribe to the message we want
-    global prettyPrintG
-    prettyPrintG = opts.pretty
-    s.subscribe(args[0], handleMessage)
+    topic = args[0]
+    if opts.pretty:
+        s.subscribeJson(topic, handleMessagePretty)
+    else:
+        s.subscribeRaw(topic, handleMessageSimple)
 
     zmqLoop()
 

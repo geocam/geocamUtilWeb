@@ -12,6 +12,8 @@ import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop import ioloop
 
+from django.core import serializers
+
 from geocamUtil import anyjson as json
 from geocamUtil.zmq.util import \
      getTimestamp, \
@@ -51,6 +53,8 @@ class ZmqPublisher(object):
         self.pubStream = None
         self.heartbeatTimer = None
 
+        self.serializer = serializers.get_serializer('json')()
+
     @classmethod
     def addOptions(cls, parser, defaultModuleName):
         if not parser.has_option('--moduleName'):
@@ -87,15 +91,25 @@ class ZmqPublisher(object):
 
     def heartbeat(self):
         logging.debug('ZmqPublisher: heartbeat')
-        self.send('central.heartbeat.%s' % self.moduleName,
-                  {'host': getShortHostName(),
-                   'pub': self.publishEndpoint})
+        self.sendJson('central.heartbeat.%s' % self.moduleName,
+                      {'host': getShortHostName(),
+                       'pub': self.publishEndpoint})
 
-    def send(self, topic, obj):
+    def sendRaw(self, topic, body):
+        self.pubStream.send('%s:%s' % (topic, body))
+
+    def sendJson(self, topic, obj):
         if isinstance(obj, dict):
             obj.setdefault('module', self.moduleName)
             obj.setdefault('timestamp', getTimestamp())
-        self.pubStream.send('%s:%s' % (topic, json.dumps(obj)))
+        self.sendRaw(topic, json.dumps(obj))
+
+    def sendDjango(self, modelInstance, topic=None):
+        dataText = self.serializer.serialize([modelInstance])
+        data = json.loads(dataText)[0]
+        if topic is None:
+            topic = data['model'].encode('utf-8')
+        self.sendJson(topic, {'data': data})
 
     def start(self):
         pubSocket = self.context.socket(zmq.PUB)

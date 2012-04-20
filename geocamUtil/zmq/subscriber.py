@@ -7,6 +7,8 @@
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 
+from django.core import serializers
+
 from geocamUtil import anyjson as json
 from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT
 
@@ -31,6 +33,7 @@ class ZmqSubscriber(object):
 
         self.handlers = {}
         self.counter = 0
+        self.deserializer = serializers.get_deserializer('json')
 
     @classmethod
     def addOptions(cls, parser, defaultModuleName):
@@ -64,7 +67,6 @@ class ZmqSubscriber(object):
             colonIndex = msg.find(':')
             topic = msg[:(colonIndex + 1)]
             body = msg[(colonIndex + 1):]
-            obj = json.loads(body)
 
             for topicPrefix, registry in self.handlers.iteritems():
                 if topic.startswith(topicPrefix):
@@ -72,9 +74,9 @@ class ZmqSubscriber(object):
                     break
 
             for handler in topicRegistry.itervalues():
-                handler(topic[:-1], obj)
+                handler(topic[:-1], body)
 
-    def subscribe(self, topic, handler):
+    def subscribeRaw(self, topic, handler):
         topicRegistry = self.handlers.setdefault(topic, {})
         if not topicRegistry:
             self.stream.setsockopt(zmq.SUBSCRIBE, topic)
@@ -82,6 +84,19 @@ class ZmqSubscriber(object):
         self.counter += 1
         topicRegistry[handlerId] = handler
         return handlerId
+
+    def subscribeJson(self, topic, handler):
+        def jsonHandler(topic, body):
+            return handler(topic, json.loads(body))
+        return self.subscribeRaw(topic, jsonHandler)
+
+    def subscribeDjango(self, topic, handler):
+        def djangoHandler(topic, body):
+            obj = json.loads(body)
+            dataText = json.dumps([obj['data']])
+            modelInstance = self.deserializer(dataText)[0]
+            return handler(topic, modelInstance)
+        return self.subscribeRaw(topic, djangoHandler)
 
     def unsubscribe(self, topic, handlerId):
         topicRegistry = self.handlers[topic]
