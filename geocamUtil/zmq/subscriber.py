@@ -80,9 +80,9 @@ class ZmqSubscriber(object):
         topicRegistry = self.handlers.setdefault(topic, {})
         if not topicRegistry:
             self.stream.setsockopt(zmq.SUBSCRIBE, topic)
-        handlerId = self.counter
+        handlerId = (topic, self.counter)
+        topicRegistry[self.counter] = handler
         self.counter += 1
-        topicRegistry[handlerId] = handler
         return handlerId
 
     def subscribeJson(self, topic, handler):
@@ -98,9 +98,10 @@ class ZmqSubscriber(object):
             return handler(topic, modelInstance)
         return self.subscribeRaw(topic, djangoHandler)
 
-    def unsubscribe(self, topic, handlerId):
+    def unsubscribe(self, handlerId):
+        topic, index = handlerId
         topicRegistry = self.handlers[topic]
-        del topicRegistry[handlerId]
+        del topicRegistry[index]
         if not topicRegistry:
             self.stream.setsockopt(zmq.UNSUBSCRIBE, topic)
 
