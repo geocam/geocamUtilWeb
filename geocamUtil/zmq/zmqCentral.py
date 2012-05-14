@@ -28,7 +28,7 @@ from geocamUtil.zmq.util import \
      parseEndpoint
 
 THIS_MODULE = 'zmqCentral'
-DEFAULT_KEEPALIVE_MS = 10000
+DEFAULT_KEEPALIVE_US = 10000000
 MONITOR_ENDPOINT = 'inproc://monitor'
 INJECT_ENDPOINT = 'inproc://inject'
 
@@ -47,7 +47,7 @@ class ZmqCentral(object):
         logging.info('module %s disconnected', moduleName)
         self.injectStream.send('central.disconnect.%s:%s'
                                % (moduleName,
-                                  json.dumps({'timestamp': getTimestamp()})))
+                                  json.dumps({'timestamp': str(getTimestamp())})))
 
     def logMessage(self, msg):
         mlog = self.messageLog
@@ -58,18 +58,17 @@ class ZmqCentral(object):
     def handleHeartbeat(self, params):
         moduleName = params['module'].encode('utf-8')
         now = getTimestamp()
-        params['centralTimestamp'] = now
 
         oldInfo = self.info.get(moduleName, None)
         if oldInfo:
-            if oldInfo['pub'] != params['pub']:
+            if oldInfo.get('pub', None) != params.get('pub', None):
                 self.announceDisconnect(moduleName)
                 self.announceConnect(moduleName, params)
         else:
             self.announceConnect(moduleName, params)
 
         self.info[moduleName] = params
-        keepalive = params.get('keepalive', DEFAULT_KEEPALIVE_MS)
+        keepalive = params.get('keepalive', DEFAULT_KEEPALIVE_US)
         params['timeout'] = now + keepalive
         return 'ok'
 

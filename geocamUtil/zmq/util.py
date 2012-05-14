@@ -17,7 +17,7 @@ DEFAULT_CENTRAL_PUBLISH_PORT = 7816
 
 
 def getTimestamp():
-    return int(time.time() * 1000)
+    return int(time.time() * 1000000)
 
 
 def getShortHostName():

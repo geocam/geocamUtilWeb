@@ -101,7 +101,7 @@ class ZmqPublisher(object):
     def sendJson(self, topic, obj):
         if isinstance(obj, dict):
             obj.setdefault('module', self.moduleName)
-            obj.setdefault('timestamp', getTimestamp())
+            obj.setdefault('timestamp', str(getTimestamp()))
         self.sendRaw(topic, json.dumps(obj))
 
     def sendDjango(self, modelInstance, topic=None):
