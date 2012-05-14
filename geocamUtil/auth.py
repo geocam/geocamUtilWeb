@@ -5,7 +5,7 @@
 # __END_LICENSE__
 
 from geocamUtil.middleware.security import requestIsSecure
-from geocamAware import settings
+from geocamUtil import settings
 
 
 def getAccountWidget(request):
