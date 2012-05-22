@@ -13,3 +13,4 @@ media/css/*.r*.css
 example/build
 /build/
 /dist/
+/geocamUtil/zmq/log
