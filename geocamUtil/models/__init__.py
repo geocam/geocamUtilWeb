@@ -9,6 +9,7 @@ from django.db import models
 from UuidField import UuidField
 from ExtrasField import ExtrasField
 from dateTimeUtc import DateTimeUtcField
+from TimestampDescriptor import TimestampDescriptor
 
 
 class UuidExample(models.Model):
