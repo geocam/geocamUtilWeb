@@ -95,8 +95,8 @@ class ZmqSubscriber(object):
         def djangoHandler(topic, body):
             obj = json.loads(body)
             dataText = json.dumps([obj['data']])
-            modelInstance = self.deserializer(dataText)[0]
-            return handler(topic, modelInstance)
+            modelInstance = list(self.deserializer(dataText))[0]
+            return handler(topic, modelInstance.object)
         return self.subscribeRaw(topic, djangoHandler)
 
     def unsubscribe(self, handlerId):
