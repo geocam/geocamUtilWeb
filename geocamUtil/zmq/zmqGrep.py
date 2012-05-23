@@ -29,7 +29,7 @@ def main():
     parser.add_option('-p', '--pretty',
                       action='store_true', default=False,
                       help='Pretty-print JSON objects')
-    ZmqSubscriber.addOptions(parser, 'testSubscriber')
+    ZmqSubscriber.addOptions(parser, 'zmqGrep')
     opts, args = parser.parse_args()
     if len(args) != 1:
         parser.error('expected exactly 1 arg')
