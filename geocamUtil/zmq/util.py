@@ -20,6 +20,19 @@ def getTimestamp():
     return int(time.time() * 1000000)
 
 
+def getTimestampFields(timestampStr):
+    """
+    Used to convert from JSON-over-0MQ microseconds-since-epoch
+    timestamp representation (used by ddsZmqBridge and some of our other
+    utilities) to a two-part timestamp representation as used by many of
+    our Django models.
+    """
+    timestampFull = int(timestampStr)
+    timestampSeconds = datetime.datetime.utcfromtimestamp(timestampFull / 1000000)
+    timestampMicroseconds = timestampFull % 1000000
+    return timestampSeconds, timestampMicroseconds
+
+
 def getShortHostName():
     node = platform.node()
     return node.split('.', 1)[0]
