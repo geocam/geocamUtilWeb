@@ -191,7 +191,9 @@ def getTimeShort(utcDt, tz=None, now=None):
     diffSecs = diff.days * 24 * 60 * 60 + diff.seconds
     diffMins = diffSecs // 60
 
-    if diffMins < 2:
+    if diffMins < 1:
+        return 'seconds ago'
+    elif diffMins < 2:
         return '1 minute ago'
     elif diffMins < 60:
         return '%s minutes ago' % diffMins
