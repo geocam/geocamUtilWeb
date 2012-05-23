@@ -7,7 +7,7 @@
 from django.db import models
 
 from UuidField import UuidField
-from ExtrasField import ExtrasField, JsonTextField, JsonCharField
+from ExtrasField import ExtrasField #, JsonTextField, JsonCharField
 from dateTimeUtc import DateTimeUtcField
 from timestampDescriptor import TimestampDescriptor
 
