@@ -11,6 +11,7 @@ from django.core import serializers
 
 from geocamUtil import anyjson as json
 from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT
+from geocamUtil.models.ExtrasDotField import convertToDotDictRecurse
 
 SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
                            'centralPublishEndpoint': 'tcp://127.0.0.1:%d'
@@ -87,7 +88,7 @@ class ZmqSubscriber(object):
 
     def subscribeJson(self, topic, handler):
         def jsonHandler(topic, body):
-            return handler(topic, json.loads(body))
+            return handler(topic, convertToDotDictRecurse(json.loads(body)))
         return self.subscribeRaw(topic, jsonHandler)
 
     def subscribeDjango(self, topic, handler):
