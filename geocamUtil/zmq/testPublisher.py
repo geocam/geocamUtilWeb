@@ -13,7 +13,7 @@ def pubMessage(p):
     topic = 'geocamUtil.greeting'
     body = {'text': 'hello'}
     logging.debug('publishing: %s:%s', topic, body)
-    p.send(topic, body)
+    p.sendJson(topic, body)
 
 
 def main():
