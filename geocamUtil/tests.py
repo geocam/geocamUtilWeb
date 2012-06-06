@@ -14,6 +14,7 @@ from geocamUtil.models.UuidFieldTest import UuidFieldTest
 from geocamUtil.models.ExtrasFieldTest import ExtrasFieldTest
 from geocamUtil.BuilderTest import BuilderTest
 from geocamUtil.InstallerTest import InstallerTest
+from geocamUtil.storeTest import StoreTest
 from geocamUtil.icons.rotateTest import IconsRotateTest
 from geocamUtil.icons.svgTest import IconsSvgTest
 
