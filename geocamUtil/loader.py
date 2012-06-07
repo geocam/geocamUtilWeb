@@ -6,8 +6,11 @@
 
 """
 Utilities for loading Python classes and Django models by name. Modeled
-in part on django.utils.importlib.
+in part on django.utils.
 """
+
+import sys
+
 
 def getModClass(name):
     """converts 'app_name.ModelName' to ['stuff.module', 'ClassName']"""
@@ -20,10 +23,20 @@ def getModClass(name):
 
 def getModelByName(qualifiedName):
     """
-    converts 'module_name.ClassName' to a class object
+    converts 'appName.ModelName' to a class object
     """
     appName, className = qualifiedName.split('.', 1)
     modelsName = '%s.models' % appName
     __import__(modelsName)
     mod = sys.modules[modelsName]
+    return getattr(mod, className)
+
+
+def getClassByName(qualifiedName):
+    """
+    converts 'moduleName.ClassName' to a class object
+    """
+    moduleName, className = qualifiedName.rsplit('.', 1)
+    __import__(moduleName)
+    mod = sys.modules[moduleName]
     return getattr(mod, className)
