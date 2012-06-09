@@ -11,6 +11,8 @@ in part on django.utils.
 
 import sys
 
+from django.db import models
+
 
 def getModClass(name):
     """converts 'app_name.ModelName' to ['stuff.module', 'ClassName']"""
@@ -25,11 +27,7 @@ def getModelByName(qualifiedName):
     """
     converts 'appName.ModelName' to a class object
     """
-    appName, className = qualifiedName.split('.', 1)
-    modelsName = '%s.models' % appName
-    __import__(modelsName)
-    mod = sys.modules[modelsName]
-    return getattr(mod, className)
+    return models.get_model(*qualifiedName.split('.'))
 
 
 def getClassByName(qualifiedName):
