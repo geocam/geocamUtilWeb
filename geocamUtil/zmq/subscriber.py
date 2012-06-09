@@ -77,34 +77,34 @@ class ZmqSubscriber(object):
             for handler in topicRegistry.itervalues():
                 handler(topic[:-1], body)
 
-    def subscribeRaw(self, topic, handler):
-        topicRegistry = self.handlers.setdefault(topic, {})
+    def subscribeRaw(self, topicPrefix, handler):
+        topicRegistry = self.handlers.setdefault(topicPrefix, {})
         if not topicRegistry:
-            self.stream.setsockopt(zmq.SUBSCRIBE, topic)
-        handlerId = (topic, self.counter)
+            self.stream.setsockopt(zmq.SUBSCRIBE, topicPrefix)
+        handlerId = (topicPrefix, self.counter)
         topicRegistry[self.counter] = handler
         self.counter += 1
         return handlerId
 
-    def subscribeJson(self, topic, handler):
-        def jsonHandler(topic, body):
-            return handler(topic, convertToDotDictRecurse(json.loads(body)))
-        return self.subscribeRaw(topic, jsonHandler)
+    def subscribeJson(self, topicPrefix, handler):
+        def jsonHandler(topicPrefix, body):
+            return handler(topicPrefix, convertToDotDictRecurse(json.loads(body)))
+        return self.subscribeRaw(topicPrefix, jsonHandler)
 
-    def subscribeDjango(self, topic, handler):
-        def djangoHandler(topic, body):
+    def subscribeDjango(self, topicPrefix, handler):
+        def djangoHandler(topicPrefix, body):
             obj = json.loads(body)
             dataText = json.dumps([obj['data']])
             modelInstance = list(self.deserializer(dataText))[0]
-            return handler(topic, modelInstance.object)
-        return self.subscribeRaw(topic, djangoHandler)
+            return handler(topicPrefix, modelInstance.object)
+        return self.subscribeRaw(topicPrefix, djangoHandler)
 
     def unsubscribe(self, handlerId):
-        topic, index = handlerId
-        topicRegistry = self.handlers[topic]
+        topicPrefix, index = handlerId
+        topicRegistry = self.handlers[topicPrefix]
         del topicRegistry[index]
         if not topicRegistry:
-            self.stream.setsockopt(zmq.UNSUBSCRIBE, topic)
+            self.stream.setsockopt(zmq.UNSUBSCRIBE, topicPrefix)
 
     def connect(self, endpoint):
         self.stream.connect(endpoint)

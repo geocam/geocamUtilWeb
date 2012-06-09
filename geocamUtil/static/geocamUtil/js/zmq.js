@@ -53,27 +53,87 @@ ZmqManager.prototype.autoReconnect = function () {
     }(this), 2000);
 };
 
-ZmqManager.prototype.subscribeRaw = function (topic, handler) {
-    this.handlers[topic] = handler;
-
+ZmqManager.prototype.sendRequest = function (method, params) {
     var request = {
         'jsonrpc': '2.0',
-        'method': 'subscribe',
-        'params': {
-            'topic': topic
-        },
+        'method': method,
+        'params': params,
         'id': this.requestCounter
     };
     this.requestCounter++;
 
     this.socket.send(JSON.stringify(request));
+}
+
+ZmqManager.prototype.subscribeRaw = function (topicPrefix, handler) {
+    var handlerId = this.requestCounter;
+    this.handlers[handlerId] = {
+        handlerId: handlerId,
+        topicPrefix: topicPrefix,
+        handler: handler
+    };
+    this.sendRequest('subscribe',
+                     {
+                         'topicPrefix': topicPrefix
+                     });
+    return handlerId;
 };
 
-ZmqManager.prototype.subscribeJson = function (topic, handler) {
-    function wrappedHandler(zmq, topic, body) {
-        return handler(zmq, topic, JSON.parse(body));
+ZmqManager.prototype.subscribeJson = function (topicPrefix, handler) {
+    function wrappedHandler(zmq, topicPrefix, body) {
+        return handler(zmq, topicPrefix, JSON.parse(body));
     }
-    this.subscribeRaw(topic, wrappedHandler);
+    return this.subscribeRaw(topicPrefix, wrappedHandler);
+};
+
+ZmqManager.prototype.subscribeDjango = function (topicPrefix, handler) {
+    console.log('subscribeDjango ' + topicPrefix);
+    function wrappedHandler(zmq, topicPrefix, body) {
+        console.log('djangoWrappedHandler');
+        return handler(zmq, topicPrefix, JSON.parse(body).data.fields);
+    }
+    return this.subscribeRaw(topicPrefix, wrappedHandler);
+};
+
+ZmqManager.prototype.unsubscribe = function (handlerId) {
+    var handlerInfo = this.handlers[handlerId];
+    handlerInfo.unsubscribeRequested = true;
+    this.unsubscribeIfNeeded(handlerId);
+};
+
+ZmqManager.prototype.unsubscribeIfNeeded = function (handlerId) {
+    var handlerInfo = this.handlers[handlerId];
+    if (handlerInfo.serverHandlerId != undefined
+        && handlerInfo.unsubscribeRequested) {
+        this.sendRequest('unsubscribe',
+                         {
+                             'handlerId': handlerInfo.serverHandlerId
+                         });
+        delete this.handlers[handlerId];
+    }
+};
+
+ZmqManager.prototype.handleResponse = function (topic, body) {
+    // This response handler is simplified because we only need to watch
+    // for responses to 'subscribe' requests and we chose the jsonrpc
+    // request id to match the handlerId.
+    var obj = JSON.parse(body);
+    if (obj.id != undefined) {
+        var handlerId = obj.id;
+        var handlerInfo = this.handlers[handlerId];
+        if (handlerInfo != undefined) {
+            // Looks like a subscribe response
+            if (obj.result == undefined) {
+                // Error handling would be nice but not clear what we
+                // should do.
+            } else {
+                handlerInfo.serverHandlerId = obj.result;
+                // Check if the client-side code already tried to
+                // unsubscribe before we received the subscribe reply.
+                this.unsubscribeIfNeeded(handlerId);
+            }
+        }
+    }
 };
 
 ZmqManager.prototype.onmessage = function (msg) {
@@ -82,9 +142,15 @@ ZmqManager.prototype.onmessage = function (msg) {
     var topic = msg.data.substr(0, colonIndex);
     var body = msg.data.substr(colonIndex+1);
 
-    $.each(this.handlers, function (topicPrefix, handler) {
-        if (topicWithColon.indexOf(topicPrefix) == 0) {
-            handler(this, topic, body);
+    // special case: handle jsonrpc response
+    if (topic == 'zmqProxy.response') {
+        this.handleResponse(topic, body);
+    }
+
+    // otherwise handle subscriptions
+    $.each(this.handlers, function (handlerId, handlerInfo) {
+        if (topicWithColon.indexOf(handlerInfo.topicPrefix) == 0) {
+            handlerInfo.handler(this, topic, body);
         }
     });
 };
@@ -100,4 +166,5 @@ ZmqManager.prototype.onclose = function () {
         this.opts.onclose(this);
     }
     this.socket = null;
+    this.handlers = {};
 };
