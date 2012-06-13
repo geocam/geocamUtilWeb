@@ -1,11 +1,11 @@
 
-from django.conf import settings
+from django.conf import settings as djangoSettings
 
 def static(request):
     """
     Backport django.core.context_processors.static to Django 1.2.
     """
-    return {'STATIC_URL': settings.STATIC_URL}
+    return {'STATIC_URL': djangoSettings.STATIC_URL}
 
-    def request(request):
-        return {'request': request}
+def settings(request):
+    return {'settings': djangoSettings}
