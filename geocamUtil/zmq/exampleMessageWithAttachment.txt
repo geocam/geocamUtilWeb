@@ -1,0 +1,14 @@
+Content-Type: multipart/mixed; boundary="d3b9176a-9e55-4afd-aca4-5f1a09fce37b"
+
+--d3b9176a-9e55-4afd-aca4-5f1a09fce37b
+Content-Disposition: inline
+Content-Type: application/json; charset="utf-8"
+
+{"cameraId": 1}
+--d3b9176a-9e55-4afd-aca4-5f1a09fce37b
+Content-Disposition: attachment; filename="processedData.bmp"
+Content-Type: image/bmp
+Content-Transfer-Encoding: binary
+
+hello
+--d3b9176a-9e55-4afd-aca4-5f1a09fce37b

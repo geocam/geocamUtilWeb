@@ -9,6 +9,7 @@ import re
 import time
 import platform
 import datetime
+import email.parser
 
 from zmq.eventloop import ioloop
 
@@ -17,8 +18,10 @@ DEFAULT_CENTRAL_SUBSCRIBE_PORT = 7815
 DEFAULT_CENTRAL_PUBLISH_PORT = 7816
 
 
-def getTimestamp():
-    return int(time.time() * 1000000)
+def getTimestamp(posixTime=None):
+    if posixTime is None:
+        posixTime = time.time()
+    return int(posixTime * 1000000)
 
 
 def getTimestampFields(timestampStr):
@@ -64,6 +67,34 @@ def parseEndpoint(endpoint,
 
     raise ValueError('can\'t resolve endpoint format "%s"' % endpoint)
 
+
+def hasAttachments(msg):
+    colonIndex = msg.find(':')
+    ctype = ':Content-Type: '
+    return msg[colonIndex : (colonIndex + len(ctype))] == ctype
+
+def parseMessageBody(body):
+    if body.startswith('Content-Type:'):
+        msg = email.parser.Parser().parsestr(body)
+        assert msg.is_multipart()
+        jsonSection = msg.get_payload()[0]
+        attachments = msg.get_payload()[1:]
+
+        if attachments:
+            # parser quirk: remove last section if it's blank
+            lastSectionText = attachments[-1].get_payload()
+            if isinstance(lastSectionText, basestring) and re.match('^\s*$', lastSectionText):
+                attachments.pop()
+
+        return {'json': jsonSection.get_payload(), 'attachments': attachments}
+    else:
+        return {'json': body, 'attachments': []}
+
+def parseMessage(msg):
+    topic, body = msg.split(':', 1)
+    parsed = parseMessageBody(body)
+    parsed['topic'] = topic
+    return parsed
 
 def zmqLoop():
     ioloop.IOLoop.instance().start()

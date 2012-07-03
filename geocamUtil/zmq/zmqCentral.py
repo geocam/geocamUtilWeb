@@ -12,6 +12,7 @@ import datetime
 import time
 import traceback
 import atexit
+import random
 
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
@@ -25,7 +26,9 @@ from geocamUtil.zmq.util import \
      DEFAULT_CENTRAL_SUBSCRIBE_PORT, \
      DEFAULT_CENTRAL_PUBLISH_PORT, \
      getTimestamp, \
-     parseEndpoint
+     parseEndpoint, \
+     hasAttachments, \
+     parseMessage
 
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_US = 10000000
@@ -49,11 +52,44 @@ class ZmqCentral(object):
                                % (moduleName,
                                   json.dumps({'timestamp': str(getTimestamp())})))
 
-    def logMessage(self, msg):
+    def logMessage(self, msg, posixTime=None, attachmentDir='-'):
         mlog = self.messageLog
-        mlog.write('@@@ %d %d ' % (getTimestamp(), len(msg)))
+        mlog.write('@@@ %d %d %s ' % (getTimestamp(posixTime), len(msg), attachmentDir))
         mlog.write(msg)
         mlog.write('\n')
+
+    def logMessageWithAttachments0(self, msg):
+        parsed = parseMessage(msg)
+        posixTime = time.time()
+
+        # construct attachment directory
+        dt = datetime.datetime.utcfromtimestamp(posixTime)
+        dateText = dt.strftime('%Y-%m-%d')
+        timeText = dt.strftime('%H-%M-%S') + '.%06d' % dt.microsecond
+        uniq = '%08x' % random.getrandbits(32)
+        attachmentSuffix = os.path.join('attachments',
+                                        dateText,
+                                        timeText,
+                                        parsed['topic'],
+                                        uniq)
+        attachmentPath = os.path.join(self.logDir, attachmentSuffix)
+        os.makedirs(attachmentPath)
+
+        # write attachments to attachment directory
+        for attachment in parsed['attachments']:
+            fullName = os.path.join(attachmentPath, attachment.get_filename())
+            open(fullName, 'wb').write(attachment.get_payload())
+
+        # log message with a pointer to the attachment directory
+        self.logMessage(':'.join((parsed['topic'], parsed['json'])),
+                        posixTime,
+                        attachmentSuffix)
+
+    def logMessageWithAttachments(self, msg):
+        try:
+            return self.logMessageWithAttachments0(msg)
+        except:  # pylint: disable=W0702
+            self.logException('logging message with attachments')
 
     def handleHeartbeat(self, params):
         moduleName = params['module'].encode('utf-8')
@@ -75,21 +111,27 @@ class ZmqCentral(object):
     def handleInfo(self):
         return self.info
 
+    def logException(self, whileClause):
+        errClass, errObject, errTB = sys.exc_info()[:3]
+        errText = '%s.%s: %s' % (errClass.__module__,
+                                 errClass.__name__,
+                                 str(errObject))
+        logging.warning(''.join(traceback.format_tb(errTB)))
+        logging.warning(errText)
+        logging.warning('[error while %s at time %s]' % (whileClause, getTimestamp()))
+
     def handleMessages(self, messages):
         for msg in messages:
-            self.logMessage(msg)
+            if hasAttachments(msg):
+                self.logMessageWithAttachments(msg)
+            else:
+                self.logMessage(msg)
             if msg.startswith('central.heartbeat.'):
                 try:
                     _topic, body = msg.split(':', 1)
                     self.handleHeartbeat(json.loads(body))
                 except:  # pylint: disable=W0702
-                    errClass, errObject, errTB = sys.exc_info()[:3]
-                    errText = '%s.%s: %s' % (errClass.__module__,
-                                             errClass.__name__,
-                                             str(errObject))
-                    logging.warning(''.join(traceback.format_tb(errTB)))
-                    logging.warning(errText)
-                    logging.warning('[error while handling heartbeat %s]', msg)
+                    self.logException('handling heartbeat')
 
     def handleRpcCall(self, messages):
         for msg in messages:
@@ -111,13 +153,7 @@ class ZmqCentral(object):
                                                 'error': None,
                                                 'id': callId}))
             except:  # pylint: disable=W0702
-                errClass, errObject, errTB = sys.exc_info()[:3]
-                errText = '%s.%s: %s' % (errClass.__module__,
-                                         errClass.__name__,
-                                         str(errObject))
-                logging.warning(''.join(traceback.format_tb(errTB)))
-                logging.warning(errText)
-                logging.warning('while handling rpc message: %s', msg)
+                self.logException('handling rpc message')
                 self.rpcStream.send(json.dumps({'result': None,
                                                 'error': errText,
                                                 'id': callId}))
