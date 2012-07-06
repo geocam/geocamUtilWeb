@@ -87,9 +87,7 @@ ZmqManager.prototype.subscribeJson = function (topicPrefix, handler) {
 };
 
 ZmqManager.prototype.subscribeDjango = function (topicPrefix, handler) {
-    console.log('subscribeDjango ' + topicPrefix);
     function wrappedHandler(zmq, topicPrefix, body) {
-        console.log('djangoWrappedHandler');
         return handler(zmq, topicPrefix, JSON.parse(body).data.fields);
     }
     return this.subscribeRaw(topicPrefix, wrappedHandler);
