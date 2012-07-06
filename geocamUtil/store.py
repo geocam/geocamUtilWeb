@@ -5,6 +5,7 @@
 # __END_LICENSE__
 
 import os
+import re
 import urllib
 try:
     import cPickle as pickle
@@ -44,13 +45,13 @@ class FileStore(MutableMapping):
             os.makedirs(directory)
 
     def getPath(self, key):
-        return os.path.join(self.directory, urllib.quote_plus(key))
+        return os.path.join(self.directory, urllib.quote_plus(key)) + '.p.gz'
 
     def __getitem__(self, key):
         path = self.getPath(key)
         exists = os.path.exists(path)
         try:
-            data = file(path, 'r').read()
+            data = file(path, 'rb').read()
         except (IOError, OSError):
             raise KeyError(key)
         logging.debug('FileStore read: key=%s path=%s exists=%s len(data)=%s',
@@ -64,7 +65,7 @@ class FileStore(MutableMapping):
                       key, path, len(data))
         pathTmp = '%s.part' % path
         try:
-            file(pathTmp, 'w').write(data)
+            file(pathTmp, 'wb').write(data)
             os.rename(pathTmp, path)
         except (IOError, OSError):
             raise KeyError(key)
@@ -83,7 +84,7 @@ class FileStore(MutableMapping):
 
     def __iter__(self):
         for name in os.listdir(self.directory):
-            yield urllib.unquote_plus(name)
+            yield urllib.unquote_plus(re.sub('\.p\.gz$', '', name))
 
     def sync(self):
         # entries are sync'd as they are added, nothing to do
