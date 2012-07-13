@@ -4,6 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+import sys
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 
@@ -59,8 +60,10 @@ class ZmqSubscriber(object):
     def start(self):
         sock = self.context.socket(zmq.SUB)
         self.stream = ZMQStream(sock)
-        self.stream.setsockopt(zmq.IDENTITY, self.moduleName)
+        # causes problems with multiple instances
+        #self.stream.setsockopt(zmq.IDENTITY, self.moduleName)
         self.stream.connect(self.centralPublishEndpoint)
+        print >> sys.stderr, 'zmq.subscriber: connected to central at %s' % self.centralPublishEndpoint
         self.stream.on_recv(self.routeMessage)
 
     def routeMessage(self, messages):
@@ -80,6 +83,7 @@ class ZmqSubscriber(object):
     def subscribeRaw(self, topicPrefix, handler):
         topicRegistry = self.handlers.setdefault(topicPrefix, {})
         if not topicRegistry:
+            print >> sys.stderr, 'zmq.subscriber: subscribe %s' % topicPrefix
             self.stream.setsockopt(zmq.SUBSCRIBE, topicPrefix)
         handlerId = (topicPrefix, self.counter)
         topicRegistry[self.counter] = handler
@@ -104,6 +108,7 @@ class ZmqSubscriber(object):
         topicRegistry = self.handlers[topicPrefix]
         del topicRegistry[index]
         if not topicRegistry:
+            print >> sys.stderr, 'zmq.subscriber: unsubscribe %s' % topicPrefix
             self.stream.setsockopt(zmq.UNSUBSCRIBE, topicPrefix)
 
     def connect(self, endpoint):
