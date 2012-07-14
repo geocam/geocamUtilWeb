@@ -114,7 +114,7 @@ class ZmqPublisher(object):
     def start(self):
         pubSocket = self.context.socket(zmq.PUB)
         self.pubStream = ZMQStream(pubSocket)
-        self.pubStream.setsockopt(zmq.IDENTITY, self.moduleName)
+        # self.pubStream.setsockopt(zmq.IDENTITY, self.moduleName)
         self.pubStream.setsockopt(zmq.HWM, self.highWaterMark)
         self.pubStream.connect(self.centralSubscribeEndpoint)
 
