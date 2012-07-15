@@ -104,11 +104,13 @@ class ZmqPublisher(object):
             obj.setdefault('timestamp', str(getTimestamp()))
         self.sendRaw(topic, json.dumps(obj))
 
-    def sendDjango(self, modelInstance, topic=None):
+    def sendDjango(self, modelInstance, topic=None, topicSuffix=None):
         dataText = self.serializer.serialize([modelInstance])
         data = json.loads(dataText)[0]
         if topic is None:
             topic = data['model'].encode('utf-8')
+            if topicSuffix is not None:
+                topic += topicSuffix
         self.sendJson(topic, {'data': data})
 
     def start(self):
