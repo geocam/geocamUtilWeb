@@ -16,8 +16,7 @@ class BatchProcessor(object):
     def add(self, elt):
         self.queue.append(elt)
         if len(self.queue) >= self.n:
-            self.func(self.queue)
-            self.queue.clear()
+            self.flush()
 
     def flush(self):
         self.func(self.queue)
