@@ -73,6 +73,7 @@ def hasAttachments(msg):
     ctype = ':Content-Type: '
     return msg[colonIndex : (colonIndex + len(ctype))] == ctype
 
+
 def parseMessageBody(body):
     if body.startswith('Content-Type:'):
         msg = email.parser.Parser().parsestr(body)
@@ -90,11 +91,56 @@ def parseMessageBody(body):
     else:
         return {'json': body, 'attachments': []}
 
+
 def parseMessage(msg):
     topic, body = msg.split(':', 1)
     parsed = parseMessageBody(body)
     parsed['topic'] = topic
     return parsed
 
+
 def zmqLoop():
     ioloop.IOLoop.instance().start()
+
+
+class LogRecord(object):
+    def __init__(self, timestamp, attachmentsPath, msg):
+        self.timestamp = timestamp
+        self.attachmentsPath = attachmentsPath
+        self.msg = msg
+
+    def writeTo(self, stream):
+        stream.write('@@@ %d %d %s ' % (self.timestamp, len(self.msg), self.attachmentsPath))
+        stream.write(self.msg)
+        stream.write('\n')
+
+
+class LogParser(object):
+    def __init__(self, logFile):
+        self.logFile = logFile
+
+    def __iter__(self):
+        for lineNum, line in enumerate(self.logFile):
+            try:
+                sentinel, timestampStr, msgSizeStr, attachmentsPath, msg = line.split(' ', 4)
+                timestamp = int(timestampStr)
+                msgSize = int(msgSizeStr)
+            except ValueError:
+                print 'warning: bad log line parse in line %d' % (lineNum + 1)
+                print line
+                continue
+            msg = msg[:-1]  # chop newline
+            if sentinel != '@@@':
+                print 'warning: bad sentinel in line %d' % (lineNum + 1)
+                print line
+                continue
+            if len(msg) != msgSize:
+                print 'warning: bad message length %d != %d in line %d' % (len(msg), msgSize, lineNum + 1)
+                print line
+                continue
+            if attachmentsPath != '-':
+                print 'warning: zmqPlayback can not handle attachments in line %d' % (lineNum + 1)
+                print line
+                continue
+
+            yield LogRecord(timestamp, attachmentsPath, msg)

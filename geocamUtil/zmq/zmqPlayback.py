@@ -11,7 +11,7 @@ import logging
 from zmq.eventloop import ioloop
 ioloop.install()
 
-from geocamUtil.zmq.util import zmqLoop
+from geocamUtil.zmq.util import zmqLoop, LogParser
 from geocamUtil.zmq.publisher import ZmqPublisher
 from geocamUtil import anyjson as json
 
@@ -31,37 +31,21 @@ class ZmqPlayback(object):
         self.publishTimer.start()
 
     def playLog(self):
-        self.log = open(self.logPath, 'rb')
+        self.logFile = open(self.logPath, 'rb')
+        self.log = LogParser(self.logFile)
         i = 0
-        for line in self.log:
-            try:
-                sentinel, timestamp, msgSizeStr, msg = line.split(' ', 3)
-                msgSize = int(msgSizeStr)
-            except ValueError:
-                print 'warning: bad log line parse:'
-                print line
-                continue
-            msg = msg[:-1]  # chop newline
-            if sentinel != '@@@':
-                print 'warning: bad sentinel'
-                print line
-                continue
-            if len(msg) != msgSize:
-                print 'warning: bad message length %d != %d' % (len(msg), msgSize)
-                print line
-                continue
-
+        for rec in self.log:
             topicMatch = False
             if self.opts.topic:
                 for topic in self.opts.topic:
-                    if msg.startswith(topic):
+                    if rec.msg.startswith(topic):
                         topicMatch = True
                         break
             else:
                 topicMatch = True
 
             if topicMatch:
-                self.publisher.pubStream.send(msg)
+                self.publisher.pubStream.send(rec.msg)
                 if i % 100 == 0:
                     sys.stdout.write('.')
                     sys.stdout.flush()
@@ -73,12 +57,6 @@ class ZmqPlayback(object):
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog <zmqCentral-messages-xxx.txt>')
-    #parser.add_option('-s', '--speedup',
-    #                  type='int', default=1,
-    #                  help='Speedup factor [%default]')
-    #parser.add_option('--max',
-    #                  action='store_true', default=False,
-    #                  help='Override speedup, play back messages as fast as possible')
     parser.add_option('-t', '--topic',
                       action='append',
                       help='Only print specified topics, can specify multiple times')

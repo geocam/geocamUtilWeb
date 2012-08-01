@@ -11,19 +11,21 @@ from zmq.eventloop.zmqstream import ZMQStream
 from django.core import serializers
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT
+from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT, LogParser
 from geocamUtil.models.ExtrasDotField import convertToDotDictRecurse
 
 SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
                            'centralPublishEndpoint': 'tcp://127.0.0.1:%d'
-                           % DEFAULT_CENTRAL_PUBLISH_PORT}
+                           % DEFAULT_CENTRAL_PUBLISH_PORT,
+                           'replay': None}
 
 
 class ZmqSubscriber(object):
     def __init__(self,
                  moduleName,
                  context=None,
-                 centralPublishEndpoint=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint']):
+                 centralPublishEndpoint=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint'],
+                 replay=None):
         self.moduleName = moduleName
 
         if context is None:
@@ -32,6 +34,9 @@ class ZmqSubscriber(object):
 
         self.centralPublishEndpoint = parseEndpoint(centralPublishEndpoint,
                                                     defaultPort=DEFAULT_CENTRAL_PUBLISH_PORT)
+        self.replayPaths = replay
+        if self.replayPaths is None:
+            self.replayPaths = []
 
         self.handlers = {}
         self.counter = 0
@@ -47,6 +52,10 @@ class ZmqSubscriber(object):
             parser.add_option('--centralPublishEndpoint',
                               default=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint'],
                               help='Endpoint where central publishes messages [%default]')
+        if not parser.has_option('--replay'):
+            parser.add_option('--replay',
+                              action='append',
+                              help='Replay specified message log (can specify multiple times), or use - to read from stdin')
 
     @classmethod
     def getOptionValues(cls, opts):
@@ -64,21 +73,25 @@ class ZmqSubscriber(object):
         #self.stream.setsockopt(zmq.IDENTITY, self.moduleName)
         self.stream.connect(self.centralPublishEndpoint)
         print >> sys.stderr, 'zmq.subscriber: connected to central at %s' % self.centralPublishEndpoint
-        self.stream.on_recv(self.routeMessage)
+        self.stream.on_recv(self.routeMessages)
 
-    def routeMessage(self, messages):
+    def routeMessages(self, messages):
         for msg in messages:
-            colonIndex = msg.find(':')
-            topic = msg[:(colonIndex + 1)]
-            body = msg[(colonIndex + 1):]
+            self.routeMessage(msg)
 
-            for topicPrefix, registry in self.handlers.iteritems():
-                if topic.startswith(topicPrefix):
-                    topicRegistry = registry
-                    break
+    def routeMessage(self, msg):
+        colonIndex = msg.find(':')
+        topic = msg[:(colonIndex + 1)]
+        body = msg[(colonIndex + 1):]
 
-            for handler in topicRegistry.itervalues():
-                handler(topic[:-1], body)
+        handled = 0
+        for topicPrefix, registry in self.handlers.iteritems():
+            if topic.startswith(topicPrefix):
+                for handler in registry.itervalues():
+                    handler(topic[:-1], body)
+                    handled = 1
+
+        return handled
 
     def subscribeRaw(self, topicPrefix, handler):
         topicRegistry = self.handlers.setdefault(topicPrefix, {})
@@ -113,3 +126,20 @@ class ZmqSubscriber(object):
 
     def connect(self, endpoint):
         self.stream.connect(endpoint)
+
+    def replay(self):
+        numReplayed = 0
+        numHandled = 0
+        for replayPath in self.replayPaths:
+            print '=== replaying messages from %s' % replayPath
+            if replayPath == '-':
+                replayFile = sys.stdin
+            else:
+                replayFile = open(replayPath, 'rb')
+            stream = LogParser(replayFile)
+            for rec in stream:
+                numReplayed += 1
+                numHandled += self.routeMessage(rec.msg)
+
+                if numReplayed % 10000 == 0:
+                    print 'replayed %d messages, %d handled' % (numReplayed, numHandled)
