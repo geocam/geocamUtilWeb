@@ -35,6 +35,7 @@ def statLogs(opts, logPaths):
         maxBucket = buckets[-1]
 
         print
+        total = 0
         for bucket in xrange(minBucket, maxBucket + 1):
             posixTimeStamp = bucket * 3600
             utcDt = datetime.datetime.utcfromtimestamp(posixTimeStamp)
@@ -42,6 +43,9 @@ def statLogs(opts, logPaths):
             if timeString.endswith('00:00'):
                 print
             print '%s %6d' % (timeString, count[bucket])
+            total += count[bucket]
+        print
+        print 'Total: %d' % total
 
         logFile.close()
 
