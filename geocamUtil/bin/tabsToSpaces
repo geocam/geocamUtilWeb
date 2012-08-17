@@ -1,2 +1,2 @@
 #!/bin/sh
-perl -i -ple 's/\t/    /g' $*
+perl -i -ple 's/\t/        /g' $*
