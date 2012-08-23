@@ -45,5 +45,5 @@ class Command(commandUtil.PathCommand):
             for mediaPath in tryMediaPaths:
                 logging.debug('collectmedia app %s: checking for media in %s', impPath, mediaPath)
                 if os.path.exists(mediaPath):
-                    inst.installRecurseGlob('%s/*' % mediaPath, '%sbuild/media' % siteDir)
+                    inst.installRecurseGlob('%s/*' % mediaPath, '%sbuild/static' % siteDir)
                     break
