@@ -12,8 +12,6 @@ import tornado.ioloop
 import tornado.web
 from tornado import websocket
 
-import zmq
-from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop import ioloop
 ioloop.install()
 
@@ -22,6 +20,9 @@ from geocamUtil.zmq.util import zmqLoop
 from geocamUtil.zmq.subscriber import ZmqSubscriber
 
 # pylint: disable=W0223
+
+proxyG = None
+
 
 class JsonRpcService(object):
     """
@@ -56,12 +57,12 @@ class JsonRpcService(object):
 
         version = request.get('jsonrpc', None)
         if version != '2.0':
-            self.writeError(rawRequest, -32600, 'request does not have jsonrpc == "2.0"')
+            self.writeError(rawRequest, None, -32600, 'request does not have jsonrpc == "2.0"')
             return
 
         requestId = request.get('id', None)
         if requestId is None:
-            self.writeError(rawRequest, -32600, 'request has no id')
+            self.writeError(rawRequest, None, -32600, 'request has no id')
             return
 
         params = request.get('params', None)
@@ -76,7 +77,7 @@ class JsonRpcService(object):
         else:
             handler = None
         if handler is None or not callable(handler):
-            self.writeError(rawRequest, requestId, -32601, 'unknown method %s' % repr(method))
+            self.writeError(rawRequest, requestId, -32601, 'unknown method %s' % methodName)
             return
 
         try:
@@ -122,7 +123,7 @@ class ClientSocket(websocket.WebSocketHandler, JsonRpcService):
         return topicPrefix
 
     def handle_unsubscribe(self, topicPrefix):
-        print >> sys.stderr, 'Client unsubscribing handler %s' % handlerId
+        print >> sys.stderr, 'Client unsubscribing from topic %s' % topicPrefix
         handlerInfo = self.handlers[topicPrefix]
         handlerInfo['refCount'] -= 1
         if handlerInfo['refCount'] == 0:

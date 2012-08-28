@@ -5,11 +5,13 @@
 # __END_LICENSE__
 
 import shutil
+import unittest
+import tempfile
 
 from geocamUtil.store import FileStore, LruCacheStore
 
 
-class StoreTest(TestCase):
+class StoreTest(unittest.TestCase):
     def storeTest(self, storeFactory):
         tempDir = tempfile.mkdtemp('-storeTestDir')
 

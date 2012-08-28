@@ -118,7 +118,7 @@ class ZmqCentral(object):
                                  str(errObject))
         logging.warning(''.join(traceback.format_tb(errTB)))
         logging.warning(errText)
-        logging.warning('[error while %s at time %s]' % (whileClause, getTimestamp()))
+        logging.warning('[error while %s at time %s]', whileClause, getTimestamp())
 
     def handleMessages(self, messages):
         for msg in messages:
@@ -154,6 +154,10 @@ class ZmqCentral(object):
                                                 'id': callId}))
             except:  # pylint: disable=W0702
                 self.logException('handling rpc message')
+                errClass, errObject = sys.exc_info()[:2]
+                errText = '%s.%s: %s' % (errClass.__module__,
+                                         errClass.__name__,
+                                         str(errObject))
                 self.rpcStream.send(json.dumps({'result': None,
                                                 'error': errText,
                                                 'id': callId}))

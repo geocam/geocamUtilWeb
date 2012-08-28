@@ -14,6 +14,7 @@ from geocamUtil.zmq.util import zmqLoop
 from geocamUtil.zmq.subscriber import ZmqSubscriber
 from geocamUtil import anyjson as json
 
+
 def handleMessagePretty(topic, obj):
     print topic
     print json.dumps(obj, sort_keys=True, indent=4)

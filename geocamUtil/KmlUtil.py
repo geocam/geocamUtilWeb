@@ -90,6 +90,7 @@ def _makeGetter(userSpec, fieldNames, defaultValue):
 
     return getter
 
+
 def markers(collection,
             name=None,
             description=None,

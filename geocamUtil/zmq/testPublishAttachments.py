@@ -10,6 +10,7 @@ from geocamUtil.zmq.util import zmqLoop
 
 TEST_MESSAGE = open('exampleMessageWithAttachment.txt', 'rb').read()
 
+
 def pubMessage(p):
     topic = 'dds.Resolve.RESOLVE_CAM_ProcessedImage'
     body = TEST_MESSAGE

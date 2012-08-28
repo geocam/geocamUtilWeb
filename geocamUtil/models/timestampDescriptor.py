@@ -6,6 +6,7 @@
 
 from datetime import datetime
 
+
 class TimestampDescriptor(object):
     """
     Descriptor that supports storage of high-resolution timestamps in a

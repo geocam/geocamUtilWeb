@@ -5,7 +5,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import sys
 import logging
 from collections import defaultdict
 import datetime
@@ -13,6 +12,7 @@ import datetime
 from geocamUtil.zmq.util import LogParser
 
 MSECS_PER_HOUR = 3600 * 1000000
+
 
 def statLogs(opts, logPaths):
     i = 0

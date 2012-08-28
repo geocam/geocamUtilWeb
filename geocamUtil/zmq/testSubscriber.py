@@ -27,7 +27,7 @@ def main():
     s.start()
 
     # subscribe to the message we want
-    s.subscribe('geocamUtil.greeting:', handleGreeting)
+    s.subscribeRaw('geocamUtil.greeting:', handleGreeting)
 
     zmqLoop()
 

@@ -5,7 +5,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import sys
 import logging
 
 from geocamUtil.zmq.util import LogParser
@@ -27,7 +26,7 @@ def sortLogs(opts, logPaths):
                 outPath = '%s-zmq-messages.txt' % topic
                 outFile = open(outPath, 'wb')
                 outFiles[topic] = outFile
-            
+
             rec.writeTo(outFile)
             i += 1
 

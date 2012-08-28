@@ -71,7 +71,7 @@ def parseEndpoint(endpoint,
 def hasAttachments(msg):
     colonIndex = msg.find(':')
     ctype = ':Content-Type: '
-    return msg[colonIndex : (colonIndex + len(ctype))] == ctype
+    return msg[colonIndex:(colonIndex + len(ctype))] == ctype
 
 
 def parseMessageBody(body):
