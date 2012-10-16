@@ -17,7 +17,7 @@ from geocamUtil.jsonConfig import loadConfig
 from geocamUtil.zmq.zerorpcClientProxy import ClientProxy
 
 INTRO_TEMPLATE = """
-Welcome to zclient.py.
+Welcome to zclient.
 
 This is an IPython shell with zerorpc clients for services from the
 ports.json file bound to variables in the shell environment. The
@@ -25,8 +25,10 @@ following services are defined:
 
 %(services)s
 
-To call service 'foo' method 'bar', type 'foo.bar()'. For more information,
-type 'help(foo)' or 'help(foo.bar)'.
+To call service 'foo' method 'bar', type 'foo.bar()'. For more
+information, type 'help(foo)' or 'help(foo.bar)'. Note that the help()
+functions only work if the service in question is available when zclient
+starts.
 """
 
 
@@ -58,7 +60,7 @@ class Shell(object):
         for name, port in rpcPorts.iteritems():
             client = zerorpc.Client(port)
             # immediately set up simple proxy
-            globals()[name] = client
+            globals()[name] = ClientProxy(name, client)
             # set up background task to construct decorated proxy that replaces
             # simple proxy
             gevent.spawn(self.setDecoratedProxy, name, client)
