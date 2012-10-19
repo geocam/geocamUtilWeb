@@ -58,7 +58,7 @@ class Shell(object):
         # initialize clients
         rpcPorts = self._ports.zerorpc
         for name, port in rpcPorts.iteritems():
-            client = zerorpc.Client(port)
+            client = zerorpc.Client(port, heartbeat=30, timeout=99999)
             # immediately set up simple proxy
             globals()[name] = ClientProxy(name, client)
             # set up background task to construct decorated proxy that replaces
@@ -80,7 +80,7 @@ def zclient(opts):
 
 def main():
     import optparse
-    parser = optparse.OptionParser('usage: %prog')
+    parser = optparse.OptionParser('usage: %prog OPTIONS')
     parser.add_option('-p', '--ports',
                       default='ports.json',
                       help='Path to ports config file [%default]')
