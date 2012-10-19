@@ -56,16 +56,22 @@ class Shell(object):
         inputhook_manager.set_inputhook(inputhook_gevent)
 
         # initialize clients
-        rpcPorts = self._ports.zerorpc
-        for name, port in rpcPorts.iteritems():
-            client = zerorpc.Client(port, heartbeat=30, timeout=99999)
+        for name, info in self._ports.iteritems():
+            port = info.get('rpc')
+            if port is None:
+                continue
+            heartbeat = info.get('rpcHeartbeat', 5)
+            timeout = info.get('rpcTimeout', 99999)
+            client = zerorpc.Client(port,
+                                    heartbeat=heartbeat,
+                                    timeout=timeout)
             # immediately set up simple proxy
             globals()[name] = ClientProxy(name, client)
             # set up background task to construct decorated proxy that replaces
             # simple proxy
             gevent.spawn(self.setDecoratedProxy, name, client)
 
-        services = sorted(rpcPorts.keys())
+        services = sorted(self._ports.keys())
         servicesStr = '\n'.join(['  %s' % svc for svc in services])
         intro = INTRO_TEMPLATE % {'services': servicesStr}
         ipshell = InteractiveShellEmbed(config=Config(),
