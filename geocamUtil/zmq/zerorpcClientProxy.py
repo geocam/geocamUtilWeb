@@ -22,6 +22,24 @@ def firstCaps(s):
         return s
 
 
+class MissingVal(object):
+    pass
+MISSING = MissingVal()
+
+
+def declarationFromZerorpcInspectArg(arg):
+    name = arg['name']
+    if isinstance(name, tuple):
+        name = '(%s)' % ', '.join([n for n in name])
+    result = name
+
+    defaultVal = arg.get('default', MISSING)
+    if defaultVal is not MISSING:
+        result += '=' + repr(defaultVal)
+
+    return result
+
+
 class ClientProxy(object):
     def __init__(self, name, client):
         self._name = name
@@ -48,7 +66,7 @@ class ClientProxy(object):
 
         methods = meta['methods']
         for name, info in methods.iteritems():
-            argNames = [arg['name'] for arg in info['args']]
+            argNames = [declarationFromZerorpcInspectArg(arg) for arg in info['args']]
             signature = ', '.join(argNames[1:])
             docstring = repr(info.get('doc', '<unknown>'))
             src += (FUNC_TEMPLATE
