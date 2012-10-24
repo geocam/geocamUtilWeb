@@ -5,7 +5,23 @@
 # __END_LICENSE__
 
 import time
-from functools import wraps
+try:
+    from decorator import decorator
+    HAVE_DECORATOR_MODULE = True
+except ImportError:
+    HAVE_DECORATOR_MODULE = False
+
+
+if not HAVE_DECORATOR_MODULE:
+    # roughly simulate the decorator module with functools
+    from functools import wraps
+    def decorator(metaFn):
+        def resultingDecorator(fn):
+            @wraps(fn)
+            def outputFn(*args, **kwargs):
+                return metaFn(fn, *args, **kwargs)
+            return outputFn
+        return resultingDecorator
 
 
 class LogDecorator(object):
@@ -15,6 +31,7 @@ class LogDecorator(object):
       import logging
       from geocamUtil.logDecorator import LogDecorator
 
+      logging.basicConfig(level=logging.DEBUG)
       logger = logging.getLogger('foo')
       log = LogDecorator(logger)
 
@@ -34,33 +51,31 @@ class LogDecorator(object):
         self._logger = logger
 
     def __call__(self, no_result=False):
-        def decorator(fn):
-            @wraps(fn)
-            def wrapped(*args, **kwargs):
-                allArgs = tuple([repr(a) for a in args[1:]] +
-                                ['%s=%s' % (k, repr(v))
-                                 for k, v in kwargs.iteritems()])
-                allArgsStr = '(%s)' % (', '.join(allArgs))
-                self._logger.debug('BEGIN %s%s', fn.__name__, allArgsStr)
-                startTime = time.time()
-                try:
-                    result = fn(*args, **kwargs)
-                except Exception, ex:
-                    endTime = time.time()
-                    self._logger.debug('END %s result=%s elapsed=%s',
-                                       fn.__name__,
-                                       repr(ex),
-                                       endTime - startTime)
-                    raise
+        @decorator
+        def resultFn(fn, *args, **kwargs):
+            allArgs = tuple([repr(a) for a in args[1:]] +
+                            ['%s=%s' % (k, repr(v))
+                             for k, v in kwargs.iteritems()])
+            allArgsStr = '(%s)' % (', '.join(allArgs))
+            self._logger.debug('BEGIN %s%s', fn.__name__, allArgsStr)
+            startTime = time.time()
+            try:
+                result = fn(*args, **kwargs)
+            except Exception, ex:
                 endTime = time.time()
-                if no_result:
-                    resultStr = ''
-                else:
-                    resultStr = ' result=%s' % repr(result)
-                self._logger.debug('END   %s%s elapsed=%s',
+                self._logger.debug('END %s result=%s elapsed=%s',
                                    fn.__name__,
-                                   resultStr,
+                                   repr(ex),
                                    endTime - startTime)
-                return result
-            return wrapped
-        return decorator
+                raise
+            endTime = time.time()
+            if no_result:
+                resultStr = ''
+            else:
+                resultStr = ' result=%s' % repr(result)
+            self._logger.debug('END   %s%s elapsed=%s',
+                               fn.__name__,
+                               resultStr,
+                               endTime - startTime)
+            return result
+        return resultFn
