@@ -15,6 +15,7 @@ except ImportError:
 if not HAVE_DECORATOR_MODULE:
     # roughly simulate the decorator module with functools
     from functools import wraps
+
     def decorator(metaFn):
         def resultingDecorator(fn):
             @wraps(fn)
