@@ -14,6 +14,7 @@ except ImportError:
 import zlib
 from collections import deque, MutableMapping
 import logging
+import json
 
 
 def encodeVal(val):
@@ -219,3 +220,33 @@ class LruCacheStore(MutableMapping):
 
     def __del__(self):
         self.sync()
+
+
+class JsonStore(dict):
+    """
+    Key/value store that uses the dict API. Keys must be strings. Values
+    may have arbitrary types but must be json-compatible.
+
+    Persistently stores key/value pairs in a single JSON file on disk.
+
+    The path argument to the constructor specifies where to write the file.
+    """
+    def __init__(self, path, initialValues=None):
+        self.path = path
+        if os.path.exists(path):
+            self.update(json.load(open(path, 'r')))
+        else:
+            if initialValues is None:
+                pass
+            else:
+                if callable(initialValues):
+                    self.update(initialValues())
+                else:
+                    self.update(initialValues)
+        super(JsonStore, self).__init__()
+
+    def sync(self):
+        parentDir = os.path.dirname(self.path)
+        if not os.path.exists(parentDir):
+            os.makedirs(parentDir)
+        json.dump(self, open(self.path, 'w'), indent=4, sort_keys=True)
