@@ -4,8 +4,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-import PIL
-import StringIO
 import tempfile
 import os
 
