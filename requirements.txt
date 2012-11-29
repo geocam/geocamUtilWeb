@@ -8,7 +8,7 @@
 # http://pip.openplans.org/requirement-format.html
 
 Django
-django-digest
+-e git+https://github.com/trey0/django-digest.git#egg=django_digest
 iso8601
 PIL
 python-digest

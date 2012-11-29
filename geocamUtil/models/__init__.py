@@ -9,7 +9,7 @@ from django.db import models
 from UuidField import UuidField
 from ExtrasField import ExtrasField
 from dateTimeUtc import DateTimeUtcField
-from TimestampDescriptor import TimestampDescriptor
+from timestampDescriptor import TimestampDescriptor
 
 
 class UuidExample(models.Model):
@@ -25,3 +25,12 @@ class ExtrasExample(models.Model):
 class DateTimeUtcExample(models.Model):
     """The sole purpose of this model is to test the DateTimeUtcField class."""
     timestamp = DateTimeUtcField()
+
+
+class TimestampDescriptorExample(models.Model):
+    """
+    The sole purpose of this model is to test the TimestampDescriptor class.
+    """
+    timestampSeconds = models.DateTimeField(null=True, blank=True)
+    timestampMicroseconds = models.PositiveIntegerField(default=0)
+    timestamp = TimestampDescriptor('timestampSeconds', 'timestampMicroseconds')

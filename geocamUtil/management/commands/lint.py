@@ -57,13 +57,13 @@ from django.core.management.base import BaseCommand
 
 from geocamUtil.bin.runpylint import runpylint
 from geocamUtil.bin.runpep8 import runpep8
-from geocamUtil.bin.runjsl import runjsl
+from geocamUtil.bin.rungjslint import rungjslint
 
 
 class Command(BaseCommand):
-    help = 'Run code checks (run pylint, pep8 on Python files and jsl on JavaScript files)'
+    help = 'Run code checks (run pylint, pep8 on Python files and gjslint on JavaScript files)'
 
     def handle(self, *args, **options):
         runpylint(args)
         runpep8(args)
-        runjsl(args)
+        rungjslint(args)

@@ -13,18 +13,20 @@ ioloop.install()
 from geocamUtil.zmq.publisher import ZmqPublisher
 from geocamUtil.zmq.util import zmqLoop
 
+TEST_MESSAGE = open('exampleMessageWithAttachment.txt', 'rb').read()
+
 
 def pubMessage(p):
-    topic = 'geocamUtil.greeting'
-    body = {'text': 'hello'}
+    topic = 'dds.Resolve.RESOLVE_CAM_ProcessedImage'
+    body = TEST_MESSAGE
     logging.debug('publishing: %s:%s', topic, body)
-    p.sendJson(topic, body)
+    p.sendRaw(topic, body)
 
 
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog')
-    ZmqPublisher.addOptions(parser, 'testPublisher')
+    ZmqPublisher.addOptions(parser, 'testPublishAttachments')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')

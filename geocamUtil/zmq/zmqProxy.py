@@ -12,8 +12,6 @@ import tornado.ioloop
 import tornado.web
 from tornado import websocket
 
-import zmq
-from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop import ioloop
 ioloop.install()
 
@@ -22,6 +20,9 @@ from geocamUtil.zmq.util import zmqLoop
 from geocamUtil.zmq.subscriber import ZmqSubscriber
 
 # pylint: disable=W0223
+
+proxyG = None
+
 
 class JsonRpcService(object):
     """
@@ -56,12 +57,12 @@ class JsonRpcService(object):
 
         version = request.get('jsonrpc', None)
         if version != '2.0':
-            self.writeError(rawRequest, -32600, 'request does not have jsonrpc == "2.0"')
+            self.writeError(rawRequest, None, -32600, 'request does not have jsonrpc == "2.0"')
             return
 
         requestId = request.get('id', None)
         if requestId is None:
-            self.writeError(rawRequest, -32600, 'request has no id')
+            self.writeError(rawRequest, None, -32600, 'request has no id')
             return
 
         params = request.get('params', None)
@@ -76,7 +77,7 @@ class JsonRpcService(object):
         else:
             handler = None
         if handler is None or not callable(handler):
-            self.writeError(rawRequest, requestId, -32601, 'unknown method %s' % repr(method))
+            self.writeError(rawRequest, requestId, -32601, 'unknown method %s' % methodName)
             return
 
         try:
@@ -112,17 +113,23 @@ class ClientSocket(websocket.WebSocketHandler, JsonRpcService):
     def on_message(self, text):
         self.handleRequest(text)
 
-    def handle_subscribe(self, topic):
-        topic = topic.encode('utf-8')
-        print >> sys.stderr, 'Client subscribing to topic "%s"' % topic
-        handlerId = proxyG.subscriber.subscribeRaw(topic, self.forward)
-        self.handlers[handlerId] = 1
-        return handlerId
+    def handle_subscribe(self, topicPrefix):
+        topicPrefix = topicPrefix.encode('utf-8')
+        print >> sys.stderr, 'Client subscribing to topicPrefix "%s"' % topicPrefix
+        handlerInfo = self.handlers.setdefault(topicPrefix, {'refCount': 0})
+        if handlerInfo['refCount'] == 0:
+            handlerInfo['handlerId'] = proxyG.subscriber.subscribeRaw(topicPrefix, self.forward)
+        handlerInfo['refCount'] += 1
+        return topicPrefix
 
-    def handle_unsubscribe(self, handlerId):
-        print >> sys.stderr, 'Client unsubscribing handler %s' % handlerId
-        proxyG.subscriber.unsubscribe(handlerId)
-        del self.handlers[handlerId]
+    def handle_unsubscribe(self, topicPrefix):
+        print >> sys.stderr, 'Client unsubscribing from topic %s' % topicPrefix
+        handlerInfo = self.handlers[topicPrefix]
+        handlerInfo['refCount'] -= 1
+        if handlerInfo['refCount'] == 0:
+            proxyG.subscriber.unsubscribe(handlerInfo['handlerId'])
+            del self.handlers[topicPrefix]
+        return 'ok'
 
     def forward(self, topic, msg):
         print >> sys.stderr, 'forward %s %s' % (topic, msg)
@@ -130,8 +137,8 @@ class ClientSocket(websocket.WebSocketHandler, JsonRpcService):
 
     def on_close(self):
         print "WebSocket closed"
-        for handlerId in self.handlers.iterkeys():
-            proxyG.subscriber.unsubscribe(handlerId)
+        for handlerInfo in self.handlers.itervalues():
+            proxyG.subscriber.unsubscribe(handlerInfo['handlerId'])
 
 
 class ZmqProxy(object):
