@@ -12,6 +12,10 @@ import zerorpc
 from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 from IPython.lib.inputhook import inputhook_manager, stdin_ready
+try:
+    from django.conf import settings
+except ImportError:
+    settings = object()
 
 from geocamUtil.jsonConfig import loadConfig
 from geocamUtil.zmq.zerorpcClientProxy import ClientProxy
@@ -88,7 +92,7 @@ def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog OPTIONS')
     parser.add_option('-p', '--ports',
-                      default='ports.json',
+                      default=getattr(settings, 'GEOCAM_UTIL_ZMQ_PORTS_PATH', 'ports.json'),
                       help='Path to ports config file [%default]')
     opts, args = parser.parse_args()
     if args:
