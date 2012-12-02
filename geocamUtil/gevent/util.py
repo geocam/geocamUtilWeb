@@ -55,9 +55,10 @@ def safeRead(fd, chunkSize, label):
     except OSError, ex:
         if ex[0] == errno.EAGAIN:
             return ''
+        if ex[0] == errno.EIO:
+            # what we see if the other end of the pipe dies uncleanly
+            return END_OF_FILE
         logging.warning('safeRead exception, label=%s', label)
-        #if ex[0] == errno.EIO:
-        #    return END_OF_FILE
         raise
     if not chunk:
         return END_OF_FILE
