@@ -11,7 +11,7 @@ class %(decoratedName)s(%(parentName)s):
 FUNC_TEMPLATE = """
     def %(name)s(self, %(signature)s):
         %(docstring)s
-        return self._client.%(name)s(%(signature)s)
+        return self._client.%(name)s(%(argNames)s)
 """
 
 
@@ -27,11 +27,15 @@ class MissingVal(object):
 MISSING = MissingVal()
 
 
-def declarationFromZerorpcInspectArg(arg):
+def nameFromArg(arg):
     name = arg['name']
     if isinstance(name, tuple):
         name = '(%s)' % ', '.join([n for n in name])
-    result = name
+    return name
+
+
+def declarationFromZerorpcInspectArg(arg):
+    result = nameFromArg(arg)
 
     defaultVal = arg.get('default', MISSING)
     if defaultVal is not MISSING:
@@ -66,13 +70,16 @@ class ClientProxy(object):
 
         methods = meta['methods']
         for name, info in methods.iteritems():
-            argNames = [declarationFromZerorpcInspectArg(arg) for arg in info['args']]
-            signature = ', '.join(argNames[1:])
+            argSigs = [declarationFromZerorpcInspectArg(arg) for arg in info['args']]
+            signature = ', '.join(argSigs[1:])
+            argNames = ', '.join(nameFromArg(arg) for arg in info['args'][1:])
             docstring = repr(info.get('doc', '<unknown>'))
             src += (FUNC_TEMPLATE
                     % {'name': name,
                        'signature': signature,
+                       'argNames': argNames,
                        'docstring': docstring})
+        # print 'zerorpcClientProxy:', src
         code = compile(src, '<string>', 'single')
         evaldict = {'__name__': 'geocamUtil.zmq.zerorpcClientProxy',
                     'ClientProxy': ClientProxy}
