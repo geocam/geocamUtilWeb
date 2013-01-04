@@ -160,7 +160,7 @@ class LruCacheStore(MutableMapping):
                 cacheInfo.refCount -= 1
 
     def flushEntry(self, key):
-        loggerG.debug('flushEntry %s' % key)
+        loggerG.debug('flushEntry %s', key)
         cacheInfo = self.cacheInfo[key]
         if cacheInfo.dirty:
             val = self.cache[key]
@@ -170,7 +170,7 @@ class LruCacheStore(MutableMapping):
             cacheInfo.dirty = False
 
     def evictEntry(self, key):
-        loggerG.debug('evictEntry %s' % key)
+        loggerG.debug('evictEntry %s', key)
         self.flushEntry(key)
         del self.cache[key]
         del self.cacheInfo[key]
@@ -186,8 +186,9 @@ class LruCacheStore(MutableMapping):
                     cacheInfo.refCount -= 1
 
     def sync(self):
-        for key in self.cache.keys():
-            self.flushEntry(key)
+        for key, cacheInfo in self.cacheInfo.iteritems():
+            if cacheInfo.dirty:
+                self.flushEntry(key)
 
     def __getitem__(self, key):
         if key in self.cache:
