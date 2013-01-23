@@ -40,6 +40,8 @@ class ZmqCentral(object):
     def __init__(self, opts):
         self.opts = opts
         self.info = {}
+        self.messageLogPath = None
+        self.messageLog = None
 
     def announceConnect(self, moduleName, params):
         logging.info('module %s connected', moduleName)
@@ -122,10 +124,11 @@ class ZmqCentral(object):
 
     def handleMessages(self, messages):
         for msg in messages:
-            if hasAttachments(msg):
-                self.logMessageWithAttachments(msg)
-            else:
-                self.logMessage(msg)
+            if self.messageLog:
+                if hasAttachments(msg):
+                    self.logMessageWithAttachments(msg)
+                else:
+                    self.logMessage(msg)
             if msg.startswith('central.heartbeat.'):
                 try:
                     _topic, body = msg.split(':', 1)
@@ -193,8 +196,9 @@ class ZmqCentral(object):
         # open log files
         now = datetime.datetime.utcnow()
         self.logDir = os.path.abspath(self.opts.logDir)
-        self.messageLogPath = self.readyLog(self.opts.messageLog, now)
-        self.messageLog = open(self.messageLogPath, 'a')
+        if self.opts.messageLog != 'none':
+            self.messageLogPath = self.readyLog(self.opts.messageLog, now)
+            self.messageLog = open(self.messageLogPath, 'a')
         self.consoleLogPath = self.readyLog(self.opts.consoleLog, now)
 
         rootLogger = logging.getLogger()
@@ -280,7 +284,9 @@ class ZmqCentral(object):
             sys.exit(1)
 
     def shutdown(self):
-        self.messageLog.flush()
+        if self.messageLog:
+            self.messageLog.close()
+            self.messageLog = None
 
 
 def main():
@@ -304,7 +310,7 @@ def main():
                       help='Directory to place logs in [%default]')
     parser.add_option('-m', '--messageLog',
                       default='zmqCentral-messages-%s.txt',
-                      help='Log file for message traffic [%default]')
+                      help='Log file for message traffic, or "none" [%default]')
     parser.add_option('-c', '--consoleLog',
                       default='zmqCentral-console-%s.txt',
                       help='Log file for debugging zmqCentral [%default]')

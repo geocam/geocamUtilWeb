@@ -7,6 +7,7 @@
 import shutil
 import unittest
 import tempfile
+import logging
 
 from geocamUtil.store import FileStore, LruCacheStore
 
@@ -16,13 +17,13 @@ class StoreTest(unittest.TestCase):
         tempDir = tempfile.mkdtemp('-storeTestDir')
 
         store1 = storeFactory(tempDir)
-        store1['a'] = 1
-        store1['b'] = 2
+        for i in xrange(20):
+            store1[str(i)] = i
         store1.sync()
 
         store2 = storeFactory(tempDir)
-        self.assertEqual(store2['a'], 1)
-        self.assertEqual(store2['b'], 2)
+        for i in xrange(20):
+            self.assertEqual(store2[str(i)], i)
 
         shutil.rmtree(tempDir)
 
@@ -30,4 +31,12 @@ class StoreTest(unittest.TestCase):
         self.storeTest(FileStore)
 
     def test_LruCacheStore(self):
-        self.storeTest(lambda path: LruCacheStore(FileStore(path), 100))
+        self.storeTest(lambda path: LruCacheStore(FileStore(path), 5))
+
+#    def test_LruEvict(self):
+#        pass
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    unittest.main()

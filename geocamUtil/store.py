@@ -16,6 +16,8 @@ from collections import deque, MutableMapping
 import logging
 import json
 
+loggerG = logging.getLogger('geocamUtil.store')
+
 
 def encodeVal(val):
     return zlib.compress(pickle.dumps(val, pickle.HIGHEST_PROTOCOL), 9)
@@ -158,6 +160,7 @@ class LruCacheStore(MutableMapping):
                 cacheInfo.refCount -= 1
 
     def flushEntry(self, key):
+        loggerG.debug('flushEntry %s', key)
         cacheInfo = self.cacheInfo[key]
         if cacheInfo.dirty:
             val = self.cache[key]
@@ -167,6 +170,7 @@ class LruCacheStore(MutableMapping):
             cacheInfo.dirty = False
 
     def evictEntry(self, key):
+        loggerG.debug('evictEntry %s', key)
         self.flushEntry(key)
         del self.cache[key]
         del self.cacheInfo[key]
@@ -174,21 +178,24 @@ class LruCacheStore(MutableMapping):
     def evictLru(self):
         while len(self.cache) >= self.maxEntries:
             key = self.queue.popleft()
-            cacheInfo = self.cacheInfo[key]
-            if cacheInfo.refCount == 1:
-                self.evictEntry(key)
-            else:
-                cacheInfo.refCount -= 1
+            cacheInfo = self.cacheInfo.get(key, None)
+            if cacheInfo:
+                if cacheInfo.refCount == 1:
+                    self.evictEntry(key)
+                else:
+                    cacheInfo.refCount -= 1
 
     def sync(self):
-        for key in self.cache.keys():
-            self.flushEntry(key)
+        for key, cacheInfo in self.cacheInfo.iteritems():
+            if cacheInfo.dirty:
+                self.flushEntry(key)
 
     def __getitem__(self, key):
         if key in self.cache:
             self.markRead(key)
             return self.cache[key]
         else:
+            # hm... add to cache?
             return self.store[key]
 
     def __setitem__(self, key, val):

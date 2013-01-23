@@ -1,4 +1,6 @@
 *.pyc
+*.swp
+*.swo
 dev.db
 local_settings.py
 media/ugc
