@@ -27,6 +27,9 @@ class DotDict(dict):
     # with Django
     _badFields = ('prepare_database_save',)
 
+    def copy(self):
+        return DotDict(self)
+
     def __repr__(self):
         return json.dumps(self, sort_keys=True, indent=4)
 
