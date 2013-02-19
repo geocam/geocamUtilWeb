@@ -11,6 +11,8 @@ from ExtrasField import ExtrasField
 from dateTimeUtc import DateTimeUtcField
 from timestampDescriptor import TimestampDescriptor
 from AbstractEnum import AbstractEnumModel
+from jsonField import (JsonCharField,
+                       JsonTextField)
 
 
 class UuidExample(models.Model):
@@ -35,3 +37,11 @@ class TimestampDescriptorExample(models.Model):
     timestampSeconds = models.DateTimeField(null=True, blank=True)
     timestampMicroseconds = models.PositiveIntegerField(default=0)
     timestamp = TimestampDescriptor('timestampSeconds', 'timestampMicroseconds')
+
+
+class JsonExample(models.Model):
+    """The sole purpose of this model is to test the JSON field types."""
+    intChar = JsonCharField(max_length=80, valueType='array<int>')
+    floatChar = JsonCharField(max_length=80, valueType='array<float>')
+    intText = JsonTextField(valueType='array<int>')
+    floatText = JsonTextField(valueType='array<float>')

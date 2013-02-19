@@ -12,6 +12,7 @@ from geocamUtil.MultiSettingsTest import MultiSettingsTest
 from geocamUtil.anyjsonTest import AnyJsonTest
 from geocamUtil.models.UuidFieldTest import UuidFieldTest
 from geocamUtil.models.ExtrasFieldTest import ExtrasFieldTest
+from geocamUtil.models.jsonFieldTest import JsonFieldTest
 from geocamUtil.BuilderTest import BuilderTest
 from geocamUtil.InstallerTest import InstallerTest
 from geocamUtil.storeTest import StoreTest
