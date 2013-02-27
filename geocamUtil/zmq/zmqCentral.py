@@ -199,16 +199,20 @@ class ZmqCentral(object):
         if self.opts.messageLog != 'none':
             self.messageLogPath = self.readyLog(self.opts.messageLog, now)
             self.messageLog = open(self.messageLogPath, 'a')
-        self.consoleLogPath = self.readyLog(self.opts.consoleLog, now)
+        if self.opts.consoleLog != 'none':
+            self.consoleLogPath = self.readyLog(self.opts.consoleLog, now)
 
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
         fmt = logging.Formatter('%(asctime)s - %(levelname)-7s - %(message)s')
         fmt.converter = time.gmtime
-        fh = logging.FileHandler(self.consoleLogPath)
-        fh.setFormatter(fmt)
-        fh.setLevel(logging.DEBUG)
-        rootLogger.addHandler(fh)
+
+        if self.opts.consoleLog != 'none':
+            fh = logging.FileHandler(self.consoleLogPath)
+            fh.setFormatter(fmt)
+            fh.setLevel(logging.DEBUG)
+            rootLogger.addHandler(fh)
+
         if self.opts.foreground:
             ch = logging.StreamHandler()
             ch.setLevel(logging.DEBUG)
