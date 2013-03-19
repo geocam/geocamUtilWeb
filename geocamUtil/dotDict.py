@@ -34,6 +34,8 @@ class DotDict(dict):
         return json.dumps(self, sort_keys=True, indent=4)
 
     def __getattr__(self, attr):
+        if attr.startswith('__'):
+            raise AttributeError(attr)  # avoids breaking copy.deepcopy
         if attr in self._badFields:
             raise KeyError(attr)
         return self.get(attr, None)
