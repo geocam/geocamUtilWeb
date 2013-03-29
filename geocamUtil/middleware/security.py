@@ -456,7 +456,6 @@ class SecurityMiddleware(object):
    `GEOCAM_UTIL_SECURITY_DEFAULT_POLICY['acceptAuthTypes']` instead.
     """
 
-    def __init__(self):
     # http://djangosnippets.org/snippets/243/
     def _basicAuthenticate(self, request):
         # require SSL for basic auth -- avoid clients sending passwords in cleartext
