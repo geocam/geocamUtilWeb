@@ -99,10 +99,6 @@ class SecurityMiddleware(object):
     Installation
     ============
 
-     * Install dependencies::
-
-         pip install django-digest python-digest
-
      * Install `geocamUtil` in your `PYTHONPATH`.
 
      * Add the middleware to your `settings.py`::
@@ -303,7 +299,7 @@ class SecurityMiddleware(object):
 
     Default: `django`
 
-    Set to `django`, `digest`, or `basic`.  Controls what challenge the
+    Set to `django` or `basic`.  Controls what challenge the
     server sends to a non-authenticated user who requests a page that
     requires authentication.
 
@@ -312,23 +308,23 @@ class SecurityMiddleware(object):
     user/password.  If the user successfully logs in their credentials
     will be stored in a session cookie until they log out.
 
-    If `digest` or `basic`, send an HTTP digest or basic authentication
-    challenge, an HTTP 401 "forbidden" response with a header that
-    causes compatible browsers to prompt the user for a username and
-    password. If the user successfully logs in the browser will cache
-    their credentials until it is restarted.  `basic` sends the password
-    unencrypted so it must only be used over SSL connections.
+    If `basic`, send an HTTP basic authentication challenge, an HTTP 401
+    "forbidden" response with a header that causes compatible browsers
+    to prompt the user for a username and password. If the user
+    successfully logs in the browser will cache their credentials until
+    it is restarted.  `basic` sends the password unencrypted so it must
+    only be used over SSL connections.
 
     `acceptAuthTypes`
     -----------------
 
-    Default: `('digest', 'basic')`
+    Default: `('basic')`
 
     List of types of authentication that should be accepted (in addition
     to the built-in Django authentication, which is always accepted unless
     the `forbidden` flag is set).
 
-    Options are: `digest`, `basic`, `secretUrl`.
+    Options are: `basic`, `secretUrl`.
 
     `forbidden`
     -----------
@@ -399,8 +395,7 @@ class SecurityMiddleware(object):
 
     If True, only accept encrypted or hashed passwords.  This will cause the
     `django` password form and `basic` credentials to be rejected unless
-    they are posted via SSL.  It has no effect on `digest` which uses hashed
-    credentials.
+    they are posted via SSL.
 
     This option helps you catch and fix cases when you are passing passwords
     over the net in cleartext, so it is on by default.
@@ -462,10 +457,6 @@ class SecurityMiddleware(object):
     """
 
     def __init__(self):
-        if 'digest' in settings.GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES:
-            import django_digest
-            self._digestAuthenticator = django_digest.HttpDigestAuthenticator()
-
     # http://djangosnippets.org/snippets/243/
     def _basicAuthenticate(self, request):
         # require SSL for basic auth -- avoid clients sending passwords in cleartext
@@ -517,12 +508,6 @@ class SecurityMiddleware(object):
             path = request.get_full_path()
         url = '%s?%s=%s' % (loginUrl, REDIRECT_FIELD_NAME, urlquote(path))
         return HttpResponseRedirect(url)
-
-    def _digestAuthenticate(self, request):
-        return self._digestAuthenticator.authenticate(request)
-
-    def _digestChallenge(self, request):
-        return self._digestAuthenticator.build_challenge_response()
 
     def _secretUrlAuthenticate(self, request):
         regex = settings.GEOCAM_UTIL_SECURITY_SECRET_URL_REGEX

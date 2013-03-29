@@ -79,7 +79,16 @@ GEOCAM_UTIL_SECURITY_DEFAULT_CHALLENGE = 'django'
 DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY challenge instead.
 """
 
-GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES = ('digest', 'basic')
+GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES = ('basic')
 """
 DEPRECATED. Use GEOCAM_UTIL_SECURITY_DEFAULT_POLICY acceptAuthTypes instead.
+"""
+
+DIGEST_REALM = 'undefinedrealm'
+"""
+Realm to display to user when using the 'basic' challenge.
+
+(Note: The name of the setting was chosen when it was used primarily
+with HTTP digest authentication, which is no longer supported. We
+avoided changing the name to keep backward compatibility.)
 """
