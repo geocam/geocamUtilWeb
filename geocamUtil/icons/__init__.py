@@ -15,7 +15,7 @@ ICON_URL_CACHE = {}
 ICON_SIZE_CACHE = {}
 
 
-def cacheIcons(d, mediaDir=settings.MEDIA_ROOT, mediaUrl=settings.MEDIA_URL):
+def cacheIcons(d, staticDir=settings.STATIC_ROOT, staticUrl=settings.STATIC_URL):
     paths = glob('%s/*' % d)
     for p in paths:
         iconPrefix, iconExt = os.path.splitext(os.path.basename(p))
@@ -23,7 +23,7 @@ def cacheIcons(d, mediaDir=settings.MEDIA_ROOT, mediaUrl=settings.MEDIA_URL):
             continue
         im = Image.open(p)
         ICON_SIZE_CACHE[iconPrefix] = list(im.size)
-        ICON_URL_CACHE[iconPrefix] = re.sub(mediaDir, mediaUrl, p)
+        ICON_URL_CACHE[iconPrefix] = re.sub(staticDir, staticUrl, p)
 
 
 def getIconSize(iconPrefix):
