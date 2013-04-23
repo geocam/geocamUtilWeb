@@ -82,19 +82,19 @@ class PrepAppsTest(TestCase):
 class CollectMediaTest(TestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
-        self.bmediaDir = '%sbuild/media/' % self.siteDir
+        self.bstaticDir = '%sbuild/static/' % self.siteDir
 
     def tearDown(self):
-        os.system('rm -rf %s' % self.bmediaDir)
+        os.system('rm -rf %s' % self.bstaticDir)
 
     def assertExists(self, f):
         self.assert_(os.path.exists(f))
 
     def test_collect(self):
         management.call_command('collectmedia')
-        self.assertExists('%sapp1/js/app1.js' % self.bmediaDir)
-        self.assertExists('%sapp2/js/app2.js' % self.bmediaDir)
-        self.assertExists('%sexternal/js/lib1.js' % self.bmediaDir)
-        self.assertExists('%sexternal/js/lib2.js' % self.bmediaDir)
-        self.assertExists('%sexternal/js/sharedlib.js' % self.bmediaDir)
-        self.assert_(not os.path.exists('%sshouldNotBeCollected.js' % self.bmediaDir))
+        self.assertExists('%sapp1/js/app1.js' % self.bstaticDir)
+        self.assertExists('%sapp2/js/app2.js' % self.bstaticDir)
+        self.assertExists('%sexternal/js/lib1.js' % self.bstaticDir)
+        self.assertExists('%sexternal/js/lib2.js' % self.bstaticDir)
+        self.assertExists('%sexternal/js/sharedlib.js' % self.bstaticDir)
+        self.assert_(not os.path.exists('%sshouldNotBeCollected.js' % self.bstaticDir))

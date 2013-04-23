@@ -26,9 +26,9 @@ class Command(commandUtil.PathCommand):
         staticRoot = getattr(settings, 'STATIC_ROOT', '%sbuild/static' % siteDir)
         if not os.path.exists(staticRoot):
             os.makedirs(staticRoot)
-        if not os.path.exists(settings.MEDIA_ROOT):
-            mediaRootNoTrailingSlash = re.sub('/$', '', settings.MEDIA_ROOT)
-            os.symlink(staticRoot, mediaRootNoTrailingSlash)
+        #if not os.path.exists(settings.MEDIA_ROOT):
+        #    mediaRootNoTrailingSlash = re.sub('/$', '', settings.MEDIA_ROOT)
+        #    os.symlink(staticRoot, mediaRootNoTrailingSlash)
 
         # install admin media
         djangoDir = os.path.dirname(os.path.realpath(django.__file__))
