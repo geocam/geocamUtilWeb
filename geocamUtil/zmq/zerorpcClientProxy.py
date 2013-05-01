@@ -11,7 +11,7 @@ class %(decoratedName)s(%(parentName)s):
 FUNC_TEMPLATE = """
     def %(name)s(self, %(signature)s):
         %(docstring)s
-        return self._client.%(name)s(%(argNames)s)
+        return self._client('%(name)s', %(argNames)s)
 """
 
 
