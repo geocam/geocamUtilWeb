@@ -249,7 +249,7 @@ class ZmqCentral(object):
             self.forwarder.setsockopt_in(zmq.IDENTITY, THIS_MODULE)
             self.forwarder.setsockopt_out(zmq.IDENTITY, THIS_MODULE)
             self.forwarder.setsockopt_in(zmq.SUBSCRIBE, '')
-            self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
+            # self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
             self.forwarder.bind_in(self.opts.subscribeEndpoint)
             self.forwarder.bind_in(INJECT_ENDPOINT)
             self.forwarder.bind_out(self.opts.publishEndpoint)
@@ -321,9 +321,9 @@ def main():
     parser.add_option('-f', '--foreground',
                       action='store_true', default=False,
                       help='Do not daemonize zmqCentral on startup')
-    parser.add_option('--highWaterMark',
-                      default=10000, type='int',
-                      help='High-water mark for publish socket (see 0MQ docs) [%default]')
+    #parser.add_option('--highWaterMark',
+    #                  default=10000, type='int',
+    #                  help='High-water mark for publish socket (see 0MQ docs) [%default]')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')

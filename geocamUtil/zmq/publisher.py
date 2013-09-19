@@ -26,7 +26,8 @@ PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
                           % DEFAULT_CENTRAL_SUBSCRIBE_PORT,
                           'publishEndpoint': 'tcp://127.0.0.1:random',
                           'heartbeatPeriodMsecs': 5000,
-                          'highWaterMark': 100}
+                          # 'highWaterMark': 100
+                          }
 
 
 class ZmqPublisher(object):
@@ -36,7 +37,8 @@ class ZmqPublisher(object):
                  centralSubscribeEndpoint=PUBLISHER_OPT_DEFAULTS['centralSubscribeEndpoint'],
                  publishEndpoint=PUBLISHER_OPT_DEFAULTS['publishEndpoint'],
                  heartbeatPeriodMsecs=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs'],
-                 highWaterMark=PUBLISHER_OPT_DEFAULTS['highWaterMark']):
+                 # highWaterMark=PUBLISHER_OPT_DEFAULTS['highWaterMark']
+                 ):
         self.moduleName = moduleName
 
         if context is None:
@@ -48,7 +50,7 @@ class ZmqPublisher(object):
         self.publishEndpoint = parseEndpoint(publishEndpoint,
                                              defaultPort='random')
         self.heartbeatPeriodMsecs = heartbeatPeriodMsecs
-        self.highWaterMark = highWaterMark
+        #self.highWaterMark = highWaterMark
 
         self.pubStream = None
         self.heartbeatTimer = None
@@ -74,11 +76,11 @@ class ZmqPublisher(object):
                               default=PUBLISHER_OPT_DEFAULTS['heartbeatPeriodMsecs'],
                               type='int',
                               help='Period for sending heartbeats to central [%default]')
-        if not parser.has_option('--highWaterMark'):
-            parser.add_option('--highWaterMark',
-                              default=PUBLISHER_OPT_DEFAULTS['highWaterMark'],
-                              type='int',
-                              help='High-water mark for publish socket (see 0MQ docs) [%default]')
+        #if not parser.has_option('--highWaterMark'):
+        #    parser.add_option('--highWaterMark',
+        #                      default=PUBLISHER_OPT_DEFAULTS['highWaterMark'],
+        #                      type='int',
+        #                      help='High-water mark for publish socket (see 0MQ docs) [%default]')
 
     @classmethod
     def getOptionValues(cls, opts):
@@ -117,7 +119,7 @@ class ZmqPublisher(object):
         pubSocket = self.context.socket(zmq.PUB)
         self.pubStream = ZMQStream(pubSocket)
         # self.pubStream.setsockopt(zmq.IDENTITY, self.moduleName)
-        self.pubStream.setsockopt(zmq.HWM, self.highWaterMark)
+        # self.pubStream.setsockopt(zmq.HWM, self.highWaterMark)
         self.pubStream.connect(self.centralSubscribeEndpoint)
 
         if self.publishEndpoint.endswith(':random'):
