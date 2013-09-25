@@ -48,7 +48,7 @@ def main():
     p.start()
 
     # start publishing an arbitrary message that central should forward
-    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(opts.prefix, p), 1)
+    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(opts.prefix, p), 0.1)
     pubTimer.start()
 
     zmqLoop()
