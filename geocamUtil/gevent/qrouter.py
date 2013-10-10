@@ -13,18 +13,26 @@ class QueueRouter(object):
     def __init__(self):
         self._subs = {}
 
-    def hasSubscribers(self):
-        return self._subs != {}
-
     def subscribe(self, topicPattern):
         q = Queue()
         self._subs[id(q)] = (topicPattern, q)
         return q
 
     def unsubscribe(self, q):
+        if isinstance(q, int):
+            qid = q
+        else:
+            qid = id(q)
         del self._subs[id(q)]
 
     def publish(self, topic, msg):
         for subscriberId, (topicPattern, q) in self._subs.iteritems():
             if fnmatch(topic, topicPattern):
                 q.put((topic, msg))
+
+    def hasSubscribers(self):
+        return self._subs != {}
+
+    def getQueueById(self, qid):
+        _, q = self._subs[qid]
+        return q
