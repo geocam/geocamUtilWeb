@@ -23,7 +23,7 @@ class QueueRouter(object):
             qid = q
         else:
             qid = id(q)
-        del self._subs[id(q)]
+        del self._subs[qid]
 
     def publish(self, topic, msg):
         for subscriberId, (topicPattern, q) in self._subs.iteritems():
@@ -33,6 +33,9 @@ class QueueRouter(object):
     def hasSubscribers(self):
         return self._subs != {}
 
-    def getQueueById(self, qid):
-        _, q = self._subs[qid]
-        return q
+    def getQueueInfo(self, q):
+        if isinstance(q, int):
+            qid = q
+        else:
+            qid = id(q)
+        return self._subs[qid]
