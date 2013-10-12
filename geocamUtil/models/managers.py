@@ -143,7 +143,7 @@ class FinalModelManager(models.Manager):
     def contribute_to_class(self, model, name):
         if self._parentModel != None:
             self._parentModel._default_manager.registerChildClass(model)
-        del self._parentModel
+        # del self._parentModel
         super(FinalModelManager, self).contribute_to_class(model, name)
 
 
