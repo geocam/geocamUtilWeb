@@ -13,10 +13,17 @@ import operator
 from django.contrib.auth import authenticate
 from django.http import HttpResponse, HttpResponseRedirect, \
      HttpResponsePermanentRedirect, HttpResponseForbidden, \
-     HttpResponseServerError, get_host
+     HttpResponseServerError
 from django.core.urlresolvers import resolve
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.utils.http import urlquote
+try:
+    from django.http import get_host
+except ImportError:
+    # In Django 1.5, django.http.get_host() was replaced
+    # by the get_host() method on request objects.
+    def get_host(request):
+        return request.get_host()
 
 from geocamUtil import settings
 
