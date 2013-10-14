@@ -681,6 +681,9 @@ def resizeCanvas(fileName, documentX, documentY, append):
     return outputFileName2
 
 
+class NoSvgBackendError(Exception):
+    pass
+
 def detectSvgBackend():
     global RENDER_BACKEND
 
@@ -694,7 +697,7 @@ def detectSvgBackend():
         RENDER_BACKEND = 'rsvg'
         return
 
-    raise Exception('no svg rendering backend found, try installing ImageMagick or rsvg')
+    raise NoSvgBackendError('no svg rendering backend found, try installing ImageMagick or rsvg')
 
 
 def renderSvgImageMagick(size, src, dst):

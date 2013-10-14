@@ -20,7 +20,13 @@ class IconsSvgTest(rotateTest.IconsTest):
 
         builder = Builder()
         logging.debug('buildIcon srcImage=%s outDir=%s', srcImage, self.outDir)
-        svg.buildIcon(builder, srcImage, outputDir=self.outDir)
+        try:
+            svg.buildIcon(builder, srcImage, outputDir=self.outDir)
+        except svg.NoSvgBackendError:
+            logging.warning('no svg rendering backend found')
+            logging.warning('in order to run svg rendering tests, try installing ImageMagick or rsvg')
+            logging.warning('note: this may be ok; svg rendering may not be needed for your site')
+            return
         self.assertExists('%sexample.png' % self.outDir)
         self.assertExists('%sexamplePoint.png' % self.outDir)
 
