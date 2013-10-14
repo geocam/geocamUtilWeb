@@ -13,7 +13,7 @@ from geocamUtil.management.commandUtil import getSiteDir
 
 STRIP_COMMENT = re.compile(r'#.*$')
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pep8Flags.txt')
-DEFAULT_FLAGS = '--ignore=E501 --show-pep8 --repeat'
+DEFAULT_FLAGS = '--ignore=E501 --show-source --show-pep8 --repeat'
 
 
 def dosys(cmd):

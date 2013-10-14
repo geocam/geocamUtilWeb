@@ -17,11 +17,10 @@ from zmq.eventloop import ioloop
 from django.core import serializers
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmqUtil.util import \
-     getTimestamp, \
-     parseEndpoint, \
-     getShortHostName, \
-     DEFAULT_CENTRAL_SUBSCRIBE_PORT
+from geocamUtil.zmqUtil.util import (getTimestamp,
+                                     parseEndpoint,
+                                     getShortHostName,
+                                     DEFAULT_CENTRAL_SUBSCRIBE_PORT)
 
 PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
                           'centralSubscribeEndpoint': 'tcp://127.0.0.1:%s'

@@ -27,7 +27,7 @@ COLORS = {
     'pale_yellow': 'ff99ffff',
     'pale_magenta': 'ffff99ff',
     'invisible': '00000000',
-    }
+}
 
 ZONE_STYLE = {'color': 'red', 'width': 4}
 
@@ -42,7 +42,7 @@ GRIDS = (
     (100, {'color': 'pale_magenta', 'width': 1}),
     (50, {'color': 'pale_magenta', 'width': 1}),
     (10, {'color': 'pale_cyan', 'width': 1}),
-    )
+)
 
 outDirG = None
 

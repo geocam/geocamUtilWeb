@@ -28,8 +28,8 @@ def deleteStaleFiles():
     files = glob('%s/*' % settings.TMP_DIR)
     now = time.time()
     for f in files:
-        if (now - os.stat(f).st_ctime > settings.GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS
-            and not f.endswith('/README.txt')):
+        if (now - os.stat(f).st_ctime > settings.GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS and
+                not f.endswith('/README.txt')):
             try:
                 os.unlink(f)
             except OSError:

@@ -10,6 +10,8 @@ from django.test import TestCase
 
 from geocamUtil.models import TimestampDescriptorExample
 
+# pylint: disable=E1101
+
 
 class TimestampDescriptorTest(TestCase):
     def setUp(self):

@@ -11,9 +11,11 @@ import base64
 import operator
 
 from django.contrib.auth import authenticate
-from django.http import HttpResponse, HttpResponseRedirect, \
-     HttpResponsePermanentRedirect, HttpResponseForbidden, \
-     HttpResponseServerError
+from django.http import (HttpResponse,
+                         HttpResponseRedirect,
+                         HttpResponsePermanentRedirect,
+                         HttpResponseForbidden,
+                         HttpResponseServerError)
 from django.core.urlresolvers import resolve
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.utils.http import urlquote
@@ -481,7 +483,7 @@ class SecurityMiddleware(object):
 
         uname, passwd = base64.b64decode(auth[1]).split(':')
         user = authenticate(username=uname, password=passwd)
-        if user == None:
+        if user is None:
             return False
 
         if not user.is_active:

@@ -282,9 +282,9 @@ def LLtoUTM(lat, lon, zoneNumber=None, zoneLetter=None):
     lonRad = lonTemp * DEG_2_RAD
 
     # user-supplied zone number will force coordinates to be computed in a particular zone
-    if zoneNumber == None:
+    if zoneNumber is None:
         zoneNumber = getZoneNumber(lat, lon)
-    if zoneLetter == None:
+    if zoneLetter is None:
         zoneLetter = UTMLetterDesignator(lat)
 
     lonOrigin = (zoneNumber - 1) * 6 - 180 + 3  # +3 puts origin in middle of zone
@@ -304,10 +304,10 @@ def LLtoUTM(lat, lon, zoneNumber=None, zoneLetter=None):
     #  x,y coordinates), is equal to zero for UTM.
     M = (EQUATORIAL_RADIUS
          * ((1 - ECC_SQUARED / 4
-              - 3 * (ECC_SQUARED * ECC_SQUARED) / 64
-              - 5 * (ECC_SQUARED * ECC_SQUARED * ECC_SQUARED) / 256) * latRad
+             - 3 * (ECC_SQUARED * ECC_SQUARED) / 64
+             - 5 * (ECC_SQUARED * ECC_SQUARED * ECC_SQUARED) / 256) * latRad
             - (3 * ECC_SQUARED / 8 + 3 * ECC_SQUARED * ECC_SQUARED / 32
-                + 45 * ECC_SQUARED * ECC_SQUARED * ECC_SQUARED / 1024)
+               + 45 * ECC_SQUARED * ECC_SQUARED * ECC_SQUARED / 1024)
             * math.sin(2 * latRad) + (15 * ECC_SQUARED * ECC_SQUARED / 256
                                       + 45 * ECC_SQUARED * ECC_SQUARED * ECC_SQUARED / 1024) * math.sin(4 * latRad)
             - (35 * ECC_SQUARED * ECC_SQUARED * ECC_SQUARED / 3072) * math.sin(6 * latRad)))
@@ -584,7 +584,7 @@ def UTMtoLL(east, north, zoneNumber, zoneLetter):
            * (D * D / 2 - (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * eccPrimeSquared) * D * D * D * D / 24
               + (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * eccPrimeSquared - 3 * C1 * C1) * D * D * D * D * D * D / 720))
     dlon = ((D - (1 + 2 * T1 + C1) * D * D * D / 6 + (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * eccPrimeSquared + 24 * T1 * T1)
-              * D * D * D * D * D / 120) / math.cos(phi1Rad))
+             * D * D * D * D * D / 120) / math.cos(phi1Rad))
     return (RAD_2_DEG * lat, lonOrigin + RAD_2_DEG * dlon)
 
 

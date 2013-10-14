@@ -60,7 +60,7 @@ class Xmp(object):
     def _getPredicate(self, field):
         prefix, attr = field.split(':', 1)
         nsuri = self.graph.namespace_manager.store.namespace(prefix)
-        if nsuri == None:
+        if nsuri is None:
             return None
         else:
             return rdflib.URIRef(nsuri + attr)
@@ -69,7 +69,7 @@ class Xmp(object):
         subject = rdflib.URIRef('')
         predicate = self._getPredicate(field)
         value = self.graph.value(subject, predicate, None)
-        if value == None:
+        if value is None:
             if dflt == 'ERROR':
                 raise KeyError(field)
             else:
@@ -79,7 +79,7 @@ class Xmp(object):
 
     def getDegMin(self, field, dirValues):
         val = self.get(field, None)
-        if val == None:
+        if val is None:
             return None
         degMin = val[:-1]
         degS, minS = degMin.split(',')
@@ -112,13 +112,13 @@ class Xmp(object):
         '''Assumes yaw is a float, a string representation of a float, or None.
         Values 0 and -999 get mapped to None.'''
 
-        if yaw != None and not isinstance(yaw, float):
+        if yaw is not None and not isinstance(yaw, float):
             yaw = Xmp.getRational(yaw)
         yaw = Xmp.checkMissing(yaw)
 
         yawRef = Xmp.checkMissing(yawRef)
 
-        if yaw == None:
+        if yaw is None:
             return (None, '')
 
         # todo: correct for magnetic declination here
@@ -142,17 +142,17 @@ class Xmp(object):
         '''Assumes yaw is a float, a string representation of a float, or None.
         Values 0 and -999 get mapped to None.'''
 
-        if altitude != None and not isinstance(altitude, float):
+        if altitude is not None and not isinstance(altitude, float):
             altitude = Xmp.getRational(altitude)
         altitude = Xmp.checkMissing(altitude)
 
         altitudeRef = Xmp.checkMissing(altitudeRef)
 
-        if altitude != None and abs(altitude) > 20000:
+        if altitude is not None and abs(altitude) > 20000:
             # Ricoh Caplio sometimes outputs huge bogus altitude values
             altitude = None
 
-        if altitude == None:
+        if altitude is None:
             return (altitude, '')
 
         # to do: possible transforms here
@@ -173,7 +173,7 @@ class Xmp(object):
 
     def getTime(self, field):
         timeStr = self.get('exif:DateTimeOriginal', None)
-        if timeStr == None:
+        if timeStr is None:
             return None
         t = iso8601.parse_date(timeStr,
                                default_timezone=pytz.timezone(settings.TIME_ZONE))
@@ -188,7 +188,7 @@ class Xmp(object):
 
         widthStr = self.get('tiff:ImageWidth', None)
         heightStr = self.get('tiff:ImageLength', None)
-        if widthStr != None and heightStr != None:
+        if widthStr is not None and heightStr is not None:
             widthPixels, heightPixels = int(widthStr), int(heightStr)
         else:
             im = PIL.Image.open(findImageName(self.xmpName))
@@ -206,7 +206,7 @@ class Xmp(object):
                      heightPixels=heightPixels)
 
         return dict([(k, v) for k, v in vals0.iteritems()
-                     if self.checkMissing(v) != None])
+                     if self.checkMissing(v) is not None])
 
     def copyToPlacemark(self, td):
         vals = self.getDict()

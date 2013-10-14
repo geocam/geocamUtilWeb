@@ -50,6 +50,6 @@ class ExtrasDotField(models.TextField):
 try:
     from south.modelsinspector import add_introspection_rules
     # tell south it can freeze this field without any special nonsense
-    add_introspection_rules([], ["^geocamUtil\.models\.ExtrasDotField"])
+    add_introspection_rules([], [r'^geocamUtil\.models\.ExtrasDotField'])
 except ImportError:
     pass

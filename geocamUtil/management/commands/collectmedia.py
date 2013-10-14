@@ -5,7 +5,6 @@
 # __END_LICENSE__
 
 import os
-import re
 import logging
 
 import django

@@ -24,9 +24,9 @@ class PasswordUrlNode(template.Node):
     def render(self, context):
         url = reverse(self.urlName)
         request = context['request']
-        if (settings.GEOCAM_UTIL_SECURITY_ENABLED
-            and not requestIsSecure(request)
-            and settings.GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS):
+        if (settings.GEOCAM_UTIL_SECURITY_ENABLED and
+                not requestIsSecure(request) and
+                settings.GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS):
             secureUrl = re.sub('^http:', 'https:', request.build_absolute_uri(url)) + '?protocol=http'
             return secureUrl
         else:

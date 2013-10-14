@@ -138,6 +138,6 @@ class DateTimeUtcField(models.DateTimeField):
 try:
     from south.modelsinspector import add_introspection_rules
     # tell south it can freeze this field without any special nonsense
-    add_introspection_rules([], ["^geocamUtil\.models\.DateTimeUtcField"])
+    add_introspection_rules([], [r'^geocamUtil\.models\.DateTimeUtcField'])
 except ImportError:
     pass

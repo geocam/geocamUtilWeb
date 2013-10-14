@@ -54,7 +54,7 @@ def copyThumbnails(builder, inDir, outDir, nameTransform=None, reqSize=REQ_SIZE)
     icons = glob('%s/*.png' % inDir) + glob('%s/*.jpg' % inDir)
     for inPath in icons:
         base, ext = os.path.splitext(os.path.basename(inPath))
-        if nameTransform != None:
+        if nameTransform is not None:
             base = nameTransform(base)
         outPath = '%s/%s%s' % (outDir, base, ext)
         builder.applyRule(outPath, [inPath],

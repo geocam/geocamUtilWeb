@@ -15,6 +15,8 @@ import gevent
 from gevent import socket
 from gevent.queue import Queue
 
+# pylint: disable=E1101
+
 END_OF_LINE = re.compile(r'\r\n|\n|\r')
 
 
@@ -29,11 +31,11 @@ class LineParser(object):
         while 1:
             m = END_OF_LINE.search(self._buf)
             ind = m.end() if m else None
-            if (ind == None
-                and self._maxLineLength is not None
-                and len(self._buf) >= self._maxLineLength):
+            if (ind is None and
+                    self._maxLineLength is not None and
+                    len(self._buf) >= self._maxLineLength):
                 ind = self._maxLineLength
-            if ind == None:
+            if ind is None:
                 break
             else:
                 line = self._buf[:ind]

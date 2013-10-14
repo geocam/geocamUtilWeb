@@ -18,9 +18,9 @@ from geocamUtil import settings
 
 class Installer(object):
     def __init__(self, builder=None, logger=None):
-        if builder == None:
+        if builder is None:
             builder = Builder()
-        if logger == None:
+        if logger is None:
             logger = logging
         self.builder = builder
         self.logger = logger

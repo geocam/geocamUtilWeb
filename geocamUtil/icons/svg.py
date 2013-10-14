@@ -32,7 +32,7 @@ def getAttributeData(tag, attribute):
     regExpression = re.compile('[ \n]+' + attribute + ' *= *"(.*)"')
 
     matchOb = regExpression.search(tag[1])
-    if matchOb != None:
+    if matchOb is not None:
         data = matchOb.group(1)
     else:
         data = None
@@ -51,7 +51,7 @@ def parseNextTag(fileHandle):
     tagList = []
     matchOb = None
 
-    while matchOb == None:
+    while matchOb is None:
         try:
             line = fileHandle.next()
         except StopIteration:
@@ -94,7 +94,7 @@ def parseNextTagText(text):
 
     textLines = text.split('\n')
 
-    while matchOb == None:
+    while matchOb is None:
         try:
             line += textLines.pop(0) + '\n'
         except IndexError:
@@ -125,7 +125,7 @@ def getTag(fileHandle, tagName):
     found in the document.
     """
     tag = parseNextTag(fileHandle)
-    while tag != None:
+    while tag is not None:
         if tag[0] == tagName:
             return tag
         else:
@@ -141,7 +141,7 @@ def getTagText(text, tagName):
     """
 
     tag, remainder = parseNextTagText(text)
-    while tag != None:
+    while tag is not None:
         if tag[0] == tagName:
             return tag
         else:
@@ -159,7 +159,7 @@ def getTagWithID(fileHandle, tagName, idValue):
 
     tag = getTag(fileHandle, tagName)
 
-    while tag != None:
+    while tag is not None:
         data = getAttributeData(tag, 'id')
         if data == idValue:
             return tag
@@ -182,15 +182,15 @@ def getDocumentDimensions(fileHandle):
     regExpressionWidth = re.compile(r'width= *"([0-9]*\.*[0-9]+)"')
     regExpressionHeight = re.compile(r'height= *"([0-9]+\.*[0-9]+)"')
 
-    while tag != None:
+    while tag is not None:
         if tag[0] == 'svg':
             matchOb = regExpressionWidth.search(tag[1])
-            if matchOb != None:
+            if matchOb is not None:
                 width = float(matchOb.group(1))
             else:
                 print "Error getting width!"
             matchOb = regExpressionHeight.search(tag[1])
-            if matchOb != None:
+            if matchOb is not None:
                 height = float(matchOb.group(1))
             else:
                 print "Error getting height!"
@@ -208,7 +208,7 @@ def setDocumentDimensions(fileHandle, fileOut, width, height):
 
     tag = parseNextTag(fileHandle)
 
-    while tag != None:
+    while tag is not None:
         if tag[0] == 'svg':
             tag, _ = changeAttribute(tag, 'width', width)
             tag, _ = changeAttribute(tag, 'height', height)
@@ -230,10 +230,10 @@ def getMainGroupContents(fileHandle):
     tagCount = 0
     source = ''
 
-    while tag != None:
+    while tag is not None:
         if tag[0] == 'g':
             tagCount += 1
-            while tagCount != 0 and tag != None:
+            while tagCount != 0 and tag is not None:
                 tag = parseNextTag(fileHandle)
                 if tag[0] == 'g':
                     tagCount += 1
@@ -254,14 +254,14 @@ def changeAttribute(tag, attribute, newValue):
     """
 
     regExpression = re.compile('<' + tag[0] + '([^>]* )' +
-        attribute + '= *"(.*)"')
+                               attribute + '= *"(.*)"')
 
     matchOb = regExpression.search(tag[1])
 
-    if matchOb != None:
+    if matchOb is not None:
         oldValue = matchOb.group(2)
         resultingString = regExpression.sub(r'<' + tag[0]
-            + r'\1' + attribute + r'="' + str(newValue) + '"', tag[1])
+                                            + r'\1' + attribute + r'="' + str(newValue) + '"', tag[1])
         #The semicolon is only necessary to prevent vim from miscoloring
         #the text after a sub expression. Should be using emacs...
         tag[1] = resultingString
@@ -283,10 +283,10 @@ def changeAllAttributesInText(text, attribute, newValue, append):
 
     if append == 0:
         resultingString = regExpression.sub(r'\1' + attribute
-        + r'="' + newValue + '"', text)
+                                            + r'="' + newValue + '"', text)
     else:
         resultingString = regExpression.sub(r'\1' + attribute
-        + r'="\2' + newValue + '"', text)
+                                            + r'="\2' + newValue + '"', text)
     return resultingString
 
 
@@ -298,7 +298,7 @@ def insertAttribute(tag, attribute, newValue):
     """
 
     value = re.sub(r'([/])>', '\n    ' + attribute + '="' + newValue
-        + '" \1>\n    ', tag[1])
+                   + '" \1>\n    ', tag[1])
     tag[1] = value
 
     return tag
@@ -311,7 +311,7 @@ def insertAttributeInText(text, tagWanted, attribute, newValue):
     """
 
     newTag = insertAttribute(tagWanted, attribute, newValue)
-    if newTag != None:
+    if newTag is not None:
         re.sub(r'<' + tagWanted[0] + r'[^>]*>', newTag[1], text)
     else:
         return None
@@ -328,7 +328,7 @@ def insertTextChunkAfterTag(textToInsert, tagFind, oldFile, newFile):
 
     firstTagFound = 0
     tag = parseNextTag(oldFile)
-    while tag != None and firstTagFound == 0:
+    while tag is not None and firstTagFound == 0:
         if tag[0] == tagFind:
             newFile.write(tag[1])
             newFile.write(textToInsert)
@@ -347,7 +347,7 @@ def copyFile(oldFile, newFile):
     """
 
     tag = parseNextTag(oldFile)
-    while tag != None:
+    while tag is not None:
         newFile.write(tag[1])
         tag = parseNextTag(oldFile)
     return tag
@@ -410,13 +410,13 @@ def changeAllColor(text, color):
 
     newData = None
 
-    if matchOb != None:
+    if matchOb is not None:
         newData = re.sub(r':#[0-9A-Fa-f]{6}', r':#' + color, text)
         newData = re.sub(r';stroke:none', r';stroke:#' + color, newData)
         newData = re.sub(r';fill:none', r';fill:#' + color, newData)
     else:
         newData = text
-    if matchObFilter != None:
+    if matchObFilter is not None:
         newData = re.sub(r':url\(.*\)', r':#' + color, newData)
 
     return newData
@@ -430,32 +430,32 @@ def changeAllStroke(text, stroke):
 
     newData = ''
     regularExpressionTransform = re.compile(r'matrix\(([^,]*),([^,]*)'
-        + r',([^,]*),([^,]*)(,[^,]*,[^,]*)\)')
+                                            + r',([^,]*),([^,]*)(,[^,]*,[^,]*)\)')
 
     stroke = float(stroke)
 
     tag, remainder = parseNextTagText(text)
 
     #Loop through the tags in the text
-    while tag != None:
+    while tag is not None:
         #Attempt to find a transform, if one exists
         attributeData = getAttributeData(tag, 'transform')
-        if attributeData != None:
+        if attributeData is not None:
             matchOb = regularExpressionTransform.search(attributeData)
-            if matchOb != None:
+            if matchOb is not None:
                 #If there is a transform, scale the desired stroke to a
                 #value that, when the transform is applied, will bring the
                 #stroke back to the original value
                 newStroke = stroke / sqrt(abs(float(matchOb.group(1))
-                    * float(matchOb.group(4)) -
-                    float(matchOb.group(2)) * float(matchOb.group(3))))
+                                              * float(matchOb.group(4)) -
+                                              float(matchOb.group(2)) * float(matchOb.group(3))))
             else:
                 newStroke = stroke
         else:
             newStroke = stroke
         #Substitute the new stroke in that tag
         newData += re.sub(r'stroke-width:[0-9]*[.]?[0-9]+', r'stroke-width:'
-            + str(newStroke), tag[1])
+                          + str(newStroke), tag[1])
         #Get the next tag
         tag, remainder = parseNextTagText(remainder)
 
@@ -471,9 +471,9 @@ def changeStrokeOpacity(text, opacity):
     newData = None
     regularExpression = re.compile(r'stroke-opacity:[0-9]*[.]?[0-9]+[;|"]')
     matchOb = regularExpression.search(text)
-    if matchOb != None:
+    if matchOb is not None:
         newData = re.sub(r'stroke-opacity:[0-9]*[.]?[0-9]+',
-            r'stroke-opacity:' + opacity, text)
+                         r'stroke-opacity:' + opacity, text)
     else:
         newData = text
 
@@ -489,9 +489,9 @@ def changeFillOpacity(text, opacity):
     newData = None
     regularExpression = re.compile(r'fill-opacity:[0-9]*[.]?[0-9]+[;|"]')
     matchOb = regularExpression.search(text)
-    if matchOb != None:
+    if matchOb is not None:
         newData = re.sub(r'fill-opacity:[0-9]*[.]?[0-9]+', r'fill-opacity:'
-            + opacity, text)
+                         + opacity, text)
     else:
         newData = text
 
@@ -508,46 +508,46 @@ def changeAllPosition(fileHandle, newX, newY):
     """
 
     regularExpressionTransform = re.compile(r'matrix\('
-        + r'([^,]*,[^,]*,[^,]*,[^,]*,)(.*),(.*)\)')
+                                            + r'([^,]*,[^,]*,[^,]*,[^,]*,)(.*),(.*)\)')
     regularExpressionNumberPair = re.compile(r'([-]?[0-9]*[.]?[0-9]+),'
-        + r'([-]?[0-9]*[.]?[0-9]+)')
+                                             + r'([-]?[0-9]*[.]?[0-9]+)')
 
     newData = ''
     tag = parseNextTag(fileHandle)
 
-    while tag != None:
+    while tag is not None:
 
         transformFound = 0
         modifiedData = ''
         newDataToAdd = tag[1]
         attributeTransform = getAttributeData(tag, 'transform')
         #Case where there's a transform
-        if attributeTransform != None:
+        if attributeTransform is not None:
             matchOb = regularExpressionTransform.search(attributeTransform)
             #It's a matrix transform (not just a scale)
-            if matchOb != None:
+            if matchOb is not None:
                 beginning = matchOb.group(1)
                 finalX = float(matchOb.group(2)) + newX
                 finalY = float(matchOb.group(3)) + newY
                 newDataToAdd = re.sub(r'matrix\(.*\)', r'matrix(' + beginning
-                    + str(finalX) + ',' + str(finalY) + ')', tag[1])
+                                      + str(finalX) + ',' + str(finalY) + ')', tag[1])
                 transformFound = 1
 
         #No transform; change values of all number pairs in d tag
         if transformFound != 1:
             attributeDataD = getAttributeData(tag, 'd')
-            if attributeDataD != None:
+            if attributeDataD is not None:
                 numberList = attributeDataD.split(' ')
                 for numberPair in numberList:
                     matchOb = regularExpressionNumberPair.search(numberPair)
                     #If it is indeed a number pair:
-                    if matchOb != None:
+                    if matchOb is not None:
                         finalX = float(matchOb.group(1)) + newX
                         finalY = float(matchOb.group(2)) + newY
                         numberPair = str(finalX) + ',' + str(finalY)
                     modifiedData += numberPair + ' '
                 newDataToAdd = re.sub('[ \n]d="[^"]*"', r' d="' + modifiedData
-                    + '"', tag[1])
+                                      + '"', tag[1])
             else:
                 newDataToAdd = tag[1]
 
@@ -568,14 +568,14 @@ def changeAllPositionText(text, newX, newY):
     """
 
     regularExpressionTransform = re.compile(r'matrix\(([^,]*,[^,]*,[^,]*,'
-        + r'[^,]*,)(.*),(.*)\)')
+                                            + r'[^,]*,)(.*),(.*)\)')
     regularExpressionNumberPair = re.compile(r'([-]?[0-9]*[.]?[0-9]+),'
-        + r'([-]?[0-9]*[.]?[0-9]+)')
+                                             + r'([-]?[0-9]*[.]?[0-9]+)')
 
     newData = ''
 
     tag, remainder = parseNextTagText(text)
-    while tag != None:
+    while tag is not None:
 
         transformFound = 0
         modifiedData = ''
@@ -584,32 +584,32 @@ def changeAllPositionText(text, newX, newY):
 
         attributeTransform = getAttributeData(tag, 'transform')
         #Case where there's a transform
-        if attributeTransform != None:
+        if attributeTransform is not None:
             matchOb = regularExpressionTransform.search(attributeTransform)
             #It's a matrix
-            if matchOb != None:
+            if matchOb is not None:
                 beginning = matchOb.group(1)
                 finalX = float(matchOb.group(2)) + newX
                 finalY = float(matchOb.group(3)) + newY
                 newDataToAdd = re.sub(r'matrix\(.*\)', r'matrix('
-                    + beginning + str(finalX) + ',' + str(finalY) + ')', tag[1])
+                                      + beginning + str(finalX) + ',' + str(finalY) + ')', tag[1])
                 transformFound = 1
 
         #No transform; change values of all number pairs in d tag
         if transformFound != 1:
             attributeDataD = getAttributeData(tag, 'd')
-            if attributeDataD != None:
+            if attributeDataD is not None:
                 numberList = attributeDataD.split(' ')
                 for numberPair in numberList:
                     matchOb = regularExpressionNumberPair.search(numberPair)
                     #If it is indeed a number pair:
-                    if matchOb != None:
+                    if matchOb is not None:
                         finalX = float(matchOb.group(1)) + newX
                         finalY = float(matchOb.group(2)) + newY
                         numberPair = str(finalX) + ',' + str(finalY)
                     modifiedData += numberPair + ' '
                 newDataToAdd = re.sub(r'[ \n]d="[^"]*"', r' d="'
-                    + modifiedData + '"', tag[1])
+                                      + modifiedData + '"', tag[1])
             else:
                 newDataToAdd = tag[1]
 
@@ -629,7 +629,7 @@ def turnToBW(attributeText):
 
     matchOb = regularExpression.search(attributeText)
 
-    if matchOb != None:
+    if matchOb is not None:
         oldValue = matchOb.group(1)
         HSL = computeHSL(oldValue)
         if HSL[2] < .5 or (HSL[0] < 260 and HSL[0] > 190):
@@ -724,7 +724,7 @@ def renderSvg(size, src, dst):
     if not os.path.exists(dstDir):
         os.makedirs(dstDir)
 
-    if RENDER_BACKEND == None:
+    if RENDER_BACKEND is None:
         detectSvgBackend()
 
     if RENDER_BACKEND == 'rsvg':
@@ -739,7 +739,7 @@ def renderIcon(iconFileName, options=None, **kwargs):
     Main function to initiate icon rendering.
     """
 
-    if options == None:
+    if options is None:
         options = parserG.get_default_values()
     for k, v in kwargs.iteritems():
         setattr(options, k, v)
@@ -776,7 +776,7 @@ def renderIcon(iconFileName, options=None, **kwargs):
     #Inserts the arrow XML into the new file
     iconFileHandle.seek(0)
     insertTextChunkAfterTag(arrowSVGSource, 'g',
-    iconFileHandle, iconWithArrowFileHandle)
+                            iconFileHandle, iconWithArrowFileHandle)
 
     #Copies the rest of the file over
     copyFile(iconFileHandle, iconWithArrowFileHandle)
@@ -834,11 +834,11 @@ def renderIcon(iconFileName, options=None, **kwargs):
     #Add filter:url(#filterAUTOADD) to style tag of everything.
     tag, restOfText = parseNextTagText(newMainImageInfo)
     temp = ''
-    while tag != None:
+    while tag is not None:
         styleData = getAttributeData(tag, 'style')
-        if styleData != None:
+        if styleData is not None:
             tag, _ = changeAttribute(tag, 'style', blurFilterStyle
-                + styleData)
+                                     + styleData)
         temp += tag[1] + '\n'
         tag, restOfText = parseNextTagText(restOfText)
 
@@ -847,11 +847,11 @@ def renderIcon(iconFileName, options=None, **kwargs):
     #Inserts the blur Filter
     iconWithArrowFileHandle.seek(0)
     insertTextChunkAfterTag(blurFilter, 'defs',
-    iconWithArrowFileHandle, iconWithAandGlowFileHandle)
+                            iconWithArrowFileHandle, iconWithAandGlowFileHandle)
 
     #Inserts the drop shadow.
     insertTextChunkAfterTag(shadowMainImageInfo, 'g',
-    iconWithArrowFileHandle, iconWithAandGlowFileHandle)
+                            iconWithArrowFileHandle, iconWithAandGlowFileHandle)
 
     #Inserts the glow
     iconWithAandGlowFileHandle.write(newMainImageInfo)
@@ -880,21 +880,21 @@ def renderIcon(iconFileName, options=None, **kwargs):
     #Might as well go through all the definitions and change
     #colors there, too (always style tags).
     tag = parseNextTag(iconWithArrowFileHandle)
-    while tag != None:
+    while tag is not None:
         atData = getAttributeData(tag, 'style')
-        if atData != None:
+        if atData is not None:
             newData = turnToBW(atData)
-            if newData != None:
+            if newData is not None:
                 changeAttribute(tag, 'style', newData)
         iconWithAandBWFileHandle.write(tag[1])
         tag = parseNextTag(iconWithArrowFileHandle)
 
     tag = parseNextTag(iconWithAandGlowFileHandle)
-    while tag != None:
+    while tag is not None:
         atData = getAttributeData(tag, 'style')
-        if atData != None:
+        if atData is not None:
             newData = turnToBW(atData)
-            if newData != None:
+            if newData is not None:
                 changeAttribute(tag, 'style', newData)
         iconWithAGandBWFileHandle.write(tag[1])
         tag = parseNextTag(iconWithAandGlowFileHandle)
@@ -960,12 +960,12 @@ parserG = optparse.OptionParser("usage: %prog")
 
 thisDir = os.path.dirname(os.path.realpath(__file__))
 parserG.add_option('-a', '--arrow', dest='arrowFileName',
-                  help='Arrow File Directory',
-                  default='%s/media_src/icons/arrow.svg' % os.path.dirname(thisDir))
+                   help='Arrow File Directory',
+                   default='%s/media_src/icons/arrow.svg' % os.path.dirname(thisDir))
 parserG.add_option('-d', '--distance', dest='distance',
-                  help='Positioning of Arrow File above icon', default=25)
+                   help='Positioning of Arrow File above icon', default=25)
 parserG.add_option('-o', '--outputDir',
-                  help='Destination for produced png icons', default='./')
+                   help='Destination for produced png icons', default='./')
 
 
 if __name__ == "__main__":

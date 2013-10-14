@@ -102,7 +102,7 @@ def stringToLocalDT(s, intervalStart=True, now=None):
     values from @now.  If @now is not specified, it defaults to the
     current time.'"""
 
-    if now == None:
+    if now is None:
         now = datetime.datetime.now()
     strftime = datetime.datetime.strftime
     bigDefaults = now
@@ -185,7 +185,7 @@ def getTimeShort(utcDt, tz=None, now=None):
     # tell pylint not to complain about too many branches and return statements
     # pylint: disable=R0911,R0912
 
-    if now == None:
+    if now is None:
         now = datetime.datetime.utcnow()
     diff = now - utcDt
     diffSecs = diff.days * 24 * 60 * 60 + diff.seconds

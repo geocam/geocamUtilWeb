@@ -61,8 +61,9 @@ def convertUsngCsv(opts, inPath):
     <coordinates>%(lon)s,%(lat)s</coordinates>
   </Point>
 </Placemark>
-""" % dict(lat=lat, lon=lon, name=name,
-           usngCoords=usngCoords))
+""" %
+                         dict(lat=lat, lon=lon, name=name,
+                              usngCoords=usngCoords))
         kbits.append('</Folder>')
         text = ''.join(kbits)
         file(opts.kml, 'w').write(KmlUtil.wrapKml(text))

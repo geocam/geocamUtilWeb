@@ -24,7 +24,7 @@ def importModuleByName(name):
 def getMiddleFileWithExtension(ext, path):
     allMatches = glob.glob('%s/*.%s' % (path, ext))
     allMatches = [x for x in allMatches
-               if not x.startswith('thumbnail')]
+                  if not x.startswith('thumbnail')]
     if not allMatches:
         raise NoDataError('no %s files in %s' % (ext, path))
     allMatches.sort()

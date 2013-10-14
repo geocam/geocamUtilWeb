@@ -21,7 +21,7 @@ class UuidField(fields.CharField):
         value = value.strip().lower()
         if value in fields.EMPTY_VALUES:
             return u''
-        if re.search('^[0-9a-f\-]{36}$', value):
+        if re.search(r'^[0-9a-f\-]{36}$', value):
             return value
         else:
             raise ValidationError('Input string is not a valid UUID (should look like output of Python str(uuid.uuid4())).')

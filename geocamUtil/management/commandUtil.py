@@ -25,7 +25,7 @@ def getSiteDir():
 
 
 def getConfirmation(description, default=True, auto=False):
-    if default == True:
+    if default is True:
         choices = '[Y/n]'
     else:
         choices = '[y/N]'
@@ -80,7 +80,7 @@ def writeCommandStatus(commandName, text):
 
 
 def getConfirmationUseStatus(commandName, description):
-    if getCommandStatus(commandName) == None:
+    if getCommandStatus(commandName) is None:
         return True
     else:
         print ('Looks like command %s has finished already, based on file %s'

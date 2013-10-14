@@ -17,7 +17,7 @@ class KmlMarkersTest(unittest.TestCase):
         points = [[-122, 37],
                   [-123, 38]]
         self.assertStripEqual(KmlUtil.markers(points),
-"""
+                              """
 <Placemark>
   <name>0</name>
   <Point>
@@ -36,7 +36,7 @@ class KmlMarkersTest(unittest.TestCase):
         points = {'foo': [-122, 37],
                   'bar': [-123, 38]}
         self.assertStripEqual(KmlUtil.markers(points),
-"""
+                              """
 <Placemark>
   <name>foo</name>
   <Point>
@@ -57,7 +57,7 @@ class KmlMarkersTest(unittest.TestCase):
         self.assertStripEqual(KmlUtil.markers(points,
                                               latitude='lat',
                                               longitude='lon'),
-"""
+                              """
 <Placemark>
   <name>foo</name>
   <Point>
@@ -79,7 +79,7 @@ class KmlMarkersTest(unittest.TestCase):
                                               name='title',
                                               longitude='x',
                                               latitude='y'),
-"""
+                              """
 <Placemark>
   <name>foo</name>
   <Point>

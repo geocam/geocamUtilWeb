@@ -23,8 +23,8 @@ def getChild(node, name, dflt=RAISE_VALUE_ERROR, ns=None):
     # such descendant that is a direct child. (e.g. it gets the <Icon>
     # that is a direct child rather than the one that is buried inside
     # the <Style>.)
-    if node != None:
-        if ns == None:
+    if node is not None:
+        if ns is None:
             children = node.getElementsByTagName(name)
         else:
             children = node.getElementsByTagNameNS(ns, name)
@@ -62,7 +62,7 @@ def getFloat(node):
 
 
 def floatOrNone(s):
-    if s == None:
+    if s is None:
         return None
     else:
         return float(s)
@@ -111,7 +111,7 @@ class TimeRange(object):
         self.hasData = False
 
     def addTime(self, dt):
-        if dt != None:
+        if dt is not None:
             self.minTime = min(self.minTime, dt)
             self.maxTime = max(self.maxTime, dt)
             self.hasData = True

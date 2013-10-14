@@ -7,6 +7,7 @@
 import tempfile
 import os
 
+
 class PdfConversionError(Exception):
     pass
 
@@ -33,7 +34,7 @@ def convertPdf(data,
 
     os.remove(tempInputFile.name)
 
-    if ret != 0 or os.path.isfile(outputFileName) == False:
+    if ret != 0 or os.path.isfile(outputFileName) is False:
         raise PdfConversionError('Error found while converting pdf')
 
     outputFile = open(outputFileName, 'r')

@@ -5,7 +5,6 @@
 # __END_LICENSE__
 
 import unittest
-import logging
 import itertools
 
 import gevent

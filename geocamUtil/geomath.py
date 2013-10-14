@@ -120,17 +120,17 @@ class UtmProjector(object):
         A = cos(latRad) * (lonRad - lonOriginRad)
 
         M = (a * ((1 - e2 / 4 - 3 * e2 * e2 / 64 - 5 * e2 * e2 * e2 / 256) * latRad
-                - (3 * e2 / 8 + 3 * e2 * e2 / 32 + 45 * e2 * e2 * e2 / 1024) * sin(2 * latRad)
-                + (15 * e2 * e2 / 256 + 45 * e2 * e2 * e2 / 1024) * sin(4 * latRad)
-                - (35 * e2 * e2 * e2 / 3072) * sin(6 * latRad)))
+                  - (3 * e2 / 8 + 3 * e2 * e2 / 32 + 45 * e2 * e2 * e2 / 1024) * sin(2 * latRad)
+                  + (15 * e2 * e2 / 256 + 45 * e2 * e2 * e2 / 1024) * sin(4 * latRad)
+                  - (35 * e2 * e2 * e2 / 3072) * sin(6 * latRad)))
 
         east = (k0 * N * (A + (1 - T + C) * A * A * A / 6
-                      + (5 - 18 * T + T * T + 72 * C - 58 * eccPrimeSquared) * A * A * A * A * A / 120)
+                          + (5 - 18 * T + T * T + 72 * C - 58 * eccPrimeSquared) * A * A * A * A * A / 120)
                 + 500000.0)
         north = (k0 * (M + N * tan(latRad)
-                      * (A * A / 2 + (5 - T + 9 * C + 4 * C * C) * A * A * A * A / 24
-                       + (61 - 58 * T + T * T + 600 * C - 330 * eccPrimeSquared) * A * A * A * A * A * A
- / 720)))
+                       * (A * A / 2 + (5 - T + 9 * C + 4 * C * C) * A * A * A * A / 24
+                          + (61 - 58 * T + T * T + 600 * C - 330 * eccPrimeSquared) * A * A * A * A * A * A
+                          / 720)))
         if 0:  # southern hemisphere
             north += 1e+7  # 10,000,000 meter offset for southern hemisphere
         return (east, north)
@@ -168,10 +168,10 @@ class UtmProjector(object):
         D = x / (N1 * k0)
 
         lat = (phi1Rad - (N1 * tan(phi1Rad) / R1)
-                * (D * D / 2 - (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * eccPrimeSquared) * D * D * D * D / 24
-                 + (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * eccPrimeSquared - 3 * C1 * C1) * D * D * D * D * D * D / 720))
+               * (D * D / 2 - (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * eccPrimeSquared) * D * D * D * D / 24
+                  + (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * eccPrimeSquared - 3 * C1 * C1) * D * D * D * D * D * D / 720))
         dlon = ((D - (1 + 2 * T1 + C1) * D * D * D / 6 + (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * eccPrimeSquared + 24 * T1 * T1)
-                  * D * D * D * D * D / 120) / cos(phi1Rad))
+                 * D * D * D * D * D / 120) / cos(phi1Rad))
         return (lonOrigin + RAD2DEG * dlon,
                 RAD2DEG * lat)
 

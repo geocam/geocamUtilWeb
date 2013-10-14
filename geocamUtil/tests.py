@@ -24,5 +24,8 @@ from geocamUtil.management import commandUtil
 siteDir = commandUtil.getSiteDir()
 print 'siteDir:', siteDir
 if siteDir.endswith('geocamUtilWeb/example/'):
-    from geocamUtil.management.commandsTest import \
-         CollectReqsTest, InstallReqsTest, PrepTemplatesTest, PrepAppsTest, CollectMediaTest
+    from geocamUtil.management.commandsTest import (CollectReqsTest,
+                                                    InstallReqsTest,
+                                                    PrepTemplatesTest,
+                                                    PrepAppsTest,
+                                                    CollectMediaTest)

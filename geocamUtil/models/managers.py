@@ -13,7 +13,7 @@ import django.core.exceptions
 REPR_OUTPUT_SIZE = 20
 
 
-class ChainQuerySet:
+class ChainQuerySet(object):
     """ChainQuerySet is modeled on Django QuerySet but runs the same
     query on multiple derived classes of the same abstract parent class
     and chains the results together.
@@ -117,7 +117,7 @@ class ChainQuerySet:
             return self._resultCache[0]
         elif num == 0:
             raise django.core.exceptions.ObjectDoesNotExist('%s matching query does not exist'
-                                           % self.model._meta.object_name)
+                                                            % self.model._meta.object_name)
         else:
             raise django.core.exceptions.MultipleObjectsReturned("get() returned more than one %s -- it returned %s! Lookup parameters were %s"
                                                                  % (self.model._meta.object_name, num, kwargs))
@@ -141,7 +141,7 @@ class FinalModelManager(models.Manager):
         self._parentModel = parentModel
 
     def contribute_to_class(self, model, name):
-        if self._parentModel != None:
+        if self._parentModel is not None:
             self._parentModel._default_manager.registerChildClass(model)
         # del self._parentModel
         super(FinalModelManager, self).contribute_to_class(model, name)

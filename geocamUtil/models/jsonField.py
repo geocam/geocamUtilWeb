@@ -5,7 +5,6 @@
 # __END_LICENSE__
 
 from django.db import models
-from django.core.exceptions import ValidationError
 
 from geocamUtil import anyjson as json
 
@@ -82,7 +81,7 @@ class JsonTextField(JsonMixin, models.TextField):
 try:
     from south.modelsinspector import add_introspection_rules
     # tell south it can freeze this field without any special nonsense
-    add_introspection_rules([], ["^geocamUtil\.models\.JsonCharField"])
-    add_introspection_rules([], ["^geocamUtil\.models\.JsonTextField"])
+    add_introspection_rules([], [r'^geocamUtil\.models\.JsonCharField'])
+    add_introspection_rules([], [r'^geocamUtil\.models\.JsonTextField'])
 except ImportError:
     pass

@@ -7,7 +7,7 @@
 """
 Creates a new management command 'lint', which runs code checkers to
 identify potential problems. Currently it runs pylint and pep8 on
-Python files and JavaScript Lint (jsl) on JavaScript files.
+Python files and the Closure Linter (gjslint) on JavaScript files.
 
 Example usage:
 
@@ -28,7 +28,6 @@ Configuration:
 
  mySite/management/pylintrc.txt
  mySite/management/pep8Flags.txt
- mySite/management/jslrc.txt
 
 Tips:
 

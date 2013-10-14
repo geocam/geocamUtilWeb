@@ -149,7 +149,7 @@ class ZmqProxy(object):
         self.application = tornado.web.Application([
             (r"^/?$", MainHandler),
             (r"^/zmq/$", ClientSocket),
-            ])
+        ])
 
     def start(self):
         # initialize zmq

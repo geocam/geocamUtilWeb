@@ -22,7 +22,7 @@ def sortLogs(opts, logPaths):
             topic, _body = rec.msg.split(':', 1)
 
             outFile = outFiles.get(topic)
-            if outFile == None:
+            if outFile is None:
                 outPath = '%s-zmq-messages.txt' % topic
                 outFile = open(outPath, 'wb')
                 outFiles[topic] = outFile

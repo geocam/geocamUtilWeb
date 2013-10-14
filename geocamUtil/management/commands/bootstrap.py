@@ -21,7 +21,7 @@ class Command(BaseCommand):
                     action='store_true',
                     default=False,
                     help='Answer yes to all yes-or-no questions'),
-        )
+    )
 
     def handle(self, *args, **options):
         # no op, by the time we get here bootstrapping is done

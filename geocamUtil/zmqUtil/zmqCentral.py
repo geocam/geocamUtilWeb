@@ -21,14 +21,13 @@ from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmqUtil.util import \
-     DEFAULT_CENTRAL_RPC_PORT, \
-     DEFAULT_CENTRAL_SUBSCRIBE_PORT, \
-     DEFAULT_CENTRAL_PUBLISH_PORT, \
-     getTimestamp, \
-     parseEndpoint, \
-     hasAttachments, \
-     parseMessage
+from geocamUtil.zmqUtil.util import (DEFAULT_CENTRAL_RPC_PORT,
+                                     DEFAULT_CENTRAL_SUBSCRIBE_PORT,
+                                     DEFAULT_CENTRAL_PUBLISH_PORT,
+                                     getTimestamp,
+                                     parseEndpoint,
+                                     hasAttachments,
+                                     parseMessage)
 
 # pylint: disable=E1101
 

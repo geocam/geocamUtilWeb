@@ -44,11 +44,11 @@ class Builder(object):
                     except OSError, e:
                         traceback.print_exc()
                         self.logger.error('[could not stat source file %s in rule to generate %s]'
-                                      % (src, dst))
+                                          % (src, dst))
                         sys.exit(1)
                     maxSrcTime = max(maxSrcTime, srcTime)
                 self.logger.debug('builder: srcs=%s maxSrcTime=%s dstTime=%s'
-                              % (srcs, maxSrcTime, dstTime))
+                                  % (srcs, maxSrcTime, dstTime))
                 rebuild = (maxSrcTime > dstTime)
         else:
             rebuild = True

@@ -26,7 +26,7 @@ class QueueRouter(object):
         del self._subs[qid]
 
     def publish(self, topic, msg):
-        for subscriberId, (topicPattern, q) in self._subs.iteritems():
+        for _subscriberId, (topicPattern, q) in self._subs.iteritems():
             if fnmatch(topic, topicPattern):
                 q.put((topic, msg))
 
