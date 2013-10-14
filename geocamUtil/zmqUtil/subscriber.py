@@ -11,7 +11,7 @@ from zmq.eventloop.zmqstream import ZMQStream
 from django.core import serializers
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT, LogParser
+from geocamUtil.zmqUtil.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT, LogParser
 from geocamUtil.models.ExtrasDotField import convertToDotDictRecurse
 
 SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,

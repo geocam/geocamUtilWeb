@@ -21,7 +21,7 @@ from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import \
+from geocamUtil.zmqUtil.util import \
      DEFAULT_CENTRAL_RPC_PORT, \
      DEFAULT_CENTRAL_SUBSCRIBE_PORT, \
      DEFAULT_CENTRAL_PUBLISH_PORT, \

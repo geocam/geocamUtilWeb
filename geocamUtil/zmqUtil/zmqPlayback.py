@@ -11,8 +11,8 @@ import logging
 from zmq.eventloop import ioloop
 ioloop.install()
 
-from geocamUtil.zmq.util import zmqLoop, LogParser
-from geocamUtil.zmq.publisher import ZmqPublisher
+from geocamUtil.zmqUtil.util import zmqLoop, LogParser
+from geocamUtil.zmqUtil.publisher import ZmqPublisher
 
 
 class ZmqPlayback(object):

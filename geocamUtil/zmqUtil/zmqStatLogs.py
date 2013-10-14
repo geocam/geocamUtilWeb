@@ -9,7 +9,7 @@ import logging
 from collections import defaultdict
 import datetime
 
-from geocamUtil.zmq.util import LogParser
+from geocamUtil.zmqUtil.util import LogParser
 
 MSECS_PER_HOUR = 3600 * 1000000
 

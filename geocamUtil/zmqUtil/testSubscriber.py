@@ -10,33 +10,29 @@ import logging
 from zmq.eventloop import ioloop
 ioloop.install()
 
-from geocamUtil.zmq.publisher import ZmqPublisher
-from geocamUtil.zmq.util import zmqLoop
+from geocamUtil.zmqUtil.util import zmqLoop
+from geocamUtil.zmqUtil.subscriber import ZmqSubscriber
 
 
-def pubMessage(p):
-    topic = 'geocamUtil.greeting'
-    body = {'text': 'hello'}
-    logging.debug('publishing: %s:%s', topic, body)
-    p.sendJson(topic, body)
+def handleGreeting(topic, body):
+    print 'received: %s' % body
 
 
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog')
-    ZmqPublisher.addOptions(parser, 'testPublisher')
+    ZmqSubscriber.addOptions(parser, 'testSubscriber')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')
     logging.basicConfig(level=logging.DEBUG)
 
     # set up networking
-    p = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
-    p.start()
+    s = ZmqSubscriber(**ZmqSubscriber.getOptionValues(opts))
+    s.start()
 
-    # start publishing an arbitrary message that central should forward
-    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(p), 1000)
-    pubTimer.start()
+    # subscribe to the message we want
+    s.subscribeRaw('geocamUtil.greeting:', handleGreeting)
 
     zmqLoop()
 

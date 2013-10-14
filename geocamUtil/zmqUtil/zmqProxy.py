@@ -16,8 +16,8 @@ from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil import anyjson as json
-from geocamUtil.zmq.util import zmqLoop
-from geocamUtil.zmq.subscriber import ZmqSubscriber
+from geocamUtil.zmqUtil.util import zmqLoop
+from geocamUtil.zmqUtil.subscriber import ZmqSubscriber
 
 # pylint: disable=W0223
 

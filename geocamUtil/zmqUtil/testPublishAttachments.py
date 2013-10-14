@@ -10,8 +10,8 @@ import logging
 from zmq.eventloop import ioloop
 ioloop.install()
 
-from geocamUtil.zmq.publisher import ZmqPublisher
-from geocamUtil.zmq.util import zmqLoop
+from geocamUtil.zmqUtil.publisher import ZmqPublisher
+from geocamUtil.zmqUtil.util import zmqLoop
 
 TEST_MESSAGE = open('exampleMessageWithAttachment.txt', 'rb').read()
 

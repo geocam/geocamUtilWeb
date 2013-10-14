@@ -18,8 +18,8 @@ ioloop.install()
 
 import gevent
 
-from geocamUtil.zmq.publisher import ZmqPublisher
-from geocamUtil.zmq.util import zmqLoop
+from geocamUtil.zmqUtil.publisher import ZmqPublisher
+from geocamUtil.zmqUtil.util import zmqLoop
 
 
 def pubMessage(prefix, p):

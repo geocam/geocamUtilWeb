@@ -18,7 +18,7 @@ except ImportError:
     settings = object()
 
 from geocamUtil.jsonConfig import loadConfig
-from geocamUtil.zmq.zerorpcClientProxy import ClientProxy
+from geocamUtil.zmqUtil.zerorpcClientProxy import ClientProxy
 
 INTRO_TEMPLATE = """
 Welcome to zclient.

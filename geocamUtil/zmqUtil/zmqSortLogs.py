@@ -7,7 +7,7 @@
 
 import logging
 
-from geocamUtil.zmq.util import LogParser
+from geocamUtil.zmqUtil.util import LogParser
 
 
 def sortLogs(opts, logPaths):

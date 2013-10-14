@@ -81,7 +81,7 @@ class ClientProxy(object):
                        'docstring': docstring})
         # print 'zerorpcClientProxy:', src
         code = compile(src, '<string>', 'single')
-        evaldict = {'__name__': 'geocamUtil.zmq.zerorpcClientProxy',
+        evaldict = {'__name__': 'geocamUtil.zmqUtil.zerorpcClientProxy',
                     'ClientProxy': ClientProxy}
         exec code in evaldict  # pylint: disable=W0122
         return evaldict[decoratedName]
