@@ -85,7 +85,7 @@ def parseNextTagText(text):
     returns a tag structure (a list containing the name of the tag and
     the full tag text) and the remainder of the text.
     """
-    regExpression = re.compile('<([^\s>]+)([\s\S]*)>')
+    regExpression = re.compile(r'<([^\s>]+)([\s\S]*)>')
     tagName = ''
     finishedTag = ''
     tagList = []
@@ -179,8 +179,8 @@ def getDocumentDimensions(fileHandle):
     tag = parseNextTag(fileHandle)
     width = 0
     height = 0
-    regExpressionWidth = re.compile('width= *"([0-9]*\.*[0-9]+)"')
-    regExpressionHeight = re.compile('height= *"([0-9]+\.*[0-9]+)"')
+    regExpressionWidth = re.compile(r'width= *"([0-9]*\.*[0-9]+)"')
+    regExpressionHeight = re.compile(r'height= *"([0-9]+\.*[0-9]+)"')
 
     while tag != None:
         if tag[0] == 'svg':
@@ -508,9 +508,9 @@ def changeAllPosition(fileHandle, newX, newY):
     """
 
     regularExpressionTransform = re.compile(r'matrix\('
-        + '([^,]*,[^,]*,[^,]*,[^,]*,)(.*),(.*)\)')
+        + r'([^,]*,[^,]*,[^,]*,[^,]*,)(.*),(.*)\)')
     regularExpressionNumberPair = re.compile(r'([-]?[0-9]*[.]?[0-9]+),'
-        + '([-]?[0-9]*[.]?[0-9]+)')
+        + r'([-]?[0-9]*[.]?[0-9]+)')
 
     newData = ''
     tag = parseNextTag(fileHandle)
@@ -567,10 +567,10 @@ def changeAllPositionText(text, newX, newY):
     image's "d" tag.
     """
 
-    regularExpressionTransform = re.compile('matrix\(([^,]*,[^,]*,[^,]*,'
-        + '[^,]*,)(.*),(.*)\)')
+    regularExpressionTransform = re.compile(r'matrix\(([^,]*,[^,]*,[^,]*,'
+        + r'[^,]*,)(.*),(.*)\)')
     regularExpressionNumberPair = re.compile(r'([-]?[0-9]*[.]?[0-9]+),'
-        + '([-]?[0-9]*[.]?[0-9]+)')
+        + r'([-]?[0-9]*[.]?[0-9]+)')
 
     newData = ''
 

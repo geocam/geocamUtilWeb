@@ -49,6 +49,7 @@ class DelayBox(object):
             self.buckets.append({})
         self.counter = 0
         self.event = None
+        self.timer = None
 
     def addJob(self, arg):
         bucketIndex = hash(arg) % self.numBuckets

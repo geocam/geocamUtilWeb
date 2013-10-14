@@ -16,7 +16,7 @@ if not HAVE_DECORATOR_MODULE:
     # roughly simulate the decorator module with functools
     from functools import wraps
 
-    def decorator(metaFn):
+    def decorator(metaFn):  # pylint: disable=E0102
         def resultingDecorator(fn):
             @wraps(fn)
             def outputFn(*args, **kwargs):
