@@ -16,8 +16,6 @@ import sys
 from zmq.eventloop import ioloop
 ioloop.install()
 
-import gevent
-
 from geocamUtil.zmqUtil.publisher import ZmqPublisher
 from geocamUtil.zmqUtil.util import zmqLoop
 

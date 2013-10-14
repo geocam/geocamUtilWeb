@@ -12,7 +12,7 @@ import traceback
 import logging
 
 
-class Builder:
+class Builder(object):
     def __init__(self):
         self.numMade = 0
         self.numRules = 0

@@ -5,6 +5,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=E1101
+
 import logging
 import re
 

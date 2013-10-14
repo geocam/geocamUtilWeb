@@ -5,6 +5,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=E0611,E1101
+
 import gevent
 import gevent.monkey
 gevent.monkey.patch_all(thread=False)

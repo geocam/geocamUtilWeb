@@ -18,8 +18,11 @@ from geocamUtil.zmqUtil.publisher import ZmqPublisher
 class ZmqPlayback(object):
     def __init__(self, logPath, opts):
         self.logPath = logPath
+        self.logFile = None
+        self.log = None
         self.opts = opts
         self.publisher = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
+        self.publishTimer = None
         print 'topics:', self.opts.topic
 
     def start(self):

@@ -4,6 +4,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=E1101
+
 import sys
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
@@ -41,6 +43,7 @@ class ZmqSubscriber(object):
         self.handlers = {}
         self.counter = 0
         self.deserializer = serializers.get_deserializer('json')
+        self.stream = None
 
     @classmethod
     def addOptions(cls, parser, defaultModuleName):

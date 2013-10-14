@@ -71,7 +71,7 @@ def getBearingDegrees(v):
     return result
 
 
-class UtmProjector:
+class UtmProjector(object):
     def __init__(self, zone, northernHemisphere):
         self._zone = zone
         self._northernHemisphere = northernHemisphere

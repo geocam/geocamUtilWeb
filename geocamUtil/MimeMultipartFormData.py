@@ -4,11 +4,13 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=R0924
+
 import random
 import StringIO
 
 
-class MimeMultipartFormData:
+class MimeMultipartFormData(object):
     def __init__(self, **kwargs):
         self._boundary = '%032x' % random.getrandbits(128)
         self._fields = kwargs.get('fields', {})

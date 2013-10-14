@@ -30,6 +30,8 @@ from geocamUtil.zmqUtil.util import \
      hasAttachments, \
      parseMessage
 
+# pylint: disable=E1101
+
 THIS_MODULE = 'zmqCentral'
 DEFAULT_KEEPALIVE_US = 10000000
 MONITOR_ENDPOINT = 'inproc://monitor'
@@ -42,6 +44,14 @@ class ZmqCentral(object):
         self.info = {}
         self.messageLogPath = None
         self.messageLog = None
+        self.rpcStream = None
+        self.disconnectTimer = None
+        self.injectStream = None
+        self.monStream = None
+        self.forwarder = None
+        self.logDir = None
+        self.context = None
+        self.consoleLogPath = None
 
     def announceConnect(self, moduleName, params):
         logging.info('module %s connected', moduleName)

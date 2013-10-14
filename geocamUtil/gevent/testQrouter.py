@@ -21,7 +21,7 @@ def firstNElementsOf(it, n):
 def subscriber1(router, resultSlot):
     q = router.subscribe('foo*')
     resultSlot.set(firstNElementsOf(q, 3))
-        
+
 
 def subscriber2(router, resultSlot):
     q = router.subscribe('f*')

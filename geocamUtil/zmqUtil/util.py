@@ -84,7 +84,7 @@ def parseMessageBody(body):
         if attachments:
             # parser quirk: remove last section if it's blank
             lastSectionText = attachments[-1].get_payload()
-            if isinstance(lastSectionText, basestring) and re.match('^\s*$', lastSectionText):
+            if isinstance(lastSectionText, basestring) and re.match(r'^\s*$', lastSectionText):
                 attachments.pop()
 
         return {'json': jsonSection.get_payload(), 'attachments': attachments}

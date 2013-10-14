@@ -19,7 +19,7 @@ from geocamUtil import anyjson as json
 from geocamUtil.zmqUtil.util import zmqLoop
 from geocamUtil.zmqUtil.subscriber import ZmqSubscriber
 
-# pylint: disable=W0223
+# pylint: disable=W0223,E1101
 
 proxyG = None
 

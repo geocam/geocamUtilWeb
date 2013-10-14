@@ -12,7 +12,7 @@ import iso8601
 from geocamUtil import anyjson as json
 
 
-class RaiseValueError:
+class RaiseValueError(object):
     pass
 RAISE_VALUE_ERROR = RaiseValueError()
 
@@ -84,7 +84,7 @@ class RoundingEncoder(json.JSONEncoder):
             return super(RoundingEncoder, self)._iterencode(o, markers)
 
 
-class Bbox:
+class Bbox(object):
     def __init__(self, dim=2):
         self.dim = dim
         self.minVal = [99e+20] * self.dim
@@ -104,7 +104,7 @@ class Bbox:
         return self.minVal + self.maxVal
 
 
-class TimeRange:
+class TimeRange(object):
     def __init__(self):
         self.minTime = datetime.datetime.max
         self.maxTime = datetime.datetime.min
@@ -129,7 +129,7 @@ class TimeRange:
             return None
 
 
-class TrackLog:
+class TrackLog(object):
     def __init__(self, tracks=None):
         self.tracks = tracks
 
@@ -199,7 +199,7 @@ class TrackLog:
         return TrackLog.parseGpxString(file(gpxPath, 'r').read())
 
 
-class Track:
+class Track(object):
     def __init__(self, icon=None, lineColor=None, lineStyle=None, pts=None):
         self.icon = icon
         self.lineColor = lineColor
@@ -222,7 +222,7 @@ class Track:
         return rng
 
 
-class TrackPoint:
+class TrackPoint(object):
     def __init__(self, lat=None, lon=None, ele=None, timestamp=None):
         self.lat = lat
         self.lon = lon

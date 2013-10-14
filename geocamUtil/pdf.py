@@ -20,7 +20,7 @@ def convertPdf(data,
     Pass in the raw binary PDF data. Returns the raw binary image data
     result after rasterization.
     """
-    
+
     #write to temporary pdf file
     tempInputFile = tempfile.NamedTemporaryFile(suffix='.pdf', delete=False)
     tempInputFile.seek(0)
@@ -28,9 +28,9 @@ def convertPdf(data,
     tempInputFile.flush()
 
     outputFileName = tempInputFile.name.replace('.pdf', '.png')
-    
+
     ret = os.system('convert -flatten %s %s > /dev/null' % (tempInputFile.name, outputFileName))
-    
+
     os.remove(tempInputFile.name)
 
     if ret != 0 or os.path.isfile(outputFileName) == False:
@@ -41,5 +41,5 @@ def convertPdf(data,
 
     outputFile.close()
     os.remove(outputFileName)
-    
+
     return outputFileData

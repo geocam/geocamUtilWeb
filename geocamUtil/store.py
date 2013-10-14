@@ -87,7 +87,7 @@ class FileStore(MutableMapping):
 
     def __iter__(self):
         for name in os.listdir(self.directory):
-            yield urllib.unquote_plus(re.sub('\.p\.gz$', '', name))
+            yield urllib.unquote_plus(re.sub(r'\.p\.gz$', '', name))
 
     def sync(self):
         # entries are sync'd as they are added, nothing to do

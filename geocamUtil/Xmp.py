@@ -30,7 +30,7 @@ def findImageName(xmpName):
     raise Exception('no image corresponding to xmp file %s' % xmpName)
 
 
-class Xmp:
+class Xmp(object):
     def __init__(self, fname):
         self.graph = Graph()
         if os.path.splitext(fname)[1].lower() in IMAGE_EXTENSIONS:
