@@ -11,8 +11,7 @@ import os
 from geocamUtil.management.commandUtil import getSiteDir
 
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pylintrc.txt')
-DEFAULT_FLAGS = '-i y -r n -f parseable'
-
+DEFAULT_FLAGS = '-i y -r n --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"'
 
 def dosys(cmd):
     print 'running: %s' % cmd
