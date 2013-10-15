@@ -11,7 +11,9 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+
     # Example:
     # (r'^example/', include('example.foo.urls')),
 
@@ -24,9 +26,11 @@ urlpatterns = patterns('',
 
 )
 
-urlpatterns = urlpatterns + patterns('',
+urlpatterns = urlpatterns + patterns(
+    '',
+
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT}),
-#    (r'^data/(?P<path>.*)$', 'django.views.static.serve',
-#        {'document_root': settings.DATA_ROOT}),
-    )
+    # (r'^data/(?P<path>.*)$', 'django.views.static.serve',
+    #  {'document_root': settings.DATA_ROOT}),
+)

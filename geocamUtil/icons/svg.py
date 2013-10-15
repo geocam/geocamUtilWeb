@@ -684,6 +684,7 @@ def resizeCanvas(fileName, documentX, documentY, append):
 class NoSvgBackendError(Exception):
     pass
 
+
 def detectSvgBackend():
     global RENDER_BACKEND
 
