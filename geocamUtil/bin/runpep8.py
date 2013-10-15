@@ -56,7 +56,7 @@ def runpep8(paths):
         d = os.path.relpath(d)
         cmd = 'pep8 %s' % flags
         if os.path.isdir(d):
-            dosys('find %s -name "*.py" | xargs -n 50 %s' % (d, cmd))
+            dosys('find %s -name "*.py" | egrep -v "external|attic" | xargs -n50 -d"\n" %s' % (d, cmd))
         else:
             dosys('%s %s' % (cmd, d))
 

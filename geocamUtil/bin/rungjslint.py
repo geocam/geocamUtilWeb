@@ -47,7 +47,7 @@ def rungjslint(paths):
         fd, tempPath = tempfile.mkstemp('-rungjslintfiles.txt')
         os.close(fd)
         if os.path.isdir(d):
-            dosys('find %s -name "*.js" | egrep -v "external|build|doc_src" > %s' % (d, tempPath))
+            dosys('find %s -name "*.js" | egrep -v "external|build|doc_src|attic" > %s' % (d, tempPath))
             files = [f[:-1] for f in file(tempPath)]
             os.unlink(tempPath)
         else:
