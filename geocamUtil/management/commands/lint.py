@@ -20,6 +20,18 @@ Requirements:
 
  pip install pylint pep8 http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz
 
+Tips:
+
+ * Run in a subdirectory. When editing a particular subdirectory, run
+   manage.py lint from within that subdirectory to avoid wasting time
+   processing irrelevant files.
+
+ * Use editor integration. For example, in Emacs, run manage.py lint
+   using M-x compile. That lets you jump straight to the problematic
+   source code line. It speeds things up a lot when pep8 gives you
+   many niggling whitespace warnings and each fix is a one-character
+   edit.
+
 Configuration:
 
  The following files can be used to customize the checker behavior for
@@ -28,6 +40,24 @@ Configuration:
  mySite/management/pylintrc.txt
  mySite/management/pep8Flags.txt
  mySite/management/gjslintFlags.txt
+
+Editor configuration:
+
+ Whitespace problems are among the most frequent lint warnings. To
+ avoid creating them in the first place, set your editor up properly
+ for Python:
+
+ * In .emacs:
+
+   (setq-default show-trailing-whitespace t)
+   (setq-default indent-tabs-mode nil)
+
+ * In .vimrc:
+
+   set tabstop=4
+   set shiftwidth=4
+   set expandtab
+   match ErrorMsg '\s\+$'
 
 Suppressing warnings in pylint:
 
@@ -65,8 +95,8 @@ Suppressing warnings in pep8:
 
     some_code_that_pep8_dislikes()  # noqa
 
- 2) There is currently no way to suppress a pep8 warning for all lines
-    of a single file.
+ 2) Suppress for all lines of a single file. Sorry, there is currently
+    no way to do that for pep8.
 
  3) Suppress for entire project: Edit management/pep8Flags.txt.
 
