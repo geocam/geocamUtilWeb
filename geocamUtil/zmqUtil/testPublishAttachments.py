@@ -5,6 +5,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+import os
 import logging
 
 from zmq.eventloop import ioloop
@@ -13,7 +14,8 @@ ioloop.install()
 from geocamUtil.zmqUtil.publisher import ZmqPublisher
 from geocamUtil.zmqUtil.util import zmqLoop
 
-TEST_MESSAGE = open('exampleMessageWithAttachment.txt', 'rb').read()
+thisDir = os.path.dirname(__file__)
+TEST_MESSAGE = open(os.path.join(thisDir, 'exampleMessageWithAttachment.txt'), 'rb').read()
 
 
 def pubMessage(p):
