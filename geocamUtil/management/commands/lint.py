@@ -4,6 +4,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=W1401
+
 """
 Creates a new management command 'lint', which runs code checkers to
 identify potential problems. Currently it runs pylint and pep8 on
@@ -120,6 +122,9 @@ class Command(BaseCommand):
     help = 'Run code checks (run pylint, pep8 on Python files and gjslint on JavaScript files)'
 
     def handle(self, *args, **options):
-        runpylint(args)
-        runpep8(args)
-        rungjslint(args)
+        verbosity = int(options.get('verbosity', False))
+        runpylint(args, verbosity=verbosity)
+        runpep8(args, verbosity=verbosity)
+        rungjslint(args, verbosity=verbosity)
+        if verbosity > 0:
+            print '### done'
