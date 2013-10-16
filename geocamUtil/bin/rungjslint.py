@@ -28,7 +28,7 @@ def rungjslint(paths):
     if not paths:
         paths = ['.']
 
-    # give helpful error message if jsl is not installed
+    # give helpful error message if gjslint is not installed
     ret = os.system('gjslint > /dev/null')
     if ret != 0:
         print >> sys.stderr, "\nWARNING: can't run gjslint command -- find it at https://developers.google.com/closure/utilities/\n"
