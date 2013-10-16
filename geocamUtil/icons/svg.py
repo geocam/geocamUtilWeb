@@ -18,6 +18,7 @@ import os
 import optparse
 import re
 from math import sqrt
+import tempfile
 
 from PIL import Image  # not needed if using ImageMagick backend
 
@@ -642,6 +643,12 @@ def turnToBW(attributeText):
         return None
 
 
+def getTempName(suffix):
+    fd, path = tempfile.mkstemp(suffix)
+    os.close(fd)
+    return path
+
+
 def resizeCanvas(fileName, documentX, documentY, append):
     """
     Resizes the canvas by setting the document dimensions and changing the
@@ -650,8 +657,8 @@ def resizeCanvas(fileName, documentX, documentY, append):
     The file's name is returned as a string.
     """
 
-    outputFileName = 'RENDERICONout' + append + '.svg'
-    outputFileName2 = 'RENDERICON2out' + append + '.svg'
+    outputFileName = getTempName('-RENDERICONout.svg')
+    outputFileName2 = getTempName('-RENDERICON2out.svg')
 
     try:
         iconResize = open(outputFileName, 'w')
@@ -748,10 +755,10 @@ def renderIcon(iconFileName, options=None, **kwargs):
     for k, v in kwargs.iteritems():
         setattr(options, k, v)
 
-    iconWithArrowFileName = os.path.splitext(os.path.basename(iconFileName))[0] + '000.svg'
-    iconWithAandGlowFileName = os.path.splitext(os.path.basename(iconFileName))[0] + '-selected000.svg'
-    iconWithAandBWFileName = os.path.splitext(os.path.basename(iconFileName))[0] + '-faded000.svg'
-    iconWithAGandBWFileName = os.path.splitext(os.path.basename(iconFileName))[0] + '-fadedselected000.svg'
+    iconWithArrowFileName = getTempName('-geocamUtil.svg')
+    iconWithAandGlowFileName = getTempName('-geocamUtil-selected.svg')
+    iconWithAandBWFileName = getTempName('-geocamUtil-faded.svg')
+    iconWithAGandBWFileName = getTempName('-geocamUtil-fadedselected.svg')
 
     try:
         arrowFileHandle = open(options.arrowFileName, 'r')
