@@ -66,7 +66,7 @@ def runpep8(paths, verbosity=1):
         else:
             xargsFlags = ''
         if os.path.isdir(d):
-            dosys('find %s -name "*.py" | egrep -v "external|attic" | xargs %s -n50 -d"\n" %s' % (d, xargsFlags, cmd), verbosity)
+            dosys('find %s -name "*.py" | egrep -v "external|attic|build/static" | xargs %s -n50 -d"\n" %s' % (d, xargsFlags, cmd), verbosity)
         else:
             dosys('%s %s' % (cmd, d), verbosity)
 
