@@ -53,7 +53,7 @@ def runpylint(paths, verbosity=1):
     for path in paths:
         path = os.path.relpath(path)
         if os.path.isdir(path):
-            dosys('find %s -name "*.py" | egrep -v "external|attic|build/static" | xargs %s -n50 -d"\n" %s' % (path, xargsFlags, cmd), verbosity)
+            dosys('find %s -name "*.py" | egrep -v "external|attic|build/static" | xargs %s -n20 -d"\n" %s' % (path, xargsFlags, cmd), verbosity)
         else:
             dosys('%s %s' % (cmd, path), verbosity)
 
