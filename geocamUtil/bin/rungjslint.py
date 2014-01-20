@@ -7,7 +7,6 @@
 
 import sys
 import os
-import tempfile
 
 from geocamUtil.management.commandUtil import getSiteDir, lintignore
 
