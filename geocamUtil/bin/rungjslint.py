@@ -45,6 +45,7 @@ def rungjslint(paths, verbosity=1):
     if os.path.exists(CONFIG_FILE):
         flags += ' --flagfile %s' % CONFIG_FILE
 
+    exitCode = 0
     cmd = 'gjslint %s' % flags
     for d in paths:
         if verbosity > 2:
@@ -57,7 +58,11 @@ def rungjslint(paths, verbosity=1):
             files = [d]
         if files:
             fileArgs = ' '.join(files)
-            dosys('%s %s' % (cmd, fileArgs), verbosity)
+            ret = dosys('%s %s' % (cmd, fileArgs), verbosity)
+            if ret != 0:
+                exitCode = 1
+
+    return exitCode
 
 
 def main():
@@ -68,7 +73,9 @@ def main():
                       default=1,
                       help='Verbosity level; 0=minimal output, 1=normal output, 2=verbose output, 3=very verbose output')
     opts, args = parser.parse_args()
-    rungjslint(args, verbosity=opts.verbosity)
+    exitCode = rungjslint(args, verbosity=opts.verbosity)
+    sys.exit(exitCode)
+
 
 if __name__ == '__main__':
     main()

@@ -10,6 +10,7 @@ import sys
 import imp
 import re
 import itertools
+import subprocess
 
 from django.core.management.base import BaseCommand
 
@@ -162,3 +163,15 @@ def lintignore(pathsText):
     paths = pathsText.splitlines()
     unignoredFiles = [p for p in paths if pathIsNotIgnored(p, lintignoreRegexes)]
     return '\n'.join(unignoredFiles)
+
+
+def pipeToCommand(cmd, text, verbosity):
+    if verbosity > 1:
+        print 'piping input to: %s' % cmd
+    proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE)
+    proc.communicate(text)
+    ret = proc.returncode
+    if verbosity > 1:
+        if ret != 0:
+            print 'warning: command exited with non-zero return value %d' % ret
+    return ret

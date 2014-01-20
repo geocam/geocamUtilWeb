@@ -9,7 +9,7 @@ import sys
 import os
 import re
 
-from geocamUtil.management.commandUtil import getSiteDir, lintignore
+from geocamUtil.management.commandUtil import getSiteDir, lintignore, pipeToCommand
 
 STRIP_COMMENT = re.compile(r'#.*$')
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pep8Flags.txt')
@@ -58,6 +58,7 @@ def runpep8(paths, verbosity=1):
     else:
         flags = DEFAULT_FLAGS
 
+    exitCode = 0
     for d in paths:
         d = os.path.relpath(d)
         cmd = 'pep8 %s' % flags
@@ -67,9 +68,16 @@ def runpep8(paths, verbosity=1):
             xargsFlags = ''
         if os.path.isdir(d):
             pathsText = lintignore(os.popen('find %s -name "*.py"' % d).read())
-            os.popen('xargs %s --no-run-if-empty -n50 -d"\n" %s' % (xargsFlags, cmd), 'w').write(pathsText)
+            ret = pipeToCommand('xargs %s --no-run-if-empty -n50 -d"\n" %s' % (xargsFlags, cmd),
+                                pathsText, verbosity)
+            if ret != 0:
+                exitCode = 1
         else:
-            dosys('%s %s' % (cmd, d), verbosity)
+            ret = dosys('%s %s' % (cmd, d), verbosity)
+            if ret != 0:
+                exitCode = 1
+
+    return exitCode
 
 
 def main():
@@ -80,7 +88,9 @@ def main():
                       default=1,
                       help='Verbosity level; 0=minimal output, 1=normal output, 2=verbose output, 3=very verbose output')
     opts, args = parser.parse_args()
-    runpep8(args, verbosity=opts.verbosity)
+    exitCode = runpep8(args, verbosity=opts.verbosity)
+    sys.exit(exitCode)
+
 
 if __name__ == '__main__':
     main()

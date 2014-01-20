@@ -8,7 +8,7 @@
 import sys
 import os
 
-from geocamUtil.management.commandUtil import getSiteDir, lintignore
+from geocamUtil.management.commandUtil import getSiteDir, lintignore, pipeToCommand
 
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pylintrc.txt')
 DEFAULT_FLAGS = '-i y -r n --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"'
@@ -50,13 +50,22 @@ def runpylint(paths, verbosity=1):
         xargsFlags = '--verbose'
     else:
         xargsFlags = ''
+
+    exitCode = 0
     for path in paths:
         path = os.path.relpath(path)
         if os.path.isdir(path):
             pathsText = lintignore(os.popen('find %s -name "*.py"' % path).read())
-            os.popen('xargs %s --no-run-if-empty -n20 -d"\n" %s' % (xargsFlags, cmd), 'w').write(pathsText)
+            ret = pipeToCommand('xargs %s --no-run-if-empty -n20 -d"\n" %s' % (xargsFlags, cmd),
+                                pathsText, verbosity)
+            if ret != 0:
+                exitCode = 1
         else:
-            dosys('%s %s' % (cmd, path), verbosity)
+            ret = dosys('%s %s' % (cmd, path), verbosity)
+            if ret != 0:
+                exitCode = 1
+
+    return exitCode
 
 
 def main():
@@ -67,7 +76,9 @@ def main():
                       default=1,
                       help='Verbosity level; 0=minimal output, 1=normal output, 2=verbose output, 3=very verbose output')
     opts, args = parser.parse_args()
-    runpylint(args, verbosity=opts.verbosity)
+    exitCode = runpylint(args, verbosity=opts.verbosity)
+    sys.exit(exitCode)
+
 
 if __name__ == '__main__':
     main()
