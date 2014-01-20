@@ -8,7 +8,7 @@
 import sys
 import os
 
-from geocamUtil.management.commandUtil import getSiteDir
+from geocamUtil.management.commandUtil import getSiteDir, lintignore
 
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pylintrc.txt')
 DEFAULT_FLAGS = '-i y -r n --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"'
@@ -53,7 +53,8 @@ def runpylint(paths, verbosity=1):
     for path in paths:
         path = os.path.relpath(path)
         if os.path.isdir(path):
-            dosys('find %s -name "*.py" | egrep -v "external|attic|build/static" | xargs %s -n20 -d"\n" %s' % (path, xargsFlags, cmd), verbosity)
+            pathsText = lintignore(os.popen('find %s -name "*.py"' % path).read())
+            os.popen('xargs %s --no-run-if-empty -n20 -d"\n" %s' % (xargsFlags, cmd), 'w').write(pathsText)
         else:
             dosys('%s %s' % (cmd, path), verbosity)
 

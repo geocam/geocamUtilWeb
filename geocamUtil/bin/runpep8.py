@@ -9,7 +9,7 @@ import sys
 import os
 import re
 
-from geocamUtil.management.commandUtil import getSiteDir
+from geocamUtil.management.commandUtil import getSiteDir, lintignore
 
 STRIP_COMMENT = re.compile(r'#.*$')
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'pep8Flags.txt')
@@ -66,7 +66,8 @@ def runpep8(paths, verbosity=1):
         else:
             xargsFlags = ''
         if os.path.isdir(d):
-            dosys('find %s -name "*.py" | egrep -v "external|attic|build/static" | xargs %s -n50 -d"\n" %s' % (d, xargsFlags, cmd), verbosity)
+            pathsText = lintignore(os.popen('find %s -name "*.py"' % d).read())
+            os.popen('xargs %s --no-run-if-empty -n50 -d"\n" %s' % (xargsFlags, cmd), 'w').write(pathsText)
         else:
             dosys('%s %s' % (cmd, d), verbosity)
 

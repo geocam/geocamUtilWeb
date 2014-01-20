@@ -9,7 +9,7 @@ import sys
 import os
 import tempfile
 
-from geocamUtil.management.commandUtil import getSiteDir
+from geocamUtil.management.commandUtil import getSiteDir, lintignore
 
 CONFIG_FILE = os.path.join(getSiteDir(), 'management', 'gjslintFlags.txt')
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -48,19 +48,17 @@ def rungjslint(paths, verbosity=1):
 
     cmd = 'gjslint %s' % flags
     for d in paths:
-        if verbosity > 1:
-            print 'd:', d
+        if verbosity > 2:
+            print 'directory:', d
         d = os.path.relpath(d)
-        fd, tempPath = tempfile.mkstemp('-rungjslintfiles.txt')
-        os.close(fd)
         if os.path.isdir(d):
-            dosys('find %s -name "*.js" | egrep -v "external|build|doc_src|attic|jquery" > %s' % (d, tempPath), verbosity)
-            files = [f[:-1] for f in file(tempPath)]
-            os.unlink(tempPath)
+            pathsText = lintignore(os.popen('find %s -name "*.js"' % d).read())
+            files = pathsText.splitlines()
         else:
             files = [d]
-        fileArgs = ' '.join(files)
-        dosys('%s %s' % (cmd, fileArgs), verbosity)
+        if files:
+            fileArgs = ' '.join(files)
+            dosys('%s %s' % (cmd, fileArgs), verbosity)
 
 
 def main():
