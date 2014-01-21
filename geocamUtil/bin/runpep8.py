@@ -18,11 +18,11 @@ DEFAULT_FLAGS = '--ignore=E501 --show-source --show-pep8 --repeat'
 
 def dosys(cmd, verbosity):
     if verbosity > 1:
-        print 'running: %s' % cmd
+        print >> sys.stderr, 'running: %s' % cmd
     ret = os.system(cmd)
     if verbosity > 1:
         if ret != 0:
-            print 'warning: command exited with non-zero return value %d' % ret
+            print >> sys.stderr, 'warning: command exited with non-zero return value %d' % ret
     return ret
 
 
@@ -39,7 +39,7 @@ def readFlags(path):
 
 def runpep8(paths, verbosity=1):
     if verbosity > 0:
-        print '### pep8'
+        print >> sys.stderr, '### pep8'
 
     if not paths:
         paths = ['.']
@@ -52,7 +52,7 @@ def runpep8(paths, verbosity=1):
 
     # extract flags from <site>/management/pep8Flags.txt if it exists
     if verbosity > 1:
-        print 'checking for pep8 flags in %s' % CONFIG_FILE
+        print >> sys.stderr, 'checking for pep8 flags in %s' % CONFIG_FILE
     if os.path.exists(CONFIG_FILE):
         flags = readFlags(CONFIG_FILE)
     else:

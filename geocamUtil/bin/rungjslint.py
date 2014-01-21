@@ -17,17 +17,17 @@ DEFAULT_FLAGS = '--unix_mode'
 
 def dosys(cmd, verbosity):
     if verbosity > 1:
-        print 'running: %s' % cmd
+        print >> sys.stderr, 'running: %s' % cmd
     ret = os.system(cmd)
     if verbosity > 1:
         if ret != 0:
-            print 'warning: command exited with non-zero return value %d' % ret
+            print >> sys.stderr, 'warning: command exited with non-zero return value %d' % ret
     return ret
 
 
 def rungjslint(paths, verbosity=1):
     if verbosity > 0:
-        print '### gjslint'
+        print >> sys.stderr, '### gjslint'
 
     if not paths:
         paths = ['.']
@@ -40,7 +40,7 @@ def rungjslint(paths, verbosity=1):
 
     # use rcfile if it exists
     if verbosity > 1:
-        print 'checking for gjslint flags in %s' % CONFIG_FILE
+        print >> sys.stderr, 'checking for gjslint flags in %s' % CONFIG_FILE
     flags = DEFAULT_FLAGS
     if os.path.exists(CONFIG_FILE):
         flags += ' --flagfile %s' % CONFIG_FILE
@@ -49,7 +49,7 @@ def rungjslint(paths, verbosity=1):
     cmd = 'gjslint %s' % flags
     for d in paths:
         if verbosity > 2:
-            print 'directory:', d
+            print >> sys.stderr, 'directory:', d
         d = os.path.relpath(d)
         if os.path.isdir(d):
             pathsText = lintignore(os.popen('find %s -name "*.js"' % d).read())

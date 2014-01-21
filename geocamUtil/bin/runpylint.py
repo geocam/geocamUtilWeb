@@ -16,17 +16,17 @@ DEFAULT_FLAGS = '-i y -r n --msg-template="{path}:{line}: [{msg_id}({symbol}), {
 
 def dosys(cmd, verbosity):
     if verbosity > 1:
-        print 'running: %s' % cmd
+        print >> sys.stderr, 'running: %s' % cmd
     ret = os.system(cmd)
     if verbosity > 1:
         if ret != 0:
-            print 'warning: command exited with non-zero return value %d' % ret
+            print >> sys.stderr, 'warning: command exited with non-zero return value %d' % ret
     return ret
 
 
 def runpylint(paths, verbosity=1):
     if verbosity > 0:
-        print '### pylint'
+        print >> sys.stderr, '### pylint'
 
     if not paths:
         paths = ['.']
@@ -39,7 +39,7 @@ def runpylint(paths, verbosity=1):
 
     # use <site>/management/pylintrc.txt as rcfile if it exists
     if verbosity > 1:
-        print 'checking for pylint flags in %s' % CONFIG_FILE
+        print >> sys.stderr, 'checking for pylint flags in %s' % CONFIG_FILE
     if os.path.exists(CONFIG_FILE):
         flags = '--rcfile %s' % CONFIG_FILE
     else:

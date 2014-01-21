@@ -167,11 +167,11 @@ def lintignore(pathsText):
 
 def pipeToCommand(cmd, text, verbosity):
     if verbosity > 1:
-        print 'piping input to: %s' % cmd
+        print >> sys.stderr, 'piping input to: %s' % cmd
     proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE)
     proc.communicate(text)
     ret = proc.returncode
     if verbosity > 1:
         if ret != 0:
-            print 'warning: command exited with non-zero return value %d' % ret
+            print >> sys.stderr, 'warning: command exited with non-zero return value %d' % ret
     return ret
