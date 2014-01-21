@@ -42,6 +42,7 @@ Configuration:
  mySite/management/pylintrc.txt
  mySite/management/pep8Flags.txt
  mySite/management/gjslintFlags.txt
+ mySite/management/lintignore
 
 Editor configuration:
 
@@ -60,6 +61,13 @@ Editor configuration:
    set shiftwidth=4
    set expandtab
    match ErrorMsg '\s\+$'
+
+Skip checking files using lintignore:
+
+ Certain files may not be worth checking. Common examples include:
+ third-party code, some kinds of generated code, and code that is no
+ longer in use (attic).  You can tell lint to ignore certain paths
+ by editing mySite/management/lintignore.
 
 Suppressing warnings in pylint:
 
@@ -111,6 +119,8 @@ Suppressing warnings in gjslint:
 
 """
 
+import sys
+
 from django.core.management.base import BaseCommand
 
 from geocamUtil.bin.runpylint import runpylint
@@ -123,8 +133,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         verbosity = int(options.get('verbosity', False))
-        runpylint(args, verbosity=verbosity)
-        runpep8(args, verbosity=verbosity)
-        rungjslint(args, verbosity=verbosity)
+
+        returnCodes = []
+        returnCodes.append(runpylint(args, verbosity=verbosity))
+        returnCodes.append(runpep8(args, verbosity=verbosity))
+        returnCodes.append(rungjslint(args, verbosity=verbosity))
+        errorsFound = not all([c == 0 for c in returnCodes])
+
         if verbosity > 0:
-            print '### done'
+            if errorsFound:
+                print '### manage.py lint done, errors found'
+            else:
+                print '### manage.py lint done, no errors found'
+
+        sys.exit(errorsFound)

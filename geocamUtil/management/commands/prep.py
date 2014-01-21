@@ -9,11 +9,12 @@ from django.core.management.base import NoArgsCommand
 
 
 class Command(NoArgsCommand):
-    help = 'Runs subcommands: preptemplates, prepapps, collectmedia'
+    help = 'Runs subcommands: installgithooks, preptemplates, prepapps, collectmedia, collectbinaries'
 
     def handle_noargs(self, **options):
         #management.call_command('collectreqs')
         #management.call_command('installreqs')
+        management.call_command('installgithooks')
         management.call_command('preptemplates')
         management.call_command('prepapps')
         management.call_command('collectmedia')
