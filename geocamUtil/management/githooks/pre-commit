@@ -31,7 +31,7 @@ def dosys(cmd):
     print >> sys.stderr, cmd
     ret = os.system(cmd)
     if ret != 0:
-        print >> sys.stderr, 'command exited with non-zero return value %s' % ret
+        print >> sys.stderr, 'system call returned with non-zero status code %s' % ret
     return ret
 
 
@@ -64,11 +64,9 @@ def isDirNotSymlink(d):
 def getCurrentApp():
     siteDir = getSiteDir()
     cwd = os.path.realpath(os.getcwd())
-    print >> sys.stderr, 'cwd:', cwd
     for p in glob.glob('%s/apps/*' % siteDir):
-        realpath = os.path.realpath(p)
-        print >> sys.stderr, 'realpath:', realpath
-        if cwd.startswith(realpath):
+        submoduleDir = os.path.dirname(os.path.realpath(p))
+        if cwd.startswith(submoduleDir):
             return os.path.basename(p)
     return None
 
@@ -123,7 +121,7 @@ def runInVagrantEnvironmentInstead():
     cwd = os.path.realpath(os.getcwd())
     rel = os.path.relpath(cwd, siteParent)
 
-    cmd = 'vagrant ssh -c "cd %s && $HOME/%s/.git/hooks/pre-commit --child"' % (rel, siteName)
+    cmd = 'vagrant ssh -c "cd %s && $HOME/%s/apps/geocamUtil/management/githooks/pre-commit --child"' % (rel, siteName)
     args = shlex.split(cmd)
     print >> sys.stderr, cmd
     os.execvp(args[0], args)
