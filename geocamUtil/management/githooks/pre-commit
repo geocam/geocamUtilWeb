@@ -151,7 +151,7 @@ def preCommit(opts):
     if commitOk:
         print >> sys.stderr, 'no errors found. continuing with commit.\n'
     else:
-        print >> sys.stderr, 'errors found. commit aborted.'
+        print >> sys.stderr, 'errors found. commit aborted. use "git commit -n" if you must commit despite errors.'
         sys.exit(1)
 
 
