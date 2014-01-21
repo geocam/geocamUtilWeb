@@ -63,9 +63,12 @@ def isDirNotSymlink(d):
 
 def getCurrentApp():
     siteDir = getSiteDir()
-    cwd = os.path.realpath(os.getcwd())
+    # note: os.path.join() calls ensure both cwd and realpath end in / to
+    # avoid a problem in the special case that one app name is a prefix
+    # of another app name (e.g. xgds_planner, xgds_planner2)
+    cwd = os.path.join(os.path.realpath(os.getcwd()), '')
     for p in glob.glob('%s/apps/*' % siteDir):
-        submoduleDir = os.path.dirname(os.path.realpath(p))
+        submoduleDir = os.path.join(os.path.dirname(os.path.realpath(p)), '')
         if cwd.startswith(submoduleDir):
             return os.path.basename(p)
     return None
