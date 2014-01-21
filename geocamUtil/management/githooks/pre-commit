@@ -1,0 +1,173 @@
+#!/usr/bin/env python
+
+"""
+This script is intended to be symlinked as .git/hooks/pre-commit so that
+it runs when the user types 'git commit', and if it finds any errors, it
+returns with a non-zero return code and the commit is aborted.
+
+It calls 'manage.py lint' and 'manage.py test' (with appropriate flags).
+
+It assumes we're in a site that follows the GeoCam / xGDS layout
+conventions.  If the commit is at the parent site level, it tries to run
+tests only over the code directly owned by the parent site (not by a
+submodule). If the commit is at the submodule level, it tries to run
+tests over only that submodule. Limiting the testing can save a lot of
+time.
+
+If it detects that the deployment uses vagrant but 'git commit' is not
+being called from inside the vagrant VM, it will attempt to run the
+tests inside the VM using 'vagrant ssh'.
+"""
+
+import os
+import glob
+import sys
+import traceback
+import stat
+import shlex
+
+
+def dosys(cmd):
+    print >> sys.stderr, cmd
+    ret = os.system(cmd)
+    if ret != 0:
+        print >> sys.stderr, 'command exited with non-zero return value %s' % ret
+    return ret
+
+
+CACHED_GIT_DIR = None
+CACHED_SITE_DIR = None
+
+
+def getGitDir():
+    global CACHED_GIT_DIR
+    if CACHED_GIT_DIR is None:
+        CACHED_GIT_DIR = os.path.realpath(os.popen('git rev-parse --git-dir').read().strip())
+    return CACHED_GIT_DIR
+
+
+def getSiteDir():
+    global CACHED_SITE_DIR
+    if CACHED_SITE_DIR is None:
+        gitDir = getGitDir()
+        elts = gitDir.split(os.path.sep)
+        gitIndex = elts.index('.git')
+        eltsBeforeGit = elts[:gitIndex]
+        CACHED_SITE_DIR = os.path.sep.join(eltsBeforeGit)
+    return CACHED_SITE_DIR
+
+
+def isDirNotSymlink(d):
+    return stat.S_ISDIR(os.lstat(d).st_mode)
+
+
+def getCurrentApp():
+    siteDir = getSiteDir()
+    cwd = os.path.realpath(os.getcwd())
+    print >> sys.stderr, 'cwd:', cwd
+    for p in glob.glob('%s/apps/*' % siteDir):
+        realpath = os.path.realpath(p)
+        print >> sys.stderr, 'realpath:', realpath
+        if cwd.startswith(realpath):
+            return os.path.basename(p)
+    return None
+
+
+def testParentSite():
+    siteDir = getSiteDir()
+    os.chdir(siteDir)
+
+    commitOk = True
+
+    appsToLint = [d
+                  for d in glob.glob('apps/*')
+                  if isDirNotSymlink(d)]
+    otherToLint = [d
+                   for d in ['bin', 'scripts']
+                   if isDirNotSymlink(d)]
+    thingsToLint = appsToLint + otherToLint
+    ret = dosys('./manage.py lint %s' % ' '.join(thingsToLint))
+    if ret != 0:
+        commitOk = False
+
+    appsToTest = [os.path.basename(d) for d in appsToLint]
+    ret = dosys('./manage.py test %s' % ' '.join(appsToTest))
+    if ret != 0:
+        commitOk = False
+
+    return commitOk
+
+
+def testApp(appName):
+    siteDir = getSiteDir()
+    os.chdir(siteDir)
+
+    commitOk = True
+
+    ret = dosys('./manage.py lint apps/%s' % appName)
+    if ret != 0:
+        commitOk = False
+
+    ret = dosys('./manage.py test %s' % appName)
+    if ret != 0:
+        commitOk = False
+
+    return commitOk
+
+
+def runInVagrantEnvironmentInstead():
+    print >> sys.stderr, 'vagrant environment detected. using "vagrant ssh" to run tests inside VM.'
+
+    siteDir = getSiteDir()
+    siteParent, siteName = os.path.split(siteDir)
+    cwd = os.path.realpath(os.getcwd())
+    rel = os.path.relpath(cwd, siteParent)
+
+    cmd = 'vagrant ssh -c "cd %s && $HOME/%s/.git/hooks/pre-commit --child"' % (rel, siteName)
+    args = shlex.split(cmd)
+    print >> sys.stderr, cmd
+    os.execvp(args[0], args)
+
+
+def preCommit(opts):
+    try:
+        if not opts.child:
+            print >> sys.stderr, 'running git pre-commit tests. use "git commit -n" if you must commit without testing.'
+
+        usingVagrant = ('vagrant' in os.getcwd())
+        inVagrantEnvironment = (os.environ['USER'] == 'vagrant')
+        if usingVagrant and not inVagrantEnvironment:
+            runInVagrantEnvironmentInstead()
+
+        appName = getCurrentApp()
+        if appName:
+            commitOk = testApp(appName)
+        else:
+            commitOk = testParentSite()
+
+    except:
+        print >> sys.stderr, traceback.format_exc()
+        print >> sys.stderr, 'sorry, it appears that pre-commit testing is broken. you may want to try "git commit -n".'
+        sys.exit(1)
+
+    if commitOk:
+        print >> sys.stderr, 'no errors found. continuing with commit.\n'
+    else:
+        print >> sys.stderr, 'errors found. commit aborted.'
+        sys.exit(1)
+
+
+def main():
+    import optparse
+    parser = optparse.OptionParser('usage: %prog\n' + __doc__)
+    parser.add_option('--child',
+                      action='store_true', default=False,
+                      help='Mark this as a child of another pre-commit process')
+    opts, args = parser.parse_args()
+    if args:
+        parser.error('expected no args')
+    preCommit(opts)
+
+
+if __name__ == '__main__':
+    main()
