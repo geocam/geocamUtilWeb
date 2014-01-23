@@ -129,7 +129,7 @@ from geocamUtil.bin.rungjslint import rungjslint
 
 
 class Command(BaseCommand):
-    help = 'Run code checks (run pylint, pep8 on Python files and gjslint on JavaScript files)'
+    help = 'Run code checks (run pylint, pep8 on Python files and gjslint on JavaScript files)' + __doc__
 
     def handle(self, *args, **options):
         verbosity = int(options.get('verbosity', False))
