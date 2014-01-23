@@ -44,11 +44,6 @@ class Command(BaseCommand):
 
         dotGitDirs = ['%s.git' % siteDir] + glob.glob('%s.git/modules/submodules/*' % siteDir)
 
-        findCmd = 'find %s -type d -name hooks | grep ".git/hooks"' % siteDir
-        if verbosity > 1:
-            print >> sys.stderr, 'running: %s' % findCmd
-        tgtDirs = os.popen(findCmd).read().splitlines()
-
         for dotGitDir in dotGitDirs:
             tgtDir = os.path.join(dotGitDir, 'hooks')
             if not os.path.exists(tgtDir):
