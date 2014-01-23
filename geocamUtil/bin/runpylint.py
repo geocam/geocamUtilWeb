@@ -55,7 +55,13 @@ def runpylint(paths, verbosity=1):
     for path in paths:
         path = os.path.relpath(path)
         if os.path.isdir(path):
-            pathsText = lintignore(os.popen('find %s -name "*.py"' % path).read())
+            findCmd = 'find %s -name "*.py"' % path
+            rawPathsText = os.popen(findCmd).read()
+            pathsText = lintignore(rawPathsText)
+            if verbosity > 1:
+                print >> sys.stderr, 'findCmd:', findCmd
+                print >> sys.stderr, 'rawPathsText:\n' + rawPathsText
+                print >> sys.stderr, '\npathsText:\n' + pathsText
             ret = pipeToCommand('xargs %s --no-run-if-empty -n20 -d"\n" %s' % (xargsFlags, cmd),
                                 pathsText, verbosity)
             if ret != 0:
