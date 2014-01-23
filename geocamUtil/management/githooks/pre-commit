@@ -105,7 +105,8 @@ def testApp(appName):
 
     commitOk = True
 
-    ret = dosys('./manage.py lint apps/%s' % appName)
+    appPath = os.path.realpath(os.path.join('apps', appName))
+    ret = dosys('./manage.py lint %s' % appPath)
     if ret != 0:
         commitOk = False
 
