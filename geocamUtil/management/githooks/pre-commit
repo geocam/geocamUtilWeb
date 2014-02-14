@@ -25,6 +25,7 @@ import sys
 import traceback
 import stat
 import shlex
+import errno
 
 
 def dosys(cmd):
@@ -58,7 +59,18 @@ def getSiteDir():
 
 
 def isDirNotSymlink(d):
-    return stat.S_ISDIR(os.lstat(d).st_mode)
+    """
+    Return True if the path is a directory.
+
+    Unlike os.path.isdir(), return False if the path is a symlink to a
+    directory.
+    """
+    try:
+        return stat.S_ISDIR(os.lstat(d).st_mode)
+    except OSError, e:
+        if e.errno == errno.ENOENT:
+            return False
+        raise
 
 
 def getCurrentApp():
