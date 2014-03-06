@@ -716,7 +716,7 @@ def parseUSNG_str(usngStr_input, parts):
     usngStr_temp = usngStr_input.upper()
 
     # put usgn string in 'standard' form with no space delimiters
-    usngStr = re.sub(r'%20', "", usngStr_temp)
+    _usngStr = re.sub(r'%20', "", usngStr_temp)
     usngStr = re.sub(r' ', "", usngStr_temp)
 
     if len(usngStr) < 7:
