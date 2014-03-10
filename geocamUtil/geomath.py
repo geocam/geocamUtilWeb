@@ -18,9 +18,8 @@ WGS84_E2 = 2 * WGS84_F - WGS84_F ** 2
 
 def calculateDiffMeters(a, b):
     """
-    a and b are WGS84 lat/lon coordinates.  returns [x,y] displacement
-    in meters that would get you from b to a.  x is easting and y is
-    northing.
+    a and b are WGS84 lat/lon coordinates, in tuples of lon,lat.  returns [x,y] displacement
+    in meters that would get you from b to a.
     """
 
     # this is a crude approximation but works fine locally, probably
