@@ -38,3 +38,14 @@ def getClassByName(qualifiedName):
     __import__(moduleName)
     mod = sys.modules[moduleName]
     return getattr(mod, className)
+
+
+def getFormByName(qualifiedName):
+    """
+    converts 'module_name.forms.FormName' to a class object
+    """
+    appName, forms, className = qualifiedName.split('.', 2)
+    formsName = '%s.%s' % (appName, forms)
+    __import__(formsName)
+    mod = sys.modules[formsName]
+    return getattr(mod, className)
