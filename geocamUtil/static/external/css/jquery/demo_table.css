@@ -73,6 +73,26 @@
 	text-align: right;
 }
 
+.dataTables_paginate a {
+ 	text-decoration: none !important;
+    display: inline-block;
+    padding: 3px;
+    margin-right: 3px !important;
+    margin-left: 3px;
+    padding-right: 5px;
+    padding-left: 5px;
+    display: inline-block;
+    background: #777;
+    border: 2px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    
+}
+
 /* Pagination nested */
 .paginate_disabled_previous, .paginate_enabled_previous,
 .paginate_disabled_next, .paginate_enabled_next {
@@ -126,7 +146,6 @@
 }
 
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * DataTables display
  */
@@ -175,6 +194,13 @@ table.display td.center {
 	text-align: center;
 }
 
+table td.right {
+    text-align: right;
+}
+
+table td.center {
+    text-align: center;
+}
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
