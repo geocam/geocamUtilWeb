@@ -100,6 +100,7 @@ class ZmqPublisher(object):
 
     def sendRaw(self, topic, body):
         self.pubStream.send('%s:%s' % (topic, body))
+        self.pubStream.flush()
 
     def sendJson(self, topic, obj):
         if isinstance(obj, dict):
