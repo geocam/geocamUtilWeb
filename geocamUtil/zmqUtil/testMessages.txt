@@ -1,0 +1,4 @@
+foo:bar
+goo:{"a": 1, "b": 2}
+foo:baz
+goo:{"a": 7, "b": 10}

@@ -6,24 +6,25 @@
 # __END_LICENSE__
 
 import logging
+import sys
 
 from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil.zmqUtil.publisher import ZmqPublisher
 from geocamUtil.zmqUtil.util import zmqLoop
+from geocamUtil.geventUtil.util import queueFromFile
 
 
-def pubMessage(p):
-    topic = 'geocamUtil.greeting'
-    body = {'text': 'hello'}
+def pubMessage(p, line):
+    topic, body = line.split(':', 1)
     logging.debug('publishing: %s:%s', topic, body)
-    p.sendJson(topic, body)
+    p.sendRaw(topic, body)
 
 
 def main():
     import optparse
-    parser = optparse.OptionParser('usage: %prog')
+    parser = optparse.OptionParser('usage: testLineSource.py testMessages.txt | %prog')
     ZmqPublisher.addOptions(parser, 'testPublisher')
     opts, args = parser.parse_args()
     if args:
@@ -38,7 +39,8 @@ def main():
     pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(p), 1000)
     pubTimer.start()
 
-    zmqLoop()
+    for line in queueFromFile(sys.stdin):
+        pubMessage(p, line.rstrip())
 
 
 if __name__ == '__main__':
