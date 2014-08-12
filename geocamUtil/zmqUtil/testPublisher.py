@@ -35,10 +35,6 @@ def main():
     p = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
     p.start()
 
-    # start publishing an arbitrary message that central should forward
-    pubTimer = ioloop.PeriodicCallback(lambda: pubMessage(p), 1000)
-    pubTimer.start()
-
     for line in queueFromFile(sys.stdin):
         pubMessage(p, line.rstrip())
 
