@@ -22,6 +22,13 @@ def pubMessage(publisher, line):
     publisher.sendRaw(topic, body)
 
 
+def stdinHandler(publisher):
+    line = sys.stdin.readline()[:-1]
+    topic, body = line.split(':', 1)
+    logging.debug('publishing: %s:%s', topic, body)
+    publisher.sendRaw(topic, body)
+
+
 def main():
     import optparse
     parser = optparse.OptionParser('usage: testLineSource.py testMessages.txt | %prog')
@@ -35,14 +42,10 @@ def main():
     publisher = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
     publisher.start()
 
-    poller = zmq.Poller()
-    poller.register(sys.stdin, zmq.POLLIN)
-
-    while 1:
-        events = poller.poll()
-        if events:
-            line = sys.stdin.readline()[:-1]
-            pubMessage(publisher, line)
+    ioloop.IOLoop.instance().add_handler(sys.stdin.fileno(),
+                                         lambda fd, events: stdinHandler(publisher),
+                                         ioloop.IOLoop.READ)
+    zmqLoop()
 
 
 if __name__ == '__main__':
