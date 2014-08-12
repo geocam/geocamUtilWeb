@@ -8,18 +8,18 @@
 import logging
 import sys
 
+import zmq
 from zmq.eventloop import ioloop
 ioloop.install()
 
 from geocamUtil.zmqUtil.publisher import ZmqPublisher
 from geocamUtil.zmqUtil.util import zmqLoop
-from geocamUtil.geventUtil.util import queueFromFile
 
 
-def pubMessage(p, line):
+def pubMessage(publisher, line):
     topic, body = line.split(':', 1)
     logging.debug('publishing: %s:%s', topic, body)
-    p.sendRaw(topic, body)
+    publisher.sendRaw(topic, body)
 
 
 def main():
@@ -32,11 +32,17 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
 
     # set up networking
-    p = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
-    p.start()
+    publisher = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
+    publisher.start()
 
-    for line in queueFromFile(sys.stdin):
-        pubMessage(p, line.rstrip())
+    poller = zmq.Poller()
+    poller.register(sys.stdin, zmq.POLLIN)
+
+    while 1:
+        events = poller.poll()
+        if events:
+            line = sys.stdin.readline()[:-1]
+            pubMessage(publisher, line)
 
 
 if __name__ == '__main__':
