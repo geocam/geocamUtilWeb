@@ -16,12 +16,6 @@ from geocamUtil.zmqUtil.publisher import ZmqPublisher
 from geocamUtil.zmqUtil.util import zmqLoop
 
 
-def pubMessage(publisher, line):
-    topic, body = line.split(':', 1)
-    logging.debug('publishing: %s:%s', topic, body)
-    publisher.sendRaw(topic, body)
-
-
 def stdinHandler(publisher):
     line = sys.stdin.readline()[:-1]
     topic, body = line.split(':', 1)

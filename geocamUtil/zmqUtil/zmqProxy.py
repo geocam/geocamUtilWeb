@@ -7,6 +7,7 @@
 
 import sys
 import traceback
+import time
 
 import tornado.ioloop
 import tornado.web
@@ -112,6 +113,9 @@ class ClientSocket(websocket.WebSocketHandler, JsonRpcService):
 
     def on_message(self, text):
         self.handleRequest(text)
+
+    def handle_time(self):
+        return time.time()
 
     def handle_subscribe(self, topicPrefix):
         topicPrefix = topicPrefix.encode('utf-8')
