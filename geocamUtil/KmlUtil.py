@@ -133,3 +133,48 @@ def markers(collection,
         markerText.write('  </Point>\n')
         markerText.write('</Placemark>\n')
     return markerText.getvalue()
+
+def makeStyle(id, iconUrl=None, iconScale=None, iconColor=None, lineColor=None, lineWidth=None, polyColor=None, polyFill=1, polyOutline=1):
+    """
+    Create a style block.  This will fill in any and all of the style sections based on parameters given.
+    Note that polyStyle requires a color.
+    """
+    result = ('''
+<Style id="%s">''' % id )
+    if iconUrl:
+        result = result + ('''
+    <IconStyle>
+        <Icon>
+            <href>%s</href>''' % iconUrl)
+        if iconScale:
+            result = result + ('''
+            <scale>%d</scale>''' % iconScale)
+        result = result + ('''
+        </Icon>''')
+        if iconColor:
+            result = result + ('''
+        <color>%s</color>''' % iconColor)
+        result = result + ('''  
+    </IconStyle>''')
+        
+    if lineColor or lineWidth:
+        result = result + ('''
+    <LineStyle>''')
+        if lineColor:
+            result = result + ('''
+        <color>%s</color>''' % lineColor)
+        if lineWidth:
+            result = result + ('''
+        <width>%d</width>''' % lineWidth)
+        result = result + ('''
+    </LineStyle>''')
+    if polyColor:
+        result = result + ('''
+    <PolyStyle>
+        <color>%s</color>
+        <fill>%d</fill>
+        <outline>%d</outline>
+    </PolyStyle>''' % (polyColor, polyFill, polyOutline))
+    result = result + ('''
+</Style>''')
+    return result
