@@ -134,29 +134,34 @@ def markers(collection,
         markerText.write('</Placemark>\n')
     return markerText.getvalue()
 
-def makeStyle(id, iconUrl=None, iconScale=1, iconColor=None, lineColor=None, lineWidth=None, polyColor=None, polyFill=1, polyOutline=1, iconHeading=None):
+def makeStyle(id=None, iconUrl=None, iconScale=None, iconColor=None, lineColor=None, lineWidth=None, polyColor=None, polyFill=1, polyOutline=1, iconHeading=None):
     """
     Create a style block.  This will fill in any and all of the style sections based on parameters given.
     Note that polyStyle requires a color.
     """
     result = ('''
-<Style id="%s">''' % id )
-    if iconUrl:
+<Style''')
+    if id:
+        result = result + (''' id="%s">''' % id )
+    else:
+        result = result + ('>')
+    if iconUrl or iconHeading:
         result = result + ('''
-    <IconStyle>
-        <Icon>
-            <href>%s</href>''' % iconUrl)
+    <IconStyle>''')
+        if iconColor:
+            result = result + ('''
+        <color>%s</color>''' % iconColor)
         if iconScale:
             result = result + ('''
             <scale>%.2f</scale>''' % iconScale)
         if iconHeading:
             result = result + ('''
-            <heading>%d</heading>''' % iconHeading)
-        result = result + ('''
-        </Icon>''')
-        if iconColor:
+            <heading>%.2f</heading>''' % iconHeading)
+        if iconUrl:
             result = result + ('''
-        <color>%s</color>''' % iconColor)
+            <Icon>
+                <href>%s</href>
+            </Icon>''' % iconUrl)
         result = result + ('''  
     </IconStyle>''')
         
