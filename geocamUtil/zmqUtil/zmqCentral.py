@@ -202,6 +202,11 @@ class ZmqCentral(object):
         return logPath
 
     def start(self):
+        # respect --bindInterface argument
+        self.opts.rpcEndpoint = self.opts.rpcEndpoint.format(bindInterface=self.opts.bindInterface)
+        self.opts.publishEndpoint = self.opts.publishEndpoint.format(bindInterface=self.opts.bindInterface)
+        self.opts.subscribeEndpoint = self.opts.subscribeEndpoint.format(bindInterface=self.opts.bindInterface)
+
         # open log files
         now = datetime.datetime.utcnow()
         self.logDir = os.path.abspath(self.opts.logDir)
@@ -252,6 +257,7 @@ class ZmqCentral(object):
             self.context = zmq.Context.instance()
             self.rpcStream = ZMQStream(self.context.socket(zmq.REP))
             self.rpcStream.bind(self.opts.rpcEndpoint)
+            logging.info('bound rpcEndpoint %s', self.opts.rpcEndpoint)
             self.rpcStream.on_recv(self.handleRpcCall)
 
             self.forwarder = ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
@@ -260,8 +266,10 @@ class ZmqCentral(object):
             self.forwarder.setsockopt_in(zmq.SUBSCRIBE, '')
             # self.forwarder.setsockopt_out(zmq.HWM, self.opts.highWaterMark)
             self.forwarder.bind_in(self.opts.subscribeEndpoint)
+            logging.info('bound subscribeEndpoint %s', self.opts.subscribeEndpoint)
             self.forwarder.bind_in(INJECT_ENDPOINT)
             self.forwarder.bind_out(self.opts.publishEndpoint)
+            logging.info('bound publishEndpoint %s', self.opts.publishEndpoint)
             self.forwarder.bind_out(MONITOR_ENDPOINT)
             for entry in self.opts.subscribeTo:
                 try:
@@ -305,14 +313,17 @@ class ZmqCentral(object):
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog')
+    parser.add_option('-b', '--bindInterface',
+                      default='127.0.0.1',
+                      help='Interface to bind endpoints to [%default]')
     parser.add_option('-r', '--rpcEndpoint',
-                      default='tcp://127.0.0.1:%s' % DEFAULT_CENTRAL_RPC_PORT,
+                      default='tcp://{bindInterface}:%s' % DEFAULT_CENTRAL_RPC_PORT,
                       help='Endpoint to listen on for RPC requests [%default]')
     parser.add_option('-s', '--subscribeEndpoint',
-                      default='tcp://127.0.0.1:%s' % DEFAULT_CENTRAL_SUBSCRIBE_PORT,
+                      default='tcp://{bindInterface}:%s' % DEFAULT_CENTRAL_SUBSCRIBE_PORT,
                       help='Endpoint to listen for messages on [%default]')
     parser.add_option('-p', '--publishEndpoint',
-                      default='tcp://127.0.0.1:%s' % DEFAULT_CENTRAL_PUBLISH_PORT,
+                      default='tcp://{bindInterface}:%s' % DEFAULT_CENTRAL_PUBLISH_PORT,
                       help='Endpoint to forward messages to [%default]')
     parser.add_option('--subscribeTo',
                       default=[],
