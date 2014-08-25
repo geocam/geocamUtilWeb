@@ -133,11 +133,11 @@ class SymlinkFileSource(FileSource):
 
 
 class ImageProcessor(object):
-    def __init__(self, resize, crop, fmt):
+    def __init__(self, resize, crop, fmt, tmpDir):
         self.crop = crop
         self.resize = resize
         self.fmt = fmt
-        self.tmpDir = tempfile.mkdtemp(prefix='filePublisher')
+        self.tmpDir = tmpDir
 
     def isImage(self, path):
         _name, ext = os.path.splitext(path)
@@ -185,7 +185,9 @@ class FilePublisher(object):
         self.pollTimer = None
         self.stopPollingTime = None
         self.imageProcessor = None
+        self.tmpDir = tempfile.mkdtemp(prefix='filePublisher')
 
+        opts.moduleName = opts.moduleName.format(subtopic=opts.subtopic)
         self.publisher = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
         self.subscriber = ZmqSubscriber(**ZmqSubscriber.getOptionValues(opts))
 
@@ -206,7 +208,8 @@ class FilePublisher(object):
         if 'imageResize' in requestDict or 'imageCrop' in requestDict or 'imageFormat' in requestDict:
             self.imageProcessor = ImageProcessor(resize=requestDict.get('imageResize'),
                                                  crop=requestDict.get('imageCrop'),
-                                                 fmt=requestDict.get('imageFormat'))
+                                                 fmt=requestDict.get('imageFormat'),
+                                                 tmpDir=self.tmpDir)
         else:
             self.imageProcessor = None
 
@@ -269,8 +272,8 @@ def main():
     parser.add_option('-t', '--subtopic',
                       default='standard',
                       help='Subtopic to use when publishing zmq message [%default]')
-    ZmqPublisher.addOptions(parser, 'filePublisher')
-    ZmqSubscriber.addOptions(parser, 'filePublisher')
+    ZmqPublisher.addOptions(parser, 'filePublisher.{subtopic}')
+    ZmqSubscriber.addOptions(parser, 'filePublisher.{subtopic}')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')

@@ -101,6 +101,7 @@ class FileReceiver(object):
         self.subtopic = opts.subtopic
         self.noRequest = opts.noRequest
 
+        opts.moduleName = opts.moduleName.format(subtopic=opts.subtopic)
         self.publisher = ZmqPublisher(**ZmqPublisher.getOptionValues(opts))
         self.subscriber = ZmqSubscriber(**ZmqSubscriber.getOptionValues(opts))
 
@@ -175,8 +176,8 @@ def main():
     parser.add_option('-n', '--noRequest',
                       action='store_true', default=False,
                       help='Do not request any files from filePublisher, but write any files that are received, for example because they are requested by other receivers. May be useful for debugging.')
-    ZmqPublisher.addOptions(parser, 'fileReceiver')
-    ZmqSubscriber.addOptions(parser, 'fileReceiver')
+    ZmqPublisher.addOptions(parser, 'fileReceiver.{subtopic}')
+    ZmqSubscriber.addOptions(parser, 'fileReceiver.{subtopic}')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')
