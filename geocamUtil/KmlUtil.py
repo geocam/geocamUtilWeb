@@ -4,6 +4,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
+# pylint: disable=W0622
+
 import re
 try:
     from cStringIO import StringIO
@@ -134,6 +136,7 @@ def markers(collection,
         markerText.write('</Placemark>\n')
     return markerText.getvalue()
 
+
 def makeStyle(id=None, iconUrl=None, iconScale=None, iconColor=None, lineColor=None, lineWidth=None, polyColor=None, polyFill=1, polyOutline=1, iconHeading=None):
     """
     Create a style block.  This will fill in any and all of the style sections based on parameters given.
@@ -142,7 +145,7 @@ def makeStyle(id=None, iconUrl=None, iconScale=None, iconColor=None, lineColor=N
     result = ('''
 <Style''')
     if id:
-        result = result + (''' id="%s">''' % id )
+        result = result + (''' id="%s">''' % id)
     else:
         result = result + ('>')
     if iconUrl or iconHeading:
@@ -162,9 +165,9 @@ def makeStyle(id=None, iconUrl=None, iconScale=None, iconColor=None, lineColor=N
             <Icon>
                 <href>%s</href>
             </Icon>''' % iconUrl)
-        result = result + ('''  
+        result = result + ('''
     </IconStyle>''')
-        
+
     if lineColor or lineWidth:
         result = result + ('''
     <LineStyle>''')
