@@ -13,7 +13,7 @@ import time
 def main():
     import optparse
     parser = optparse.OptionParser('usage: %prog testMessages.txt')
-    opts, args = parser.parse_args()
+    _opts, args = parser.parse_args()
     if len(args) != 1:
         parser.error('expected exactly 1 arg')
     msgFile = args[0]

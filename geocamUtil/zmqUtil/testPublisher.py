@@ -8,7 +8,6 @@
 import logging
 import sys
 
-import zmq
 from zmq.eventloop import ioloop
 ioloop.install()
 
@@ -17,7 +16,12 @@ from geocamUtil.zmqUtil.util import zmqLoop
 
 
 def stdinHandler(publisher):
-    line = sys.stdin.readline()[:-1]
+    line = sys.stdin.readline()
+    if not line:
+        # EOF... end program
+        ioloop.IOLoop.instance().stop()
+        return
+    line = line[:-1]
     topic, body = line.split(':', 1)
     logging.debug('publishing: %s:%s', topic, body)
     publisher.sendRaw(topic, body)
