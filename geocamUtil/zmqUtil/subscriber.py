@@ -6,6 +6,7 @@
 
 # pylint: disable=E1101
 
+import logging
 import sys
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
@@ -16,8 +17,9 @@ from geocamUtil import anyjson as json
 from geocamUtil.zmqUtil.util import parseEndpoint, DEFAULT_CENTRAL_PUBLISH_PORT, LogParser
 from geocamUtil.models.ExtrasDotField import convertToDotDictRecurse
 
-SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
-                           'centralPublishEndpoint': 'tcp://127.0.0.1:%d'
+SUBSCRIBER_OPT_DEFAULTS = {'centralHost': '127.0.0.1',
+                           'moduleName': None,
+                           'centralPublishEndpoint': 'tcp://{centralHost}:%d'
                            % DEFAULT_CENTRAL_PUBLISH_PORT,
                            'replay': None}
 
@@ -25,17 +27,20 @@ SUBSCRIBER_OPT_DEFAULTS = {'moduleName': None,
 class ZmqSubscriber(object):
     def __init__(self,
                  moduleName,
+                 centralHost=SUBSCRIBER_OPT_DEFAULTS['centralHost'],
                  context=None,
                  centralPublishEndpoint=SUBSCRIBER_OPT_DEFAULTS['centralPublishEndpoint'],
                  replay=None):
         self.moduleName = moduleName
+        self.centralHost = centralHost
 
         if context is None:
             context = zmq.Context.instance()
         self.context = context
 
         self.centralPublishEndpoint = parseEndpoint(centralPublishEndpoint,
-                                                    defaultPort=DEFAULT_CENTRAL_PUBLISH_PORT)
+                                                    defaultPort=DEFAULT_CENTRAL_PUBLISH_PORT,
+                                                    centralHost=self.centralHost)
         self.replayPaths = replay
         if self.replayPaths is None:
             self.replayPaths = []
@@ -47,6 +52,10 @@ class ZmqSubscriber(object):
 
     @classmethod
     def addOptions(cls, parser, defaultModuleName):
+        if not parser.has_option('--centralHost'):
+            parser.add_option('--centralHost',
+                              default=SUBSCRIBER_OPT_DEFAULTS['centralHost'],
+                              help='Host where central runs [%default]')
         if not parser.has_option('--moduleName'):
             parser.add_option('--moduleName',
                               default=defaultModuleName,
@@ -75,7 +84,7 @@ class ZmqSubscriber(object):
         # causes problems with multiple instances
         #self.stream.setsockopt(zmq.IDENTITY, self.moduleName)
         self.stream.connect(self.centralPublishEndpoint)
-        print >> sys.stderr, 'zmq.subscriber: connected to central at %s' % self.centralPublishEndpoint
+        logging.info('zmq.subscriber: connected to central at %s', self.centralPublishEndpoint)
         self.stream.on_recv(self.routeMessages)
 
     def routeMessages(self, messages):
@@ -99,7 +108,7 @@ class ZmqSubscriber(object):
     def subscribeRaw(self, topicPrefix, handler):
         topicRegistry = self.handlers.setdefault(topicPrefix, {})
         if not topicRegistry:
-            print >> sys.stderr, 'zmq.subscriber: subscribe %s' % topicPrefix
+            logging.info('zmq.subscriber: subscribe %s', topicPrefix)
             self.stream.setsockopt(zmq.SUBSCRIBE, topicPrefix)
         handlerId = (topicPrefix, self.counter)
         topicRegistry[self.counter] = handler
@@ -124,7 +133,7 @@ class ZmqSubscriber(object):
         topicRegistry = self.handlers[topicPrefix]
         del topicRegistry[index]
         if not topicRegistry:
-            print >> sys.stderr, 'zmq.subscriber: unsubscribe %s' % topicPrefix
+            logging.info('zmq.subscriber: unsubscribe %s', topicPrefix)
             self.stream.setsockopt(zmq.UNSUBSCRIBE, topicPrefix)
 
     def connect(self, endpoint):

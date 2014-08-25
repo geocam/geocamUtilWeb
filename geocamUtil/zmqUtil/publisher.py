@@ -22,8 +22,9 @@ from geocamUtil.zmqUtil.util import (getTimestamp,
                                      getShortHostName,
                                      DEFAULT_CENTRAL_SUBSCRIBE_PORT)
 
-PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
-                          'centralSubscribeEndpoint': 'tcp://127.0.0.1:%s'
+PUBLISHER_OPT_DEFAULTS = {'centralHost': '127.0.0.1',
+                          'moduleName': None,
+                          'centralSubscribeEndpoint': 'tcp://{centralHost}:%s'
                           % DEFAULT_CENTRAL_SUBSCRIBE_PORT,
                           'publishEndpoint': 'tcp://127.0.0.1:random',
                           'heartbeatPeriodMsecs': 5000,
@@ -34,6 +35,7 @@ PUBLISHER_OPT_DEFAULTS = {'moduleName': None,
 class ZmqPublisher(object):
     def __init__(self,
                  moduleName,
+                 centralHost=PUBLISHER_OPT_DEFAULTS['centralHost'],
                  context=None,
                  centralSubscribeEndpoint=PUBLISHER_OPT_DEFAULTS['centralSubscribeEndpoint'],
                  publishEndpoint=PUBLISHER_OPT_DEFAULTS['publishEndpoint'],
@@ -41,13 +43,15 @@ class ZmqPublisher(object):
                  # highWaterMark=PUBLISHER_OPT_DEFAULTS['highWaterMark']
                  ):
         self.moduleName = moduleName
+        self.centralHost = centralHost
 
         if context is None:
             context = zmq.Context.instance()
         self.context = context
 
         self.centralSubscribeEndpoint = parseEndpoint(centralSubscribeEndpoint,
-                                                      defaultPort=DEFAULT_CENTRAL_SUBSCRIBE_PORT)
+                                                      defaultPort=DEFAULT_CENTRAL_SUBSCRIBE_PORT,
+                                                      centralHost=self.centralHost)
         self.publishEndpoint = parseEndpoint(publishEndpoint,
                                              defaultPort='random')
         self.heartbeatPeriodMsecs = heartbeatPeriodMsecs
@@ -60,6 +64,10 @@ class ZmqPublisher(object):
 
     @classmethod
     def addOptions(cls, parser, defaultModuleName):
+        if not parser.has_option('--centralHost'):
+            parser.add_option('--centralHost',
+                              default=PUBLISHER_OPT_DEFAULTS['centralHost'],
+                              help='Host where central runs [%default]')
         if not parser.has_option('--moduleName'):
             parser.add_option('--moduleName',
                               default=defaultModuleName,
@@ -123,6 +131,7 @@ class ZmqPublisher(object):
         # self.pubStream.setsockopt(zmq.IDENTITY, self.moduleName)
         # self.pubStream.setsockopt(zmq.HWM, self.highWaterMark)
         self.pubStream.connect(self.centralSubscribeEndpoint)
+        logging.info('zmq.publisher: connected to central at %s', self.centralSubscribeEndpoint)
 
         if self.publishEndpoint.endswith(':random'):
             endpointWithoutPort = re.sub(r':random$', '', self.publishEndpoint)

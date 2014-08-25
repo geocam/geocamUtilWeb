@@ -45,23 +45,27 @@ def getShortHostName():
 def parseEndpoint(endpoint,
                   defaultPort=None,
                   defaultHost='127.0.0.1',
-                  defaultProto='tcp://'):
-    # tcp://host:port
+                  defaultProto='tcp://',
+                  centralHost='127.0.0.1'):
+    # substitute centralHost into template, if needed
+    endpoint = re.sub(r'\{centralHost\}', centralHost, endpoint)
+
+    # fully qualified endpoint in the form "tcp://host:port"
     if '://' in endpoint:
         return endpoint
 
-    # host:port
+    # endpoint in the form "host:port"
     if re.match(r'^([\w\.]+):(random|\d+)$', endpoint):
         return '%s%s' % (defaultProto, endpoint)
 
-    # host
+    # endpoint in the form "host"
     if re.match(r'^[\w\.]+$', endpoint):
         if defaultPort is None:
             raise ValueError('endpoint format %s has no port' % endpoint)
         else:
             return '%s%s:%s' % (defaultProto, endpoint, defaultPort)
 
-    # :port
+    # endpoint in the form ":port"
     if re.match(r'^:(random|\d+)$', endpoint):
         return '%s%s%s' % (defaultProto, defaultHost, endpoint)
 
