@@ -226,3 +226,11 @@ if 1:  # DEFINE_HERE:
             # available for pytz time zones
             value = timezone.normalize(value)
         return value.replace(tzinfo=None)
+
+    def convertToUtc(value, timezone=settings.TIME_ZONE):
+        """
+        Makes a naive time in the timezone into a naive time in utc timezone
+        """
+        result = timezone.localize(value)
+        result = result.astimezone(pytz.utc)
+        result = result.replace(tzinfo=None)
