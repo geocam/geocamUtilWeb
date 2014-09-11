@@ -231,7 +231,7 @@ if 1:  # DEFINE_HERE:
         """
         Makes a naive time in the timezone into a naive time in utc timezone
         """
-        result = timezone.localize(value)
-        result = result.astimezone(pytz.utc)
-        result = result.replace(tzinfo=None)
+        goalzone = pytz.timezone(timezone)
+        awareTime = make_aware(value, goalzone)
+        result = make_naive(awareTime, pytz.utc)
         return result
