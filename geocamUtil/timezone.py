@@ -234,3 +234,4 @@ if 1:  # DEFINE_HERE:
         result = timezone.localize(value)
         result = result.astimezone(pytz.utc)
         result = result.replace(tzinfo=None)
+        return result
