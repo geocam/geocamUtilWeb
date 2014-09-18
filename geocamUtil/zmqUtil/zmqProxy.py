@@ -136,7 +136,7 @@ class ClientSocket(websocket.WebSocketHandler, JsonRpcService):
         return 'ok'
 
     def forward(self, topic, msg):
-        print >> sys.stderr, 'forward %s %s' % (topic, msg)
+        # print >> sys.stderr, 'forward %s %s' % (topic, msg)
         self.write_message(''.join((topic, ':', msg)))
 
     def on_close(self):
