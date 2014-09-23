@@ -30,6 +30,17 @@ def getModelByName(qualifiedName):
     return models.get_model(*qualifiedName.split('.'))
 
 
+class LazyGetModelByName(object):
+    def __init__(self, qualifiedName):
+        self.qualifiedName = qualifiedName
+        self.result = None
+
+    def get(self):
+        if self.result is None:
+            self.result = getModelByName(self.qualifiedName)
+        return self.result
+
+
 def getClassByName(qualifiedName):
     """
     converts 'moduleName.ClassName' to a class object
