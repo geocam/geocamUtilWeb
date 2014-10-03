@@ -32,6 +32,14 @@ def calculateDiffMeters(a, b):
             EARTH_RADIUS_METERS * latDiff]
 
 
+def calculateUTMDiffMeters(a, b):
+    """
+    a and b are UTM coordinates in tuples of easting, northing.
+    """
+    result = math.sqrt((a[1]-b[1])**2 + (a[0]-b[0])**2)
+    return result
+
+
 def addMeters(latLon, xy):
     """
     approximate inverse of calculateDiffMeters
