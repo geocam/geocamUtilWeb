@@ -7,12 +7,14 @@
 
 # pylint: disable=E0611,E1101
 
+import sys
+
 import gevent
 import gevent.monkey
 gevent.monkey.patch_all(thread=False)
 import zerorpc
 from IPython.config.loader import Config
-from IPython.frontend.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.lib.inputhook import inputhook_manager, stdin_ready
 try:
     from django.conf import settings
@@ -73,9 +75,15 @@ class Shell(object):
                                     timeout=timeout)
             # immediately set up simple proxy
             globals()[name] = ClientProxy(name, client)
-            # set up background task to construct decorated proxy that replaces
-            # simple proxy
-            gevent.spawn(self.setDecoratedProxy, name, client)
+            if not self._opts.command:
+                # set up background task to construct decorated proxy that replaces
+                # simple proxy
+                gevent.spawn(self.setDecoratedProxy, name, client)
+
+        if self._opts.command:
+            exec(self._opts.command)
+            gevent.sleep(0.1)
+            sys.exit(0)
 
         services = sorted(self._ports.keys())
         servicesStr = '\n'.join(['  %s' % svc for svc in services])
@@ -96,6 +104,8 @@ def main():
     parser.add_option('-p', '--ports',
                       default=getattr(settings, 'GEOCAM_UTIL_ZMQ_PORTS_PATH', 'ports.json'),
                       help='Path to ports config file [%default]')
+    parser.add_option('-c', '--command',
+                      help='If specified, eval command and exit')
     opts, args = parser.parse_args()
     if args:
         parser.error('expected no args')
