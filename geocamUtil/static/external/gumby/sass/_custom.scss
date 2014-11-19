@@ -1,0 +1,136 @@
+$color: white;
+$light-fg: white;
+$primary: #005c8e;
+$secondary: #387ea3;
+$tertiary: #8b9ba3;
+
+body{
+	background: $color;
+};
+
+$irg_logo_img: image-url('/static/external/gumby/img/irg.png', false, true);
+.irg_logo {
+	background: $irg_logo_img #c0c0c0 no-repeat;
+	width:65px;
+    height:65px;
+};
+
+$nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true);
+.nasa_logo {
+	background: $nasa_logo_img white no-repeat; //#cccccc no-repeat;
+	height:65px;
+	width:75px;
+};
+
+.logo {
+	height:65px;
+};
+
+.logo img {
+	margin-left: 20px;
+}
+
+.xgds_and_brand {
+  margin-top: 6px;
+};
+
+.xgds {
+	color: #888;  /* color for the xGDS words at the top of the page (top left) */
+    font-weight: bold;
+};
+
+.brand {
+	font-size: 130%;
+	font-weight: bold;
+};
+
+.currentnav {
+	@extend .active;
+};
+
+.mybutton {
+	@extend .btn;
+};
+
+$navbar-height: 32px;
+
+.navbar {
+	min-height: $navbar-height;
+	margin-bottom: 5px;
+};
+
+.navbar ul li {
+	height: $navbar-height;
+	line-height: $navbar-height;
+}
+
+.navbar ul li > a{
+	height: $navbar-height;
+	line-height:$navbar-height;
+	font-size: 1.1rem;
+};
+.navbar .active {
+	background: $secondary;
+};
+
+.sitemenu-nav-secondary {
+	@extend .row;
+};
+
+.sitemenu-nav-secondary .subnav {
+	font-size: 1rem;
+	font-weight: 400;
+};
+
+.sitemenu-nav-secondary .subnav li a {
+	color: $secondary;
+	margin-right: 20px;
+};
+
+.subnav li.currentnav a {
+	background: $color;
+};
+
+.sitemenu-nav-secondary .subnav li.currentnav a{
+	background-color: $secondary;
+	color: $light-fg;
+	margin-right: 20px;
+};
+
+.mybutton {
+	@extend .btn;
+	@extend .medium;
+	@extend .primary;
+	@extend .metro;
+	@extend .rounded;
+	color: $light-fg;
+	font-weight: 400;
+	min-width: 85px;
+    text-align: center;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+};
+
+input[type="submit"], button, .button, a.actionlink {
+	@extend .mybutton;
+}
+
+h1 {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: $primary;
+}
+
+h2 {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: $primary;
+}
+
+h3 {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: $primary;
+}
+
