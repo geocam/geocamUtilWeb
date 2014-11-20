@@ -1706,6 +1706,8 @@ body { background: white; }
 
 .navbar .active, .navbar .currentnav { background: #387ea3; }
 
+.sitemenu-nav-secondary { margin-left: 15px; }
+
 .sitemenu-nav-secondary .subnav { font-size: 1rem; font-weight: 400; }
 
 .sitemenu-nav-secondary .subnav li a { color: #387ea3; margin-right: 20px; }
@@ -1721,3 +1723,73 @@ h1 { font-size: 1.3rem; font-weight: 700; color: #005c8e; }
 h2 { font-size: 1.2rem; font-weight: 700; color: #005c8e; }
 
 h3 { font-size: 1.1rem; font-weight: 700; color: #005c8e; }
+
+/*
+table {
+	min-width: initial;
+	width: initial;
+}
+
+table tr td:first-child { 
+	font-weight: normal; 
+	font-size: .9rem;
+	padding: 0px;
+	padding-left:5px;
+	padding-right: 5px;
+}
+
+table thead th, table tbody td, table tr td {
+	padding: 0px;
+	padding-left:5px;
+	padding-right: 5px;
+	font-size: .9rem;
+}
+*/
+/* xGDS Tables */
+.dataTable { margin-bottom: 0px; }
+
+table { display: table; background-color: white; border-collapse: collapse; border-spacing: 0; margin-bottom: 5px; min-width: initial; width: initial; border: 1px solid #e5e5e5; border-radius: 4px; border-collapse: separate; }
+table caption { text-align: center; font-size: 32px; padding: .75em; }
+table thead th, table tbody td, table tr td { display: table-cell; padding: 0px; padding-left: 5px; padding-right: 5px; vertical-align: top; text-align: left; border-top: 1px solid #e5e5e5; }
+table tr td, table tbody tr td { font-size: 0.9rem; }
+table tr td:first-child { font-weight: normal; }
+table thead { background-color: #387ea3; color: #fff; }
+table thead tr th { font-size: 14px; font-weight: bold; vertical-align: bottom; }
+table tr:nth-of-type(even), table table tr.stripe, table table tr.striped { background-color: #e8e8e8; }
+table caption + thead tr:first-child th:first-child, table caption + tr td:first-child, table > thead tr:first-child th:first-child, table > thead tr:first-child td:first-child, table > tr:first-child td:first-child { border-top-left-radius: 4px; }
+table caption + thead tr:first-child th:last-child, table caption + tr td:last-child, table > thead tr:first-child th:last-child, table > thead tr:first-child td:last-child, table > tr:first-child td:last-child { border-top-right-radius: 4px; }
+table thead ~ tr:last-child td:last-child, table tbody tr:last-child td:last-child { border-bottom-right-radius: 4px; }
+table thead ~ tr:last-child td:first-child, table tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
+table thead th, table thead td, table caption + tbody tr:first-child td, table > tbody:first-child tr:first-child td { border-top: 0; }
+
+.mimicOddGradeA { background-color: #ddffdd; }
+
+.mimicEvenGradeA { background-color: #eeffee; }
+
+.mimicOddGradeX { background-color: #ffdddd; }
+
+.mimicEvenGradeX { background-color: #ffeeee; }
+
+table.display tr.odd.gradeA { background-color: #ddffdd; }
+
+table.display tr.even.gradeA { background-color: #eeffee; }
+
+table.display tr.odd.gradeC { background-color: #ddddff; }
+
+table.display tr.even.gradeC { background-color: #eeeeff; }
+
+table.display tr.odd.gradeX { background-color: #ffdddd; }
+
+table.display tr.even.gradeX { background-color: #ffeeee; }
+
+table.display tr.odd.gradeU { background-color: #ddd; }
+
+table.display tr.even.gradeU { background-color: #eee; }
+
+.right-align { text-align: right; }
+
+.right { text-align: right; }
+
+#buttonrow .right { position: absolute; right: 40px; }
+
+form label { font-size: .9rem; display: inline-block; padding-right: 5px; line-height: 1.25em; }

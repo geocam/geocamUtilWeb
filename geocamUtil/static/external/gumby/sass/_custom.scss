@@ -3,28 +3,29 @@ $light-fg: white;
 $primary: #005c8e;
 $secondary: #387ea3;
 $tertiary: #8b9ba3;
+$table-thead-bgcolor: $secondary;
 
 body{
 	background: $color;
-};
+}
 
 $irg_logo_img: image-url('/static/external/gumby/img/irg.png', false, true);
 .irg_logo {
 	background: $irg_logo_img #c0c0c0 no-repeat;
 	width:65px;
     height:65px;
-};
+}
 
 $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true);
 .nasa_logo {
 	background: $nasa_logo_img white no-repeat; //#cccccc no-repeat;
 	height:65px;
 	width:75px;
-};
+}
 
 .logo {
 	height:65px;
-};
+}
 
 .logo img {
 	margin-left: 20px;
@@ -32,32 +33,32 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 
 .xgds_and_brand {
   margin-top: 6px;
-};
+}
 
 .xgds {
 	color: #888;  /* color for the xGDS words at the top of the page (top left) */
     font-weight: bold;
-};
+}
 
 .brand {
 	font-size: 130%;
 	font-weight: bold;
-};
+}
 
 .currentnav {
 	@extend .active;
-};
+}
 
 .mybutton {
 	@extend .btn;
-};
+}
 
 $navbar-height: 32px;
 
 .navbar {
 	min-height: $navbar-height;
 	margin-bottom: 5px;
-};
+}
 
 .navbar ul li {
 	height: $navbar-height;
@@ -68,34 +69,35 @@ $navbar-height: 32px;
 	height: $navbar-height;
 	line-height:$navbar-height;
 	font-size: 1.1rem;
-};
+}
 .navbar .active {
 	background: $secondary;
-};
+}
 
 .sitemenu-nav-secondary {
 	@extend .row;
-};
+	margin-left: 15px;
+}
 
 .sitemenu-nav-secondary .subnav {
 	font-size: 1rem;
 	font-weight: 400;
-};
+}
 
 .sitemenu-nav-secondary .subnav li a {
 	color: $secondary;
 	margin-right: 20px;
-};
+}
 
 .subnav li.currentnav a {
 	background: $color;
-};
+}
 
 .sitemenu-nav-secondary .subnav li.currentnav a{
 	background-color: $secondary;
 	color: $light-fg;
 	margin-right: 20px;
-};
+}
 
 .mybutton {
 	@extend .btn;
@@ -110,7 +112,7 @@ $navbar-height: 32px;
     margin-right: 5px;
     padding-left: 10px;
     padding-right: 10px;
-};
+}
 
 input[type="submit"], button, .button, a.actionlink {
 	@extend .mybutton;
@@ -134,3 +136,153 @@ h3 {
 	color: $primary;
 }
 
+/*
+table {
+	min-width: initial;
+	width: initial;
+}
+
+table tr td:first-child { 
+	font-weight: normal; 
+	font-size: .9rem;
+	padding: 0px;
+	padding-left:5px;
+	padding-right: 5px;
+}
+
+table thead th, table tbody td, table tr td {
+	padding: 0px;
+	padding-left:5px;
+	padding-right: 5px;
+	font-size: .9rem;
+}
+*/
+
+/* xGDS Tables */
+$table-stripe-bgcolor: #e8e8e8;
+
+.dataTable {
+	margin-bottom: 0px;
+}
+	
+table {
+	display: table;
+	background-color: $table-bgcolor;
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin-bottom: 5px;
+	min-width: initial;
+	width: initial;
+	border: $table-border-size $table-border-style $table-border-color;
+
+	caption {
+		text-align: center;
+		font-size: $larger;
+		padding: .75em;
+	}
+
+	thead th,
+	tbody td,
+	tr td {
+		display: table-cell;
+		padding: 0px;
+		padding-left:5px;
+		padding-right: 5px;
+		vertical-align: top;
+		text-align: left;
+		border-top: $table-cell-border-size $table-cell-border-style $table-cell-border-color;
+	}
+
+	tr td, tbody tr td {
+		font-size: 0.9rem;
+	}
+
+	tr td:first-child {
+		font-weight: normal;
+	}
+
+	thead {
+		background-color: $table-thead-bgcolor;
+		color: #fff;
+
+		tr th {
+			font-size: $norm;
+			font-weight: bold;
+			vertical-align: bottom;
+		}
+	}
+	
+	tr:nth-of-type(even),
+	table tr.stripe,
+	table tr.striped {
+		background-color: $table-stripe-bgcolor;
+	}
+
+	border-radius: $table-border-radius;
+	border-collapse: separate;
+
+	caption + thead tr:first-child th:first-child,
+	caption + tr td:first-child,
+	> thead tr:first-child th:first-child,
+	> thead tr:first-child td:first-child,
+	> tr:first-child td:first-child {
+		border-top-left-radius: $table-border-radius;
+	}
+
+	caption + thead tr:first-child th:last-child,
+	caption + tr td:last-child,
+	> thead tr:first-child th:last-child,
+	> thead tr:first-child td:last-child,
+	> tr:first-child td:last-child {
+		border-top-right-radius: $table-border-radius;
+	}
+
+	thead ~ tr:last-child td:last-child,
+	tbody tr:last-child td:last-child {
+		border-bottom-right-radius: $table-border-radius;
+	}
+
+	thead ~ tr:last-child td:first-child,
+	tbody tr:last-child td:first-child {
+		border-bottom-left-radius: $table-border-radius;
+	}
+
+	thead th, thead td,
+	caption + tbody tr:first-child td,
+	> tbody:first-child tr:first-child td {
+		border-top: 0;
+	}
+}
+
+.mimicOddGradeA { background-color: #ddffdd; }
+.mimicEvenGradeA { background-color: #eeffee; }
+.mimicOddGradeX { background-color: #ffdddd; }
+.mimicEvenGradeX { background-color: #ffeeee; }
+table.display tr.odd.gradeA {background-color: #ddffdd;}
+table.display tr.even.gradeA {background-color: #eeffee;}
+table.display tr.odd.gradeC {background-color: #ddddff;}
+table.display tr.even.gradeC {background-color: #eeeeff;}
+table.display tr.odd.gradeX {background-color: #ffdddd;}
+table.display tr.even.gradeX {background-color: #ffeeee;}
+table.display tr.odd.gradeU {background-color: #ddd;}
+table.display tr.even.gradeU {background-color: #eee;}
+
+.right-align {	
+	text-align:right;
+}
+
+.right {	
+	text-align:right;
+}
+
+#buttonrow .right {
+    position:absolute;
+	right:40px;
+}
+
+form label {
+	font-size: .9rem;
+	display: inline-block; 
+	padding-right: 5px; 
+	line-height: 1.25em;
+}
