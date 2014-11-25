@@ -56,6 +56,12 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 	@extend .btn;
 }
 
+.btn  {
+	button {
+		background: $primary;
+	}
+}
+
 $navbar-height: 32px;
 
 .navbar {
@@ -339,10 +345,6 @@ table.display tr.even.gradeU {background-color: #eee;}
 	text-align:right;
 }
 
-.right {	
-	float:right;
-}
-
 #buttonrow .right {
     position:absolute;
 	right:40px;
@@ -353,4 +355,13 @@ form label {
 	display: inline-block; 
 	padding-right: 5px; 
 	line-height: 1.25em;
+}
+
+/* bootstrappy stuff */
+.btn-group {
+	@extend .pill;
+}
+
+.row-fluid {
+	@extend .row;
 }
