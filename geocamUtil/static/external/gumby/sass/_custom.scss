@@ -3,8 +3,10 @@ $light-fg: white;
 $primary: #005c8e;
 $secondary: #387ea3;
 $tertiary: #8b9ba3;
+$disabled-bg: #e6e6e6;
 $disabled-fg: #888888;
 $table-thead-bgcolor: $secondary;
+$table-stripe-bgcolor: #e8e8e8;
 
 @import url('/static/external/fonts/fonts.css');
 
@@ -59,6 +61,51 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 .btn  {
 	button {
 		background: $primary;
+	}
+	.disabled, [disabled] {
+		  color: $disabled-fg;
+		  background-color: $disabled-bg;
+		  *background-color: $disabled-bg;
+	}
+}
+
+.pill {
+	display:inline;
+	button {
+		@include shape(squared);
+		@extend .btn;
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+		margin-left: -5px !important;
+		margin-right: 0px !important;
+		background: $color;
+		color: $primary;
+		.disabled, [disabled] {
+			background: $disabled-bg;
+			color: $disabled-fg;
+		}
+	}
+	.disabled, [disabled] {
+		background: $disabled-bg;
+		color: $disabled-fg;
+	}
+	:active {
+		background: $tertiary;
+	}
+	:hover {
+		color: $secondary;
+		text-decoration: bold;
+	}
+	.active {
+		background: $secondary;
+		color: $light-fg;
+	}
+	
+	.pill-left {
+		@include shape(pill-left);
+	}
+	.pill-right  {
+		@include shape(pill-right);
 	}
 }
 
@@ -154,7 +201,6 @@ h3 {
 
 
 /* xGDS Tables */
-$table-stripe-bgcolor: #e8e8e8;
 	
 table {
 	display: table;
@@ -299,6 +345,44 @@ table {
     cursor: pointer;
 }
 
+/*
+.tab-nav li a {
+	color: $primary;
+}
+*/
+.tab-nav > li > a { 
+	color: $primary;
+	height: 32px; 
+	line-height: 30px; 
+}
+
+.tab-nav > li > li.active > a, .tab-nav > li > li.currentnav > a { 
+	height: 33px; 
+	line-height: 31px; 
+}
+.tab-nav > li.active > a, .tab-nav > li.currentnav > a {
+	 height: 33px; 
+	 line-height: 31px; 
+}
+
+
+
+.tab-content {
+    padding: 5px 5px;
+	a  {
+		text-decoration: none;
+	}
+	a#tab-nav-link {
+		text-decoration: none;
+	}
+	form fieldset {
+		border: none;
+		border-style: none;
+		margin-top: 0px;
+		padding: 0px !important;
+	}
+}
+
 //TODO fix sorting icons
 .sorting_asc {
 	// @extend .icon-up-dir; does not work because not <i>
@@ -357,11 +441,3 @@ form label {
 	line-height: 1.25em;
 }
 
-/* bootstrappy stuff */
-.btn-group {
-	@extend .pill;
-}
-
-.row-fluid {
-	@extend .row;
-}
