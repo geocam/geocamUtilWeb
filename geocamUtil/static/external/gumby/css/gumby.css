@@ -1826,3 +1826,5 @@ table.display tr.even.gradeU { background-color: #eee; }
 #buttonrow .right { position: absolute; right: 40px; }
 
 form label { font-size: .9rem; display: inline-block; padding-right: 5px; line-height: 1.25em; }
+
+fluid { *zoom: 1; }
