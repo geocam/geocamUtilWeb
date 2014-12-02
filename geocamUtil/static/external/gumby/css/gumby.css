@@ -1700,15 +1700,15 @@ body { background: white; }
 .brand { font-size: 130%; font-weight: bold; }
 
 .btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #005c8e; }
-.btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #e6e6e6; *background-color: #e6e6e6; }
+.btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #f2f2f2; *background-color: #f2f2f2; }
 
 .pill { display: inline; }
-.pill button { -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; padding-left: 0px !important; padding-right: 0px !important; margin-left: -5px !important; margin-right: 0px !important; background: white; color: #005c8e; }
-.pill button .disabled, .pill button [disabled] { background: #e6e6e6; color: #888888; }
-.pill .disabled, .pill [disabled] { background: #e6e6e6; color: #888888; }
-.pill :active { background: #8b9ba3; }
-.pill :hover { color: #387ea3; text-decoration: bold; }
-.pill .active, .pill .currentnav { background: #387ea3; color: white; }
+.pill button { -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; padding-left: 0px !important; padding-right: 0px !important; margin-left: -5px !important; margin-right: 0px !important; background: white; color: #005c8e; border-color: #e5e5e5; }
+.pill button .disabled, .pill button [disabled] { background: #f2f2f2; color: #888888; }
+.pill .disabled, .pill [disabled] { background-color: #f2f2f2; color: #888888; }
+.pill :active:enabled { background-color: #8b9ba3; }
+.pill :hover:enabled { color: #8b9ba3; text-decoration: bold; }
+.pill .active :hover, .pill .currentnav :hover { background: #387ea3; color: white; }
 .pill .pill-left { -webkit-border-radius: 500px 0 0 500px; -moz-border-radius: 500px 0 0 500px; -ms-border-radius: 500px 0 0 500px; -o-border-radius: 500px 0 0 500px; border-radius: 500px 0 0 500px; }
 .pill .pill-right { -webkit-border-radius: 0 500px 500px 0; -moz-border-radius: 0 500px 500px 0; -ms-border-radius: 0 500px 500px 0; -o-border-radius: 0 500px 500px 0; border-radius: 0 500px 500px 0; }
 

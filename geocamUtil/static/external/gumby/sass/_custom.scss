@@ -3,10 +3,11 @@ $light-fg: white;
 $primary: #005c8e;
 $secondary: #387ea3;
 $tertiary: #8b9ba3;
-$disabled-bg: #e6e6e6;
+$disabled-bg: #F2F2F2; //#e6e6e6;
 $disabled-fg: #888888;
 $table-thead-bgcolor: $secondary;
 $table-stripe-bgcolor: #e8e8e8;
+$button-border: #E5E5E5;
 
 @import url('/static/external/fonts/fonts.css');
 
@@ -66,6 +67,10 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 		  color: $disabled-fg;
 		  background-color: $disabled-bg;
 		  *background-color: $disabled-bg;
+		  :active {
+		  }
+		  :hover {
+		  }
 	}
 }
 
@@ -80,23 +85,24 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 		margin-right: 0px !important;
 		background: $color;
 		color: $primary;
+		border-color: $button-border;
 		.disabled, [disabled] {
 			background: $disabled-bg;
 			color: $disabled-fg;
 		}
 	}
 	.disabled, [disabled] {
-		background: $disabled-bg;
+		background-color: $disabled-bg;
 		color: $disabled-fg;
 	}
-	:active {
-		background: $tertiary;
+	:active:enabled {
+		background-color: $tertiary;
 	}
-	:hover {
-		color: $secondary;
+	:hover:enabled {
+		color: $tertiary;
 		text-decoration: bold;
 	}
-	.active {
+	.active :hover{
 		background: $secondary;
 		color: $light-fg;
 	}
