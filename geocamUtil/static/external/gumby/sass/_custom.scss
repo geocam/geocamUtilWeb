@@ -60,7 +60,6 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 }
 
 .btn  {
-	@extend .oval;
 	button {
 		background: $primary;
 	}
@@ -83,10 +82,14 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 		background: $color;
 		color: $primary;
 		border-color: $button-border;
-		.disabled, [disabled] {
+		/*.disabled, [disabled] {
 			background: $disabled-bg;
 			color: $disabled-fg;
-		}
+		}*/
+	}
+	.active {
+		background-color: $secondary;
+		color: $light-fg;
 	}
 	.disabled, [disabled] {
 		background-color: $disabled-bg;
@@ -153,9 +156,11 @@ $navbar-height: 32px;
 			color: $primary; 
 		}
 		li.currentnav a {
-			background: $color;
-			background-color: $secondary;
-			color: $light-fg;
+ 			background: $color;
+			background-color: $color;
+			text-shadow: none;
+ 			color: $primary;
+ 			font-weight: 600;
 			margin-right: 20px;
 			:hover {
 				text-decoration:bold;

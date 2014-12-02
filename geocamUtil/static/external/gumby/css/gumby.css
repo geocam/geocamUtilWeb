@@ -1363,7 +1363,7 @@ img { -ms-interpolation-mode: bicubic; }
 .btn.small.icon-right a, .small.icon-right.mybutton a, input.small.icon-right[type="submit"] a, input.small.icon-right[type="button"] a, button.small.icon-right a, .small.icon-right.button a, a.small.icon-right.actionlink a, .skiplink.small.icon-right a { padding-right: 21px; }
 .btn.small.icon-right a:after, .small.icon-right.mybutton a:after, input.small.icon-right[type="submit"] a:after, input.small.icon-right[type="button"] a:after, button.small.icon-right a:after, .small.icon-right.button a:after, a.small.icon-right.actionlink a:after, .skiplink.small.icon-right a:after { right: 6px; }
 .btn.small a, .small.mybutton a, input.small[type="submit"] a, input.small[type="button"] a, button.small a, .small.button a, a.small.actionlink a, .skiplink.small a { padding: 0 9px; }
-.btn.oval, .pill button, button.oval, .btn, .mybutton, input[type="submit"], input[type="button"], button, .button, a.actionlink, .skiplink.oval, .skiplink.btn, .skiplink.mybutton, input.skiplink[type="submit"], input.skiplink[type="button"], button.skiplink, .skiplink.button, a.skiplink.actionlink { -webkit-border-radius: 1000px; -moz-border-radius: 1000px; -ms-border-radius: 1000px; -o-border-radius: 1000px; border-radius: 1000px; }
+.btn.oval, .oval.mybutton, input.oval[type="submit"], input.oval[type="button"], button.oval, .oval.button, a.oval.actionlink, .skiplink.oval { -webkit-border-radius: 1000px; -moz-border-radius: 1000px; -ms-border-radius: 1000px; -o-border-radius: 1000px; border-radius: 1000px; }
 .btn.pill-left, .pill-left.mybutton, input.pill-left[type="submit"], input.pill-left[type="button"], button.pill-left, .pill-left.button, a.pill-left.actionlink, .skiplink.pill-left { -webkit-border-radius: 500px 0 0 500px; -moz-border-radius: 500px 0 0 500px; -ms-border-radius: 500px 0 0 500px; -o-border-radius: 500px 0 0 500px; border-radius: 500px 0 0 500px; }
 .btn.pill-right, .pill-right.mybutton, input.pill-right[type="submit"], input.pill-right[type="button"], button.pill-right, .pill-right.button, a.pill-right.actionlink, .skiplink.pill-right { -webkit-border-radius: 0 500px 500px 0; -moz-border-radius: 0 500px 500px 0; -ms-border-radius: 0 500px 500px 0; -o-border-radius: 0 500px 500px 0; border-radius: 0 500px 500px 0; }
 
@@ -1703,8 +1703,11 @@ body { background: white; }
 .btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #f2f2f2; *background-color: #f2f2f2; }
 
 .pill { display: inline; }
-.pill button { -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; padding-left: 0px !important; padding-right: 0px !important; margin-left: -5px !important; margin-right: 0px !important; background: white; color: #005c8e; border-color: #e5e5e5; }
-.pill button .disabled, .pill button [disabled] { background: #f2f2f2; color: #888888; }
+.pill button { -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; padding-left: 0px !important; padding-right: 0px !important; margin-left: -5px !important; margin-right: 0px !important; background: white; color: #005c8e; border-color: #e5e5e5; /*.disabled, [disabled] {
+	background: $disabled-bg;
+	color: $disabled-fg;
+}*/ }
+.pill .active, .pill .currentnav { background-color: #387ea3; color: white; }
 .pill .disabled, .pill [disabled] { background-color: #f2f2f2; color: #888888; }
 .pill :active:enabled { background-color: #8b9ba3; }
 .pill :hover:enabled { color: #8b9ba3; text-decoration: bold; }
@@ -1738,7 +1741,7 @@ $navbar-height: 32px;
 .sitemenu-nav-secondary .subnav { font-size: 1rem; font-weight: 400; margin-bottom: 0px; }
 .sitemenu-nav-secondary .subnav li a { color: #387ea3; margin-right: 20px; }
 .sitemenu-nav-secondary .subnav li a :hover { color: #005c8e; }
-.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: #387ea3; color: white; margin-right: 20px; }
+.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; text-shadow: none; color: #005c8e; font-weight: 600; margin-right: 20px; }
 .sitemenu-nav-secondary .subnav li.currentnav a :hover { text-decoration: bold; }
 
 .navbar { min-height: 32px; margin-bottom: 5px; font-weight: 700; }
