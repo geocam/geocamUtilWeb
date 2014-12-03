@@ -1685,21 +1685,19 @@ table.rounded thead th, table.mybutton thead th, table.button thead th, table.ro
 
 body { background: white; }
 
-.irg_logo { background: url(/static/external/gumby/img/irg.png) silver no-repeat; width: 65px; height: 65px; }
+.irg_logo { background: url(/static/external/gumby/img/irg.png) #005c8e no-repeat; width: 65px; height: 65px; }
 
-.nasa_logo { background: url(/static/external/gumby/img/meatball.png) white no-repeat; height: 65px; width: 75px; }
+.nasa_logo { background: url(/static/external/gumby/img/meatball.png) #005c8e no-repeat; height: 65px; width: 75px; }
 
-.logo { height: 65px; }
-
-.logo img { margin-left: 20px; }
+.logo img { display: inline; }
 
 .xgds_and_brand { margin-top: 6px; }
 
-.xgds { color: #888; /* color for the xGDS words at the top of the page (top left) */ font-weight: bold; }
+.xgds h1 a { color: white; font-weight: bold; }
 
 .brand { font-size: 130%; font-weight: bold; }
 
-.btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #005c8e; }
+.btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #387ea3; font-weight: 600; color: white; }
 .btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #f2f2f2; *background-color: #f2f2f2; }
 
 .pill { display: inline; }
@@ -1744,11 +1742,13 @@ $navbar-height: 32px;
 .sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; text-shadow: none; color: #005c8e; font-weight: 600; margin-right: 20px; }
 .sitemenu-nav-secondary .subnav li.currentnav a :hover { text-decoration: bold; }
 
-.navbar { min-height: 32px; margin-bottom: 5px; font-weight: 700; }
+.navbar { min-height: 65px; margin-bottom: 5px; font-weight: 700; }
+.navbar .logo { height: 65px; }
 
-.navbar ul li { height: 32px; line-height: 32px; }
+.navbar ul li { height: 65px; line-height: 65px; max-height: 65px; }
+.navbar ul li img { padding: 0px; margin: 0px; }
 
-.navbar ul li > a { height: 32px; line-height: 32px; font-size: 1.1rem; }
+.navbar ul li > a { height: 65px; line-height: 65px; font-size: 1.1rem; }
 
 .navbar .active, .navbar .currentnav { background: #387ea3; }
 

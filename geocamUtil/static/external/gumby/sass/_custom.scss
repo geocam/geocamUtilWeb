@@ -17,32 +17,28 @@ body{
 
 $irg_logo_img: image-url('/static/external/gumby/img/irg.png', false, true);
 .irg_logo {
-	background: $irg_logo_img #c0c0c0 no-repeat;
+	background: $irg_logo_img $primary no-repeat;
 	width:65px;
     height:65px;
 }
 
 $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true);
 .nasa_logo {
-	background: $nasa_logo_img white no-repeat; //#cccccc no-repeat;
+	background: $nasa_logo_img $primary no-repeat; 
 	height:65px;
 	width:75px;
 }
 
-.logo {
-	height:65px;
-}
-
 .logo img {
-	margin-left: 20px;
+	display:inline;
 }
 
 .xgds_and_brand {
   margin-top: 6px;
 }
 
-.xgds {
-	color: #888;  /* color for the xGDS words at the top of the page (top left) */
+.xgds h1 a {
+	color: $light-fg; 
     font-weight: bold;
 }
 
@@ -61,7 +57,9 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 
 .btn  {
 	button {
-		background: $primary;
+		background: $secondary;
+		font-weight: 600;
+		color: $light-fg;
 	}
 	.disabled, [disabled] {
 		  color: $disabled-fg;
@@ -115,7 +113,7 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 	}
 }
 
-$navbar-height: 32px;
+$navbar-height: 65px;
 
 /*
 $navbar-height: 32px;
@@ -173,11 +171,19 @@ $navbar-height: 32px;
 	min-height: $navbar-height;
 	margin-bottom: 5px;
 	font-weight:700;
+	.logo {
+		height:65px;
+	}
 }
 
 .navbar ul li {
 	height: $navbar-height;
 	line-height: $navbar-height;
+	max-height: $navbar-height;
+	img {
+		padding: 0px;
+		margin: 0px;
+	}
 }
 
 .navbar ul li > a{
@@ -506,4 +512,8 @@ form label {
 
 fluid {
 	*zoom: 1;
+}
+
+.label {
+	color:inherit;
 }
