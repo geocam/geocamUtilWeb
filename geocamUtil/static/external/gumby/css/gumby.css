@@ -1685,9 +1685,9 @@ table.rounded thead th, table.mybutton thead th, table.button thead th, table.ro
 
 body { background: white; }
 
-.irg_logo { background: url(/static/external/gumby/img/irg.png) #005c8e no-repeat; width: 65px; height: 65px; }
+.irg_logo { background: url(/static/external/gumby/img/irg.png) white no-repeat; width: 65px; height: 65px; }
 
-.nasa_logo { background: url(/static/external/gumby/img/meatball.png) #005c8e no-repeat; height: 65px; width: 75px; }
+.nasa_logo { background: url(/static/external/gumby/img/meatball.png) #cccccc no-repeat; height: 65px; width: 75px; }
 
 .logo img { display: inline; }
 
@@ -1697,7 +1697,7 @@ body { background: white; }
 
 .brand { font-size: 130%; font-weight: bold; }
 
-.btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #387ea3; font-weight: 600; color: white; }
+.btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #42a5da; font-weight: 600; color: white; }
 .btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #f2f2f2; *background-color: #f2f2f2; }
 
 .pill { display: inline; }
@@ -1705,11 +1705,11 @@ body { background: white; }
 	background: $disabled-bg;
 	color: $disabled-fg;
 }*/ }
-.pill .active, .pill .currentnav { background-color: #387ea3; color: white; }
+.pill .active, .pill .currentnav { background-color: #42a5da; color: white; }
 .pill .disabled, .pill [disabled] { background-color: #f2f2f2; color: #888888; }
 .pill :active:enabled { background-color: #8b9ba3; }
 .pill :hover:enabled { color: #8b9ba3; text-decoration: bold; }
-.pill .active :hover, .pill .currentnav :hover { background: #387ea3; color: white; }
+.pill .active :hover, .pill .currentnav :hover { background: #42a5da; color: white; }
 .pill .pill-left { -webkit-border-radius: 500px 0 0 500px; -moz-border-radius: 500px 0 0 500px; -ms-border-radius: 500px 0 0 500px; -o-border-radius: 500px 0 0 500px; border-radius: 500px 0 0 500px; }
 .pill .pill-right { -webkit-border-radius: 0 500px 500px 0; -moz-border-radius: 0 500px 500px 0; -ms-border-radius: 0 500px 500px 0; -o-border-radius: 0 500px 500px 0; border-radius: 0 500px 500px 0; }
 
@@ -1735,12 +1735,12 @@ $navbar-height: 32px;
 	}
 }
 */
-.sitemenu-nav-secondary { margin-left: 15px; }
-.sitemenu-nav-secondary .subnav { font-size: 1rem; font-weight: 400; margin-bottom: 0px; }
-.sitemenu-nav-secondary .subnav li a { color: #387ea3; margin-right: 20px; }
-.sitemenu-nav-secondary .subnav li a :hover { color: #005c8e; }
-.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; text-shadow: none; color: #005c8e; font-weight: 600; margin-right: 20px; }
-.sitemenu-nav-secondary .subnav li.currentnav a :hover { text-decoration: bold; }
+.sitemenu-nav-secondary { margin-left: 0px; background-color: #42a5da; margin-top: -5px; margin-bottom: 5px; }
+.sitemenu-nav-secondary .subnav { margin-top: 3px; margin-bottom: 3px; }
+.sitemenu-nav-secondary .subnav li { margin-bottom: 3px; }
+.sitemenu-nav-secondary .subnav li a { font-size: 1rem; color: white; font-weight: bold; margin-right: 20px; text-shadow: 0px 1px 2px #001A28; }
+.sitemenu-nav-secondary .subnav li a :hover { color: #fff6ce; }
+.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; color: #005c8e; font-weight: 600; text-shadow: none; }
 
 .navbar { min-height: 65px; margin-bottom: 5px; font-weight: 700; }
 .navbar .logo { height: 65px; }
@@ -1750,7 +1750,7 @@ $navbar-height: 32px;
 
 .navbar ul li > a { height: 65px; line-height: 65px; font-size: 1.1rem; }
 
-.navbar .active, .navbar .currentnav { background: #387ea3; }
+.navbar .active, .navbar .currentnav { background: #42a5da; }
 
 /*
 .sitemenu-nav-secondary {
@@ -1797,7 +1797,7 @@ table thead th { padding-left: 17px; }
 table thead th tr td td:first-child { font-weight: bold; font-size: 1rem; }
 table tr td, table tbody tr td { font-size: 0.9rem; }
 table tr td:first-child { font-weight: normal; }
-table thead { background-color: #387ea3; color: #fff; }
+table thead { background-color: #42a5da; color: #fff; }
 table thead tr th { font-size: 14px; font-weight: bold; vertical-align: bottom; }
 table tr:nth-of-type(even), table table tr.stripe, table table tr.striped { background-color: #e8e8e8; }
 table caption + thead tr:first-child th:first-child, table caption + tr td:first-child, table > thead tr:first-child th:first-child, table > thead tr:first-child td:first-child, table > tr:first-child td:first-child { border-top-left-radius: 4px; }
@@ -1875,3 +1875,30 @@ table.display tr.even.gradeU { background-color: #eee; }
 form label { font-size: .9rem; display: inline-block; padding-right: 5px; line-height: 1.25em; }
 
 fluid { *zoom: 1; }
+
+.label { color: inherit; }
+
+.footer { width: 100%; bottom: 0; left: 0; background-color: #cccccc; margin-left: 0px; height: 65px; margin-top: 20px; padding-left: 0px; }
+.footer ul { display: table; }
+.footer ul li { padding-left: 20px; display: table-cell; }
+
+.footer-words { vertical-align: top; padding-top: 8px; font-weight: bold; }
+
+/*
+* {
+	margin: 0;
+}
+html, body {
+	margin:0; 	padding:0;
+	height: 100%;
+}
+#wrapper {
+	min-height: 100%;
+	margin: 0 auto -$footer-height; 
+}
+
+#page-content {
+	//padding:10px;
+	padding-bottom:$footer-height; 
+}
+*/

@@ -1,13 +1,4 @@
-$color: white;
-$light-fg: white;
-$primary: #005c8e;
-$secondary: #387ea3;
-$tertiary: #8b9ba3;
-$disabled-bg: #F2F2F2; //#e6e6e6;
-$disabled-fg: #888888;
-$table-thead-bgcolor: $secondary;
-$table-stripe-bgcolor: #e8e8e8;
-$button-border: #E5E5E5;
+@import 'theme';
 
 @import url('/static/external/fonts/fonts.css');
 
@@ -17,15 +8,15 @@ body{
 
 $irg_logo_img: image-url('/static/external/gumby/img/irg.png', false, true);
 .irg_logo {
-	background: $irg_logo_img $primary no-repeat;
+	background: $irg_logo_img $color no-repeat;
 	width:65px;
-    height:65px;
+    height:$footer-height;
 }
 
 $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true);
 .nasa_logo {
-	background: $nasa_logo_img $primary no-repeat; 
-	height:65px;
+	background: $nasa_logo_img $footer-bg no-repeat; 
+	height:$footer-height;
 	width:75px;
 }
 
@@ -140,29 +131,33 @@ $navbar-height: 32px;
 
 .sitemenu-nav-secondary {
 	@extend .row;
-	margin-left: 15px;
+	margin-left: 0px;
+	background-color: $secondary;
+	margin-top: -5px;
+	margin-bottom: 5px;
 	.subnav {
-		font-size: 1rem;
-		font-weight: 400;
-		margin-bottom: 0px;
+		margin-top: 3px;
+		margin-bottom: 1px;
+		li {
+			margin-bottom: 3px;
+		}
 		li a {
-			color: $secondary;
+			font-size: 1rem;
+			color: $light-fg;
+			font-weight: bold;
 			margin-right: 20px;
+			text-shadow: 0px 1px 2px #001A28;
 			
 		}
 		li a :hover {
-			color: $primary; 
+			color: $light-fg-hover; 
 		}
 		li.currentnav a {
  			background: $color;
 			background-color: $color;
-			text-shadow: none;
  			color: $primary;
  			font-weight: 600;
-			margin-right: 20px;
-			:hover {
-				text-decoration:bold;
-			}
+ 			text-shadow: none;
 		}
 	}
 }
@@ -517,3 +512,49 @@ fluid {
 .label {
 	color:inherit;
 }
+
+.footer {
+	width:100%;
+//	position:absolute;
+	bottom:0;
+	left:0;
+	background-color: $footer-bg;
+	margin-left: 0px;
+	height: $footer-height;
+	margin-top: 20px;
+	padding-left: 0px;
+	ul {
+		display:table;
+	}
+	ul li {
+		padding-left: 20px;
+		display: table-cell;
+	}
+}
+
+.footer-words {
+	vertical-align:top;
+	padding-top: 8px;
+	font-weight: bold;
+} 
+
+/*
+* {
+	margin: 0;
+}
+html, body {
+	margin:0;
+   	padding:0;
+	height: 100%;
+}
+#wrapper {
+	min-height: 100%;
+	margin: 0 auto -$footer-height; 
+}
+
+#page-content {
+	//padding:10px;
+	padding-bottom:$footer-height; 
+}
+*/
+
