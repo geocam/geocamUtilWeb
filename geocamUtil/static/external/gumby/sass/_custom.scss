@@ -2,8 +2,17 @@
 
 @import url('/static/external/fonts/fonts.css');
 
+$footer-height: 65px;
+$navbar-height: 40px;
+$subnav-height: 22px;
+$tab-top-border-radius: 4px;
+
 body{
 	background: $color;
+}
+
+.primary{
+	background-color: $primary;
 }
 
 $irg_logo_img: image-url('/static/external/gumby/img/irg.png', false, true);
@@ -20,8 +29,12 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 	width:75px;
 }
 
-.logo img {
-	display:inline;
+.logo {
+	background: $primary;
+	padding-right: 0px;
+	img {
+		display:inline;
+	}
 }
 
 .xgds_and_brand {
@@ -42,9 +55,7 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 	@extend .active;
 }
 
-.mybutton {
-	@extend .btn;
-}
+
 
 .btn  {
 	button {
@@ -57,6 +68,17 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 		  background-color: $disabled-bg;
 		  *background-color: $disabled-bg;
 	}
+	:link:hover {
+		color: $light-fg !important;
+	}
+}
+
+.mybutton {
+	@extend .btn;
+	
+}
+.mybutton:link:hover {
+	color: $light-fg !important;
 }
 
 .pill {
@@ -104,70 +126,19 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 	}
 }
 
-$navbar-height: 65px;
 
-/*
-$navbar-height: 32px;
 
 .navbar {
 	min-height: $navbar-height;
-	margin-bottom: 5px;
-	font-weight:700;
-	.active {
-		background: $secondary;
-	}
-	ul li {
-		height: $navbar-height;
-		line-height: $navbar-height;
-		> a {
-			font-size: 1.1rem;
-		}
-		:hover {
-			background: $tertiary;
-		}
-	}
-}
-*/
-
-.sitemenu-nav-secondary {
-	@extend .row;
-	margin-left: 0px;
-	background-color: $secondary;
-	margin-top: -5px;
-	margin-bottom: 5px;
-	.subnav {
-		margin-top: 3px;
-		margin-bottom: 1px;
-		li {
-			margin-bottom: 3px;
-		}
-		li a {
-			font-size: 1rem;
-			color: $light-fg;
-			font-weight: bold;
-			margin-right: 20px;
-			text-shadow: 0px 1px 2px #001A28;
-			
-		}
-		li a :hover {
-			color: $light-fg-hover; 
-		}
-		li.currentnav a {
- 			background: $color;
-			background-color: $color;
- 			color: $primary;
- 			font-weight: 600;
- 			text-shadow: none;
-		}
-	}
-}
-
-.navbar {
-	min-height: $navbar-height;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 	font-weight:700;
 	.logo {
 		height:65px;
+	}
+	ul {
+		padding-top: 3px;
+		margin-left: 8px;
+		width: 100%;
 	}
 }
 
@@ -175,10 +146,29 @@ $navbar-height: 32px;
 	height: $navbar-height;
 	line-height: $navbar-height;
 	max-height: $navbar-height;
+	/* Only round the top corners */
+  -webkit-border-top-left-radius: $tab-top-border-radius;
+  -webkit-border-top-right-radius: $tab-top-border-radius;
+  -moz-border-radius-topleft: $tab-top-border-radius;
+  -moz-border-radius-topright: $tab-top-border-radius;
+  border-top-left-radius: $tab-top-border-radius;
+  border-top-right-radius: $tab-top-border-radius; 
 	img {
 		padding: 0px;
 		margin: 0px;
 	}
+}
+
+.navbar :hover {
+	-webkit-border-top-left-radius: $tab-top-border-radius;
+  -webkit-border-top-right-radius: $tab-top-border-radius;
+  -moz-border-radius-topleft: $tab-top-border-radius;
+  -moz-border-radius-topright: $tab-top-border-radius;
+  border-top-left-radius: $tab-top-border-radius;
+  border-top-right-radius: $tab-top-border-radius; 
+  .active {
+  	background-color: $secondary;
+  }
 }
 
 .navbar ul li > a{
@@ -191,33 +181,62 @@ $navbar-height: 32px;
 	background: $secondary;
 }
 
-/*
 .sitemenu-nav-secondary {
 	@extend .row;
-	margin-left: 15px;
-}
-
-.sitemenu-nav-secondary .subnav {
-	font-size: 1rem;
-	font-weight: 400;
-	margin-bottom: 0px;
-}
-
-.sitemenu-nav-secondary .subnav li a {
-	color: $secondary;
-	margin-right: 20px;
-}
-
-.subnav li.currentnav a {
-	background: $color;
-}
-
-.sitemenu-nav-secondary .subnav li.currentnav a{
+	margin-left: 0px;
 	background-color: $secondary;
-	color: $light-fg;
-	margin-right: 20px;
+	height: $subnav-height;
+	line-height:$subnav-height;
+	max-height:  $subnav-height;
+	padding-top: 3px;
+	/* Only round the top corners */
+	  -webkit-border-top-left-radius: $tab-top-border-radius;
+	  -webkit-border-top-right-radius: $tab-top-border-radius;
+	  -moz-border-radius-topleft: $tab-top-border-radius;
+	  -moz-border-radius-topright: $tab-top-border-radius;
+	  border-top-left-radius: $tab-top-border-radius;
+	  border-top-right-radius: $tab-top-border-radius; 
+	.subnav {
+		background-color: $secondary;
+		padding-top: 4px;
+		padding-bottom: 6px;
+		padding-left: 10px;
+		ul {
+			width: auto;
+		}
+		li {
+			height:  $subnav-height;;
+			line-height:  $subnav-height;
+			max-height:  $subnav-height;
+			float: inherit;
+		}
+		li a {
+			height:  $subnav-height;;
+			line-height:  $subnav-height;
+			max-height:  $subnav-height;
+			font-size: 1rem;
+			color: $light-fg;
+			font-weight: bold;
+			margin-right: 20px;
+			text-shadow: 0px 1px 2px #001A28;
+			
+		}
+		li.currentnav a {
+ 			background: $color;
+			background-color: $color;
+ 			color: $primary;
+ 			font-weight: 600;
+ 			text-shadow: none;
+ 			padding: 0px;
+ 			padding-left: 10px;
+ 			padding-right: 10px;
+		}
+		.active :hover {
+  			color: $light-fg;
+  		}
+		
+	}
 }
-*/
 
 .mybutton {
 	@extend .btn;
@@ -226,7 +245,7 @@ $navbar-height: 32px;
 	@extend .metro;
 	@extend .rounded;
 	color: $light-fg;
-	font-weight: 400;
+	font-weight: bold;
 	min-width: 85px;
     text-align: center;
     margin-right: 5px;
@@ -237,7 +256,7 @@ $navbar-height: 32px;
 input[type="submit"], input[type="button"], button, .button, a.actionlink {
 	@extend .mybutton;
 	text-decoration: none;
-	font-weight:400;
+	font-weight:bold;
 	-webkit-box-sizing: border-box;
   	-moz-box-sizing: border-box;
   	box-sizing: border-box;
@@ -515,7 +534,7 @@ fluid {
 
 .footer {
 	width:100%;
-//	position:absolute;
+	position:absolute;
 	bottom:0;
 	left:0;
 	background-color: $footer-bg;
@@ -538,7 +557,6 @@ fluid {
 	font-weight: bold;
 } 
 
-/*
 * {
 	margin: 0;
 }
@@ -553,8 +571,7 @@ html, body {
 }
 
 #page-content {
-	//padding:10px;
+	margin-top: 5px;
 	padding-bottom:$footer-height; 
 }
-*/
 
