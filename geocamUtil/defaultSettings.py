@@ -92,3 +92,15 @@ Realm to display to user when using the 'basic' challenge.
 with HTTP digest authentication, which is no longer supported. We
 avoided changing the name to keep backward compatibility.)
 """
+
+GEOCAM_UTIL_LIVE_MODE = False
+"""
+If live mode is true, various live feed data can send inputs to site and
+ more parts of the site will be visible.  Suggest expansion to include a
+ list of services.
+
+ IMPORTANT YOU MUST INCLUDE THIS IN SITE SETTINGS
+ TEMPLATE_CONTEXT_PROCESSORS = (global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+     ...
+     'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
+ """
