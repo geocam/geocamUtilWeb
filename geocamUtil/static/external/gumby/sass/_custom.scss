@@ -75,9 +75,13 @@ $nasa_logo_img: image-url('/static/external/gumby/img/meatball.png', false, true
 
 .mybutton {
 	@extend .btn;
-	
 }
+
 .mybutton:link:hover {
+	color: $light-fg !important;
+}
+
+.mybutton a:hover {
 	color: $light-fg !important;
 }
 

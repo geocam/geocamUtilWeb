@@ -19,3 +19,4 @@ class Command(NoArgsCommand):
         management.call_command('prepapps')
         management.call_command('collectmedia')
         management.call_command('collectbinaries')
+
