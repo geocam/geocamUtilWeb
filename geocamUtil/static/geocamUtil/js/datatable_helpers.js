@@ -25,17 +25,12 @@
         initializeCheckbox();
      }));
  */
-heightPercentage = 40;
+heightPercentage = 60;
 /*
  * Change height percentage if you need a different size table
  */
 calcDataTableHeight = function() {
-    var h;
-    if ($('#page-content').length >= 0) {
-        h = Math.floor($('#page-content').height()*heightPercentage/100);
-    } else {
-        h = Math.floor($(window).height()*heightPercentage/100);
-    }
+    var h =  Math.floor($(window).height()*heightPercentage/100);
     return h + 'px';
 };
 

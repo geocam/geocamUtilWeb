@@ -2,9 +2,6 @@
 
 @import url('/static/external/fonts/fonts.css');
 
-$footer-height: 65px;
-$navbar-height: 40px;
-$subnav-height: 22px;
 $tab-top-border-radius: 4px;
 
 body{
@@ -537,21 +534,23 @@ fluid {
 }
 
 .footer {
-	width:100%;
-	position:absolute;
+ 	position:absolute;
 	bottom:0;
 	left:0;
-	background-color: $footer-bg;
-	margin-left: 0px;
+ 	background-color: $footer-bg;
 	height: $footer-height;
+	margin: 0px;
 	margin-top: 20px;
-	padding-left: 0px;
+	padding: 0px;
 	ul {
 		display:table;
 	}
 	ul li {
 		padding-left: 20px;
 		display: table-cell;
+	}
+	.row {
+ 		overflow: hidden;
 	}
 }
 
@@ -569,13 +568,13 @@ html, body {
    	padding:0;
 	height: 100%;
 }
-#wrapper {
-	min-height: 100%;
-	margin: 0 auto -$footer-height; 
-}
 
 #page-content {
 	margin-top: 5px;
+	margin-bototm: 0px;
 	padding-bottom:$footer-height; 
 }
 
+.errors {
+	margin-top: 10px;	
+}
