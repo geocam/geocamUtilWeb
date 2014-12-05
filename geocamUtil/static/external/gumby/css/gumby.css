@@ -1685,10 +1685,13 @@ table.rounded thead th, table.mybutton thead th, table.button thead th, table.ro
 
 body { background: white; }
 
+.primary, .mybutton, input[type="submit"], input[type="button"], button, .button, a.actionlink { background-color: #005c8e; }
+
 .irg_logo { background: url(/static/external/gumby/img/irg.png) white no-repeat; width: 65px; height: 65px; }
 
 .nasa_logo { background: url(/static/external/gumby/img/meatball.png) #cccccc no-repeat; height: 65px; width: 75px; }
 
+.logo { background: #005c8e; padding-right: 0px; }
 .logo img { display: inline; }
 
 .xgds_and_brand { margin-top: 6px; }
@@ -1699,6 +1702,11 @@ body { background: white; }
 
 .btn button, .mybutton button, input[type="submit"] button, input[type="button"] button, button button, .button button, a.actionlink button, .pill button button { background: #42a5da; font-weight: 600; color: white; }
 .btn .disabled, .mybutton .disabled, input[type="submit"] .disabled, input[type="button"] .disabled, button .disabled, .button .disabled, a.actionlink .disabled, .btn [disabled], .mybutton [disabled], input[type="submit"] [disabled], input[type="button"] [disabled], button [disabled], .button [disabled], a.actionlink [disabled] { color: #888888; background-color: #f2f2f2; *background-color: #f2f2f2; }
+.btn :link:hover, .mybutton :link:hover, input[type="submit"] :link:hover, input[type="button"] :link:hover, button :link:hover, .button :link:hover, a.actionlink :link:hover { color: white !important; }
+
+.mybutton:link:hover, input[type="submit"]:link:hover, input[type="button"]:link:hover, button:link:hover, .button:link:hover, a.actionlink:link:hover { color: white !important; }
+
+.mybutton a:hover, input[type="submit"] a:hover, input[type="button"] a:hover, button a:hover, .button a:hover, a.actionlink a:hover { color: white !important; }
 
 .pill { display: inline; }
 .pill button { -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; padding-left: 0px !important; padding-right: 0px !important; margin-left: -5px !important; margin-right: 0px !important; background: white; color: #005c8e; border-color: #e5e5e5; /*.disabled, [disabled] {
@@ -1713,75 +1721,31 @@ body { background: white; }
 .pill .pill-left { -webkit-border-radius: 500px 0 0 500px; -moz-border-radius: 500px 0 0 500px; -ms-border-radius: 500px 0 0 500px; -o-border-radius: 500px 0 0 500px; border-radius: 500px 0 0 500px; }
 .pill .pill-right { -webkit-border-radius: 0 500px 500px 0; -moz-border-radius: 0 500px 500px 0; -ms-border-radius: 0 500px 500px 0; -o-border-radius: 0 500px 500px 0; border-radius: 0 500px 500px 0; }
 
-/*
-$navbar-height: 32px;
-
-.navbar {
-	min-height: $navbar-height;
-	margin-bottom: 5px;
-	font-weight:700;
-	.active {
-		background: $secondary;
-	}
-	ul li {
-		height: $navbar-height;
-		line-height: $navbar-height;
-		> a {
-			font-size: 1.1rem;
-		}
-		:hover {
-			background: $tertiary;
-		}
-	}
-}
-*/
-.sitemenu-nav-secondary { margin-left: 0px; background-color: #42a5da; margin-top: -5px; margin-bottom: 5px; }
-.sitemenu-nav-secondary .subnav { margin-top: 3px; margin-bottom: 3px; }
-.sitemenu-nav-secondary .subnav li { margin-bottom: 3px; }
-.sitemenu-nav-secondary .subnav li a { font-size: 1rem; color: white; font-weight: bold; margin-right: 20px; text-shadow: 0px 1px 2px #001A28; }
-.sitemenu-nav-secondary .subnav li a :hover { color: #fff6ce; }
-.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; color: #005c8e; font-weight: 600; text-shadow: none; }
-
-.navbar { min-height: 65px; margin-bottom: 5px; font-weight: 700; }
+.navbar { min-height: 40px; margin-bottom: 15px; font-weight: 700; }
 .navbar .logo { height: 65px; }
+.navbar ul { padding-top: 3px; margin-left: 8px; width: 100%; }
 
-.navbar ul li { height: 65px; line-height: 65px; max-height: 65px; }
+.navbar ul li { height: 40px; line-height: 40px; max-height: 40px; /* Only round the top corners */ -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
 .navbar ul li img { padding: 0px; margin: 0px; }
 
-.navbar ul li > a { height: 65px; line-height: 65px; font-size: 1.1rem; }
+.navbar :hover { -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.navbar :hover .active, .navbar :hover .currentnav { background-color: #42a5da; }
+
+.navbar ul li > a { height: 40px; line-height: 40px; font-size: 1.1rem; }
 
 .navbar .active, .navbar .currentnav { background: #42a5da; }
 
-/*
-.sitemenu-nav-secondary {
-	@extend .row;
-	margin-left: 15px;
-}
+.sitemenu-nav-secondary { margin-left: 0px; background-color: #42a5da; height: 22px; line-height: 22px; max-height: 22px; padding-top: 3px; /* Only round the top corners */ -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.sitemenu-nav-secondary .subnav { background-color: #42a5da; padding-top: 4px; padding-bottom: 6px; padding-left: 10px; }
+.sitemenu-nav-secondary .subnav ul { width: auto; }
+.sitemenu-nav-secondary .subnav li { height: 22px; line-height: 22px; max-height: 22px; float: inherit; }
+.sitemenu-nav-secondary .subnav li a { height: 22px; line-height: 22px; max-height: 22px; font-size: 1rem; color: white; font-weight: bold; margin-right: 20px; text-shadow: 0px 1px 2px #001A28; }
+.sitemenu-nav-secondary .subnav li.currentnav a { background: white; background-color: white; color: #005c8e; font-weight: 600; text-shadow: none; padding: 0px; padding-left: 10px; padding-right: 10px; }
+.sitemenu-nav-secondary .subnav .active :hover, .sitemenu-nav-secondary .subnav .currentnav :hover { color: white; }
 
-.sitemenu-nav-secondary .subnav {
-	font-size: 1rem;
-	font-weight: 400;
-	margin-bottom: 0px;
-}
+.mybutton, input[type="submit"], input[type="button"], button, .button, a.actionlink { color: white; font-weight: bold; min-width: 85px; text-align: center; margin-right: 5px; padding-left: 10px; padding-right: 10px; }
 
-.sitemenu-nav-secondary .subnav li a {
-	color: $secondary;
-	margin-right: 20px;
-}
-
-.subnav li.currentnav a {
-	background: $color;
-}
-
-.sitemenu-nav-secondary .subnav li.currentnav a{
-	background-color: $secondary;
-	color: $light-fg;
-	margin-right: 20px;
-}
-*/
-.mybutton, input[type="submit"], input[type="button"], button, .button, a.actionlink { color: white; font-weight: 400; min-width: 85px; text-align: center; margin-right: 5px; padding-left: 10px; padding-right: 10px; }
-
-input[type="submit"], input[type="button"], button, .button, a.actionlink { text-decoration: none; font-weight: 400; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+input[type="submit"], input[type="button"], button, .button, a.actionlink { text-decoration: none; font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 
 h1 { font-size: 1.3rem; font-weight: 700; color: #005c8e; }
 
@@ -1878,27 +1842,17 @@ fluid { *zoom: 1; }
 
 .label { color: inherit; }
 
-.footer { width: 100%; bottom: 0; left: 0; background-color: #cccccc; margin-left: 0px; height: 65px; margin-top: 20px; padding-left: 0px; }
+.footer { position: absolute; bottom: 0; left: 0; background-color: #cccccc; height: 65px; margin: 0px; margin-top: 20px; padding: 0px; }
 .footer ul { display: table; }
 .footer ul li { padding-left: 20px; display: table-cell; }
+.footer .row, .footer .sitemenu-nav-secondary { overflow: hidden; }
 
 .footer-words { vertical-align: top; padding-top: 8px; font-weight: bold; }
 
-/*
-* {
-	margin: 0;
-}
-html, body {
-	margin:0; 	padding:0;
-	height: 100%;
-}
-#wrapper {
-	min-height: 100%;
-	margin: 0 auto -$footer-height; 
-}
+* { margin: 0; }
 
-#page-content {
-	//padding:10px;
-	padding-bottom:$footer-height; 
-}
-*/
+html, body { margin: 0; padding: 0; height: 100%; }
+
+#page-content { margin-top: 5px; margin-bototm: 0px; padding-bottom: 65px; }
+
+.errors { margin-top: 10px; }
