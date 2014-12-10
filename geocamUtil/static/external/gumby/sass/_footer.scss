@@ -1,0 +1,26 @@
+.footer {
+ 	position:absolute;
+	bottom:0;
+	left:0;
+ 	background-color: $footer-bg;
+	height: $footer-height;
+	margin: 0px;
+	margin-top: 20px;
+	padding: 0px;
+	ul {
+		display:table;
+	}
+	ul li {
+		padding-left: 20px;
+		display: table-cell;
+	}
+	.row {
+ 		overflow: hidden;
+	}
+}
+
+.footer-words {
+	vertical-align:top;
+	padding-top: 8px;
+	font-weight: bold;
+} 

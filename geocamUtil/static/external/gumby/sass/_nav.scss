@@ -1,0 +1,153 @@
+$tab-top-border-radius: 4px;
+
+.currentnav {
+	@extend .active;
+}
+
+.navbar-color {
+	background-color: $navbar-color;
+}
+
+.navbar {
+	background-color: $navbar-color;
+	min-height: $navbar-height;
+	margin-bottom: 15px;
+	font-weight:700;
+	.logo {
+		height:$main-logo-height;
+		background-color: $navbar-color;
+	}
+	ul {
+		padding-top: 3px;
+		margin-left: 8px;
+		width: 100%;
+	}
+}
+
+.navbar ul li {
+	height: $navbar-height;
+	line-height: $navbar-height;
+	max-height: $navbar-height;
+	/* Only round the top corners */
+  -webkit-border-top-left-radius: $tab-top-border-radius;
+  -webkit-border-top-right-radius: $tab-top-border-radius;
+  -moz-border-radius-topleft: $tab-top-border-radius;
+  -moz-border-radius-topright: $tab-top-border-radius;
+  border-top-left-radius: $tab-top-border-radius;
+  border-top-right-radius: $tab-top-border-radius; 
+	img {
+		padding: 0px;
+		margin: 0px;
+	}
+}
+
+.navbar :hover {
+	-webkit-border-top-left-radius: $tab-top-border-radius;
+  -webkit-border-top-right-radius: $tab-top-border-radius;
+  -moz-border-radius-topleft: $tab-top-border-radius;
+  -moz-border-radius-topright: $tab-top-border-radius;
+  border-top-left-radius: $tab-top-border-radius;
+  border-top-right-radius: $tab-top-border-radius; 
+  .active {
+  	background-color: $secondary;
+  }
+}
+
+.navbar ul li > a{
+	height: $navbar-height;
+	line-height:$navbar-height;
+	font-size: 1.1rem;
+}
+
+.navbar .active {
+	background: $secondary;
+}
+
+.sitemenu-nav-secondary {
+	@extend .row;
+	margin-left: 0px;
+	background-color: $secondary;
+	height: $subnav-height;
+	line-height:$subnav-height;
+	max-height:  $subnav-height;
+	padding-top: 3px;
+	/* Only round the top corners */
+	  -webkit-border-top-left-radius: $tab-top-border-radius;
+	  -webkit-border-top-right-radius: $tab-top-border-radius;
+	  -moz-border-radius-topleft: $tab-top-border-radius;
+	  -moz-border-radius-topright: $tab-top-border-radius;
+	  border-top-left-radius: $tab-top-border-radius;
+	  border-top-right-radius: $tab-top-border-radius; 
+	.subnav {
+		background-color: $secondary;
+		padding-top: 4px;
+		padding-bottom: 6px;
+		padding-left: 10px;
+		ul {
+			width: auto;
+		}
+		li {
+			height:  $subnav-height;;
+			line-height:  $subnav-height;
+			max-height:  $subnav-height;
+			float: inherit;
+		}
+		li a {
+			height:  $subnav-height;;
+			line-height:  $subnav-height;
+			max-height:  $subnav-height;
+			font-size: 1rem;
+			color: $light-fg;
+			font-weight: bold;
+			margin-right: 20px;
+			text-shadow: 0px 1px 2px #001A28;
+			
+		}
+		li.currentnav a {
+ 			background: $color;
+			background-color: $color;
+ 			color: $primary;
+ 			font-weight: 600;
+ 			text-shadow: none;
+ 			padding: 0px;
+ 			padding-left: 10px;
+ 			padding-right: 10px;
+		}
+		.active :hover {
+  			color: $light-fg;
+  		}
+		
+	}
+}
+
+.tab-nav > li > a { 
+	color: $primary;
+	height: 32px; 
+	line-height: 30px; 
+}
+
+.tab-nav > li > li.active > a, .tab-nav > li > li.currentnav > a { 
+	height: 33px; 
+	line-height: 31px; 
+}
+.tab-nav > li.active > a, .tab-nav > li.currentnav > a {
+	 height: 33px; 
+	 line-height: 31px; 
+}
+
+
+.tab-content {
+    padding: 5px 5px;
+	a  {
+		text-decoration: none;
+	}
+	a#tab-nav-link {
+		text-decoration: none;
+	}
+	form fieldset {
+		border: none;
+		border-style: none;
+		margin-top: 0px;
+		padding: 0px !important;
+	}
+}

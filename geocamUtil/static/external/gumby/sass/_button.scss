@@ -1,0 +1,93 @@
+.btn  {
+	button {
+		background: $secondary;
+		font-weight: 600;
+		color: $light-fg;
+	}
+	.disabled, [disabled] {
+		  color: $disabled-fg;
+		  background-color: $disabled-bg;
+		  *background-color: $disabled-bg;
+	}
+	:link:hover {
+		color: $light-fg !important;
+	}
+}
+
+.mybutton {
+	@extend .btn;
+	@extend .medium;
+	@extend .primary;
+	@extend .metro;
+	@extend .rounded;
+	color: $light-fg;
+	font-weight: bold;
+	min-width: 85px;
+    text-align: center;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mybutton:link:hover {
+	color: $light-fg !important;
+}
+
+.mybutton a:hover {
+	color: $light-fg !important;
+}
+
+input[type="submit"], input[type="button"], button, .button, a.actionlink {
+	@extend .mybutton;
+	text-decoration: none;
+	font-weight:bold;
+	-webkit-box-sizing: border-box;
+  	-moz-box-sizing: border-box;
+  	box-sizing: border-box;
+}
+
+
+.pill {
+	display:inline;
+	button {
+		@include shape(squared);
+		@extend .btn;
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+		margin-left: -5px !important;
+		margin-right: 0px !important;
+		background: $color;
+		color: $primary;
+		border-color: $button-border;
+		/*.disabled, [disabled] {
+			background: $disabled-bg;
+			color: $disabled-fg;
+		}*/
+	}
+	.active {
+		background-color: $secondary;
+		color: $light-fg;
+	}
+	.disabled, [disabled] {
+		background-color: $disabled-bg;
+		color: $disabled-fg;
+	}
+	:active:enabled {
+		background-color: $tertiary;
+	}
+	:hover:enabled {
+		color: $tertiary;
+		text-decoration: bold;
+	}
+	.active :hover{
+		background: $secondary;
+		color: $light-fg;
+	}
+	
+	.pill-left {
+		@include shape(pill-left);
+	}
+	.pill-right  {
+		@include shape(pill-right);
+	}
+}
