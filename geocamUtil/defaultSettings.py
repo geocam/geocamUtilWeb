@@ -104,3 +104,18 @@ If live mode is true, various live feed data can send inputs to site and
      ...
      'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
  """
+
+PIPELINE_COMPILERS = (
+    'pipeline_compass.compiler.CompassCompiler',
+)
+
+
+"""
+Set up pipeline for gumby.
+"""
+PIPLINE_CSS = {'gumby': {'source_filenames': ('external/gumby/sass/*.sass',
+                                              ),
+                         'output_filename': 'external/gumby/css/gumby.css'
+                         }
+               }
+
