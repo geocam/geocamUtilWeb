@@ -30,7 +30,7 @@ def wrapKmlDjango(text):
 
 
 def djangoResponse(wrappedText):
-    return HttpResponse(wrappedText, mimetype='application/vnd.google-earth.kml+xml')
+    return HttpResponse(wrappedText, content_type='application/vnd.google-earth.kml+xml')
 
 
 def wrapKml(text, docId=None):

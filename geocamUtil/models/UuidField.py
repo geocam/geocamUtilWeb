@@ -28,7 +28,7 @@ class UuidField(models.CharField):
         kwargs.setdefault('max_length', 48)
         kwargs.setdefault('editable', False)
         kwargs.setdefault('db_index', True)
-        super(UuidField, self).__init__(self, *args, **kwargs)
+        super(UuidField, self).__init__(*args, **kwargs)
 
     def pre_save(self, model_instance, add):
         if add and not getattr(model_instance, self.attname):
