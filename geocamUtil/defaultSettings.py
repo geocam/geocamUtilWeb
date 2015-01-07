@@ -99,27 +99,42 @@ If live mode is true, various live feed data can send inputs to site and
  more parts of the site will be visible.  Suggest expansion to include a
  list of services.
 
- IMPORTANT YOU MUST INCLUDE THIS IN SITE SETTINGS
+ IMPORTANT YOU MUST INCLUDE THIS IN siteSettings
  TEMPLATE_CONTEXT_PROCESSORS = (global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
      ...
      'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
  """
+
 GEOCAM_UTIL_PIPELINE_COMPILERS = (
     'pipeline_compass.compiler.CompassCompiler',
 )
+"""
+And you must add this to PIPELINE_COMPILERS in siteSettings
+PIPELINE_COMPILERS = ()
+PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELINE_COMPILERS
+"""
 
 
 """
 Set up pipeline for gumby.
 """
-GEOCAM_UTIL_PIPLINE_CSS = {'gumby': {'source_filenames': ('external/gumby/sass/*.scss',
+GEOCAM_UTIL_PIPLINE_CSS = {'gumby': {'source_filenames': (#'external/gumby/sass/var/_settings.scss',
+#                                                           'external/gumby/sass/var/_lists.scss',
+#                                                           'external/gumby/sass/var/icons/_entypo-icon-list.scss',
+                                                          #'external/gumby/sass/var/icons/_entypo.scss',
+                                                          #'external/gumby/sass/extensions/sassy-math/stylesheets/*.scss',
+                                                          #'external/gumby/sass/extensions/modular-scale/stylesheets/*.scss',
+                                                          #'external/gumby/sass/functions/*.scss',
+                                                          #'external/gumby/sass/ui/*.scss',
+                                                          #'external/gumby/sass/*.scss',
+                                                          'external/gumby/sass/gumby.scss',
                                                           'external/gumby/css/*.css',
-                                                          'external/gumby/fonts/icons/*',
-                                                          'external/gumby/img/*.png',
-                                                          'external/gumby/*.rb',
                                                           'external/gumby/*.json'
+                                                          'external/gumby/config.rb',
                                                           ),
                                      'output_filename': 'external/gumby/css/gumby.css'
                                      }
                            }
+
+PIPELINE_COMPASS_ARGUMENTS = '--debug-info -c build/static/external/gumby/config.rb'  # default: ''
 
