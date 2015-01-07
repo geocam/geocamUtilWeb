@@ -17,6 +17,6 @@ class Command(NoArgsCommand):
         management.call_command('installgithooks')
         management.call_command('preptemplates')
         management.call_command('prepapps')
-        management.call_command('collectmedia')
+        management.call_command('collectstatic -l')
         management.call_command('collectbinaries')
 
