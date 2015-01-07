@@ -102,8 +102,8 @@
     var properties;
 
     /// Utility function that shows an error message
-    ///@param errorText - text that should be shown
-    ///@param action - action that was executed when error occured e.g. "update", "delete", or "add"
+    ///#param errorText - text that should be shown
+    ///#param action - action that was executed when error occured e.g. "update", "delete", or "add"
     function fnShowError(errorText, action) {
         alert(errorText);
     }
