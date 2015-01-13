@@ -105,9 +105,8 @@ If live mode is true, various live feed data can send inputs to site and
      'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
  """
 
-GEOCAM_UTIL_PIPELINE_COMPILERS = (
-    'pipeline_compass.compiler.CompassCompiler',
-)
+# GEOCAM_UTIL_PIPELINE_COMPILERS = ('pipeline_compass.compiler.CompassCompiler',  # this is for django-pipeline-compass
+#                                   )
 """
 And you must add this to PIPELINE_COMPILERS in siteSettings
 PIPELINE_COMPILERS = ()
@@ -118,23 +117,11 @@ PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELI
 """
 Set up pipeline for gumby.
 """
-GEOCAM_UTIL_PIPLINE_CSS = {'gumby': {'source_filenames': (#'external/gumby/sass/var/_settings.scss',
-#                                                           'external/gumby/sass/var/_lists.scss',
-#                                                           'external/gumby/sass/var/icons/_entypo-icon-list.scss',
-                                                          #'external/gumby/sass/var/icons/_entypo.scss',
-                                                          #'external/gumby/sass/extensions/sassy-math/stylesheets/*.scss',
-                                                          #'external/gumby/sass/extensions/modular-scale/stylesheets/*.scss',
-                                                          #'external/gumby/sass/functions/*.scss',
-                                                          #'external/gumby/sass/ui/*.scss',
-                                                          #'external/gumby/sass/*.scss',
-                                                          'external/gumby/sass/gumby.scss',
-                                                          'external/gumby/css/*.css',
-                                                          'external/gumby/*.json'
-                                                          'external/gumby/config.rb',
-                                                          ),
-                                     'output_filename': 'external/gumby/css/gumby.css'
-                                     }
-                           }
 
-PIPELINE_COMPASS_ARGUMENTS = '--debug-info -c build/static/external/gumby/config.rb'  # default: ''
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_YUGLIFY_CSS_ARGUMENTS = '--terminal'
+PIPELINE_YUGLIFY_JS_ARGUMENTS = '--terminal'
 
+GEOCAM_UTIL_PREPCSS_DIRS = ['external/gumby']
+GEOCAM_UTIL_COMPRESSCSS_FILES = ['external/gumby/css/gumby.css']

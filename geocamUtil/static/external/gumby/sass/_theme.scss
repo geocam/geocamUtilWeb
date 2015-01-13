@@ -21,6 +21,9 @@ $navbar-height: 40px;
 $subnav-height: 22px;
 $footer-bg: #cccccc;
 $footer-height: 65px;
+$ms-base: 12px 58px;
+//$base-size: 14px !default;  // base font size
+//$base-font-size: 14px !default;
  
 /* fonts so we do not rely on internet */
 @import url('/static/external/fonts/fonts.css');

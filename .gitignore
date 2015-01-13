@@ -16,3 +16,4 @@ example/build
 /build/
 /dist/
 /geocamUtil/zmq/log
+.sass-cache

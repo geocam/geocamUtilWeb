@@ -175,3 +175,13 @@ def pipeToCommand(cmd, text, verbosity):
         if ret != 0:
             print >> sys.stderr, 'warning: command exited with non-zero return value %d' % ret
     return ret
+
+
+def dosys(cmd, verbosity):
+    if verbosity > 1:
+        print >> sys.stderr, cmd
+    ret = os.system(cmd)
+    if ret != 0:
+        if verbosity > 1:
+            print >> sys.stderr, 'command exited with non-zero return value %s' % ret
+    return ret

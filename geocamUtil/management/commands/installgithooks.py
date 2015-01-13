@@ -11,17 +11,7 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from geocamUtil.management.commandUtil import getSiteDir
-
-
-def dosys(cmd, verbosity):
-    if verbosity > 1:
-        print >> sys.stderr, cmd
-    ret = os.system(cmd)
-    if ret != 0:
-        if verbosity > 1:
-            print >> sys.stderr, 'command exited with non-zero return value %s' % ret
-    return ret
+from geocamUtil.management.commandUtil import getSiteDir, dosys
 
 
 class Command(BaseCommand):
