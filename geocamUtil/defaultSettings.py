@@ -117,11 +117,10 @@ PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELI
 """
 Set up pipeline for gumby.
 """
-
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_YUGLIFY_CSS_ARGUMENTS = '--terminal'
-PIPELINE_YUGLIFY_JS_ARGUMENTS = '--terminal'
+PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
+# PIPELINE_DISABLE_WRAPPER = True
 
 GEOCAM_UTIL_PREPCSS_DIRS = ['external/gumby']
 GEOCAM_UTIL_COMPRESSCSS_FILES = ['external/gumby/css/gumby.css']

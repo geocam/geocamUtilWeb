@@ -1,7 +1,7 @@
 .btn  {
 	button {
 		background: $secondary;
-		font-weight: 600;
+		font-weight: 400;
 		color: $light-fg;
 	}
 	.disabled, [disabled] {
@@ -21,7 +21,7 @@
 	@extend .metro;
 	@extend .rounded;
 	color: $light-fg;
-	font-weight: bold;
+	font-weight: normal;
 	min-width: 85px;
     text-align: center;
     margin-right: 5px;
@@ -40,7 +40,7 @@
 input[type="submit"], input[type="button"], button, .button, a.actionlink {
 	@extend .mybutton;
 	text-decoration: none;
-	font-weight:bold;
+	font-weight:normal;
 	-webkit-box-sizing: border-box;
   	-moz-box-sizing: border-box;
   	box-sizing: border-box;
