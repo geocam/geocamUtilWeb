@@ -17,13 +17,12 @@ $button-border: #E5E5E5;
 
 /* sizes */
 $main-logo-height: 65px;
-$navbar-height: 40px;
+$navbar-height: 37px;
 $subnav-height: 22px;
 $footer-bg: #cccccc;
 $footer-height: 65px;
 $ms-base: 12px 58px;
-//$base-size: 14px !default;  // base font size
-//$base-font-size: 14px !default;
+$base-font-size: ms(-1);
  
 /* fonts so we do not rely on internet */
 @import url('/static/external/fonts/fonts.css');
