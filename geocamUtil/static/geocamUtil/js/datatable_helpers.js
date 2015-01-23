@@ -73,7 +73,7 @@ initializeCheckbox = function() {
         $('#pick_master').change(function() {
                 var masterChecked = $(this).is(":checked");
                 $('.check').each(function(i, obj) {
-                 $(this).attr("checked", masterChecked);
+                 $(this).prop("checked", masterChecked);
                 });
         });
     }

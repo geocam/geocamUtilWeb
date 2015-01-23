@@ -3,16 +3,39 @@
 		background: $secondary;
 		font-weight: 400;
 		color: $light-fg;
+		
 	}
-	.disabled, [disabled] {
-		  color: $disabled-fg;
-		  background-color: $disabled-bg;
-		  *background-color: $disabled-bg;
+	.active {
+		background-color: $secondary;
+		color: $light-fg;
 	}
-	:link:hover {
+	
+	:link:hover :enabled {
 		color: $light-fg !important;
 	}
+	:active:enabled {
+		background-color: $tertiary;
+	}
+	:hover:enabled {
+		color: $tertiary;
+		text-decoration: bold;
+	}
+	.active :hover{
+		background: $secondary;
+		color: $light-fg;
+	}
 }
+.btn.disabled, [disabled]{
+		background-color: $disabled-bg;
+		color: $disabled-fg;
+		border-color: $button-border;
+	}
+
+.btn.disabled:hover, [disabled]:hover{
+		background-color: $disabled-bg;
+		color: $disabled-fg;
+		border-color: $button-border;
+	}
 
 .mybutton {
 	@extend .btn;
@@ -59,10 +82,6 @@ input[type="submit"], input[type="button"], button, .button, a.actionlink {
 		background: $color;
 		color: $primary;
 		border-color: $button-border;
-		/*.disabled, [disabled] {
-			background: $disabled-bg;
-			color: $disabled-fg;
-		}*/
 	}
 	.active {
 		background-color: $secondary;
