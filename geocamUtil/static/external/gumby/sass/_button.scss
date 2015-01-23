@@ -102,6 +102,9 @@ input[type="submit"], input[type="button"], button, .button, a.actionlink {
 		background: $secondary;
 		color: $light-fg;
 	}
+	.small {
+		min-width: 50px;
+	}
 	
 	.pill-left {
 		@include shape(pill-left);

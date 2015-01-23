@@ -105,17 +105,30 @@ If live mode is true, various live feed data can send inputs to site and
      'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
  """
 
+# WARNING could NOT get pipeline compiler to compile gumby, so instead we have our own step in prep, prepcss.
+# do not do this section
 # GEOCAM_UTIL_PIPELINE_COMPILERS = ('pipeline_compass.compiler.CompassCompiler',  # this is for django-pipeline-compass
 #                                   )
-"""
-And you must add this to PIPELINE_COMPILERS in siteSettings
-PIPELINE_COMPILERS = ()
-PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELINE_COMPILERS
-"""
+# """
+# And you must add this to PIPELINE_COMPILERS in siteSettings
+# PIPELINE_COMPILERS = ()
+# PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELINE_COMPILERS
+# """
+# end do not do section
 
 
 """
 Set up pipeline for gumby.
+"""
+"""
+Note the following for some reason does not work when only included here, so you must also have this in your siteSettings.py
+PIPELINE_CSS = {}
+PIPELINE_CSS.update(xgds_planner2.settings.XGDS_PLANNER_PIPELINE_CSS)
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
+PIPELINE_DISABLE_WRAPPER = True
+PIPELINE_ENABLED = True
 """
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
