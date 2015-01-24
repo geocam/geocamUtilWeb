@@ -18,5 +18,5 @@ class Command(NoArgsCommand):
         management.call_command('preptemplates')
         management.call_command('prepapps')
         management.call_command('collectstatic', noinput=True, link=True)
-        management.call_command('prepcss', compress=True)
+        management.call_command('prepcss')
         management.call_command('collectbinaries')

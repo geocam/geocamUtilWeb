@@ -15,7 +15,10 @@ from django.core.management.base import BaseCommand
 from geocamUtil.management.commandUtil import getSiteDir, dosys
 from geocamUtil import settings
 
-
+"""
+It turns out you can compress directly from compass by configuring the config.rb to compress.  Who knew? 
+Anyhow no longer any need to call yuglify.
+"""
 class Command(BaseCommand):
     help = 'Use compass to compile css from sass in various directories.  Ruby, compass, and your gems must be installed'
 
