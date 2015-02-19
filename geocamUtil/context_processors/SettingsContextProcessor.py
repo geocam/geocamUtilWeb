@@ -13,4 +13,5 @@ def SettingsContextProcessor(request):
     """
     return {
         'LIVE_MODE': settings.GEOCAM_UTIL_LIVE_MODE,
+        'EXTERNAL_URL': settings.EXTERNAL_URL
     }
