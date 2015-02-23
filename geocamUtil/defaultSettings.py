@@ -150,5 +150,5 @@ GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',
                                     'jquery-validate',
                                     'jeditable',
                                     'jquery-form',
-                                    'gumby',
+                                    'gumby#master',
                                     )
