@@ -135,8 +135,8 @@ PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
 # PIPELINE_DISABLE_WRAPPER = True
 
-GEOCAM_UTIL_PREPCSS_DIRS = ['external/bower_components/gumby']
-GEOCAM_UTIL_COMPRESSCSS_FILES = ['external/bower_components/gumby/css/gumby.css']
+GEOCAM_UTIL_PREPCSS_DIRS = ['gumby']
+GEOCAM_UTIL_COMPRESSCSS_FILES = ['gumby/css/gumby.css']
 
 # include this in your siteSettings.py BOWER_INSTALLED_APPS
 GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',

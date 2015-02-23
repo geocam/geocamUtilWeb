@@ -15,14 +15,14 @@ body{
 	background-color: $primary;
 }
 
-$irg_logo_img: image-url('/static/external/bower_components/gumby/img/irg.png', false, true);
+$irg_logo_img: image-url('/static/gumby/img/irg.png', false, true);
 .irg_logo {
 	background: $irg_logo_img $color no-repeat;
 	width:65px;
     height:$logo-height;
 }
 
-$nasa_logo_img: image-url('/static/external/bower_components/gumby/img/meatball.png', false, true);
+$nasa_logo_img: image-url('/static/gumby/img/meatball.png', false, true);
 .nasa_logo {
 	background: $nasa_logo_img $footer-bg no-repeat; 
 	height:$logo-height;
