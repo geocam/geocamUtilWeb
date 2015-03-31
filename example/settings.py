@@ -1,5 +1,5 @@
 # __BEGIN_LICENSE__
-#Copyright © 2015, United States Government, as represented by the 
+#Copyright (c) 2015, United States Government, as represented by the 
 #Administrator of the National Aeronautics and Space Administration. 
 #All rights reserved.
 #
