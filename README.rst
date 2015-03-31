@@ -85,7 +85,7 @@ These properties are stored in a database ``TextField`` as a
 JSON-encoded set of key-value pairs.
 
 .. o  __BEGIN_LICENSE__
-.. o  Copyright (C) 2008-2010 United States Government as represented by
-.. o  the Administrator of the National Aeronautics and Space Administration.
-.. o  All Rights Reserved.
+.. o Copyright (c) 2015, United States Government, as represented by the 
+.. o Administrator of the National Aeronautics and Space Administration. 
+.. o All rights reserved.
 .. o  __END_LICENSE__
