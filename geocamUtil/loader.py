@@ -12,6 +12,7 @@ in part on django.utils.
 import sys
 
 from django.db import models
+from django.apps import apps
 
 
 def getModClass(name):
@@ -27,7 +28,7 @@ def getModelByName(qualifiedName):
     """
     converts 'appName.ModelName' to a class object
     """
-    return models.get_model(*qualifiedName.split('.'))
+    return apps.get_model(qualifiedName)  # *qualifiedName.split('.'))
 
 
 class LazyGetModelByName(object):

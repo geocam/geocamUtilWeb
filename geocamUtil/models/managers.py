@@ -10,6 +10,8 @@ from operator import attrgetter
 from django.db import models
 import django.core.exceptions
 
+from geocamUtil.loader import getModelByName
+
 REPR_OUTPUT_SIZE = 20
 
 
@@ -136,6 +138,8 @@ class ChainQuerySet(object):
 
 
 class FinalModelManager(models.Manager):
+    """ Non abstract models use:
+        objects = FinalModelManager(parentModel=ParentModel)"""
     def __init__(self, parentModel):
         super(FinalModelManager, self).__init__()
         self._parentModel = parentModel
@@ -148,11 +152,63 @@ class FinalModelManager(models.Manager):
 
 
 class AbstractModelManager(FinalModelManager):
+    """ Abstract models use:
+        objects = AbstractModelManager(parentModel=ParentModel)
+
+        * [Special case] For models at the top of the inheritance
+          hierarchy (at least in terms of models we control), you set
+          parentModel to None:
+
+          objects = AbstractModelManager(parentModel=None)"""
     def __init__(self, parentModel):
         super(AbstractModelManager, self).__init__(parentModel)
         self._childClasses = []
 
     def get_query_set(self):
+        return ChainQuerySet(self.model, self._childClasses)
+
+    def registerChildClass(self, cls):
+        self._childClasses.append(cls)
+
+
+class ModelCollectionManager(AbstractModelManager):
+    """ A manager for a collection of models that will build a chain query set
+        over all the given models"""
+    def __init__(self, parentModel, childModels):
+        super(ModelCollectionManager, self).__init__(parentModel)
+        self._childClasses = []
+        for child in childModels:
+            self.registerChildClass(child)
+
+    def get_query_set(self):
+        return ChainQuerySet(self.model, self._childClasses)
+
+    def registerChildClass(self, cls):
+        self._childClasses.append(cls)
+
+
+class LazyModelCollectionManager(AbstractModelManager):
+    """ A manager for a collection of models that will build a chain query set
+        over all the given models.  Note this is lazy loading, and takes the qualified
+        class names.  When the query set is demanded, initialization will be run (once)"""
+    def __init__(self, parentModelName, childModelNames):
+        self.parentModelName = parentModelName
+        self.childModelNames = childModelNames
+        self.initialized = False
+        self._childClasses = []
+
+    def doInitialization(self):
+        """ actually do the initialization and look up the models """
+        if not self.initialized:
+            parentModel = getModelByName(self.parentModelName)
+            super(ModelCollectionManager, self).__init__(parentModel)
+            for childName in self.childModelNames:
+                childModel = getModelByName(childName)
+                self.registerChildClass(childModel)
+            self.initialized = True
+
+    def get_query_set(self):
+        self.doInitialization()
         return ChainQuerySet(self.model, self._childClasses)
 
     def registerChildClass(self, cls):
