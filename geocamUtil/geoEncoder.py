@@ -10,8 +10,14 @@ class GeoDjangoEncoder(DjangoJSONEncoder):
         if isinstance(obj, Polygon):
             result = obj.coords[0]
             return result
+#         if isinstance(obj, Point):
+#             result = obj.coords
+#             return result
+#         if isinstance(obj, LineString):
+#             result = obj.coords
+#             return result
         if isinstance(obj, GEOSGeometry):
-            result = obj.json()
+            result = obj.coords # obj.json()
             return result
         if isinstance(obj, ImageFieldFile):
             try:
