@@ -65,7 +65,7 @@ class ChainQuerySet(object):
         if not self._resultCache:
             subQueries = []
             for c in self._classes:
-                qs = c._default_manager.get_query_set().filter(self._query)
+                qs = c._default_manager.get_queryset().filter(self._query)
                 if self._distinct:
                     qs = qs.distinct()
                 if self._selectRelated:
@@ -164,7 +164,7 @@ class AbstractModelManager(FinalModelManager):
         super(AbstractModelManager, self).__init__(parentModel)
         self._childClasses = []
 
-    def get_query_set(self):
+    def get_queryset(self):
         return ChainQuerySet(self.model, self._childClasses)
 
     def registerChildClass(self, cls):
@@ -180,7 +180,7 @@ class ModelCollectionManager(AbstractModelManager):
         for child in childModels:
             self.registerChildClass(child)
 
-    def get_query_set(self):
+    def get_queryset(self):
         return ChainQuerySet(self.model, self._childClasses)
 
     def registerChildClass(self, cls):
@@ -207,7 +207,7 @@ class LazyModelCollectionManager(AbstractModelManager):
                 self.registerChildClass(childModel)
             self.initialized = True
 
-    def get_query_set(self):
+    def get_queryset(self):
         self.doInitialization()
         return ChainQuerySet(self.model, self._childClasses)
 

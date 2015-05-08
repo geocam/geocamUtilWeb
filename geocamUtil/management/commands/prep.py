@@ -18,6 +18,7 @@ class Command(NoArgsCommand):
         management.call_command('preptemplates')
         management.call_command('prepapps')
         management.call_command('prepbower')
+        # manage.py help collectstatic says: -i PATTERN, --ignore=PATTERN Ignore files or directories matching this glob-style pattern. Use multiple times to ignore more.
         management.call_command('collectstatic', noinput=True, link=True)
         management.call_command('prepcss')
         management.call_command('collectbinaries')
