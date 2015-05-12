@@ -152,7 +152,7 @@ table {
 }
 
 .sorting_asc {
-	// @extend .icon-up-dir; does not work because not <i>
+	/* @extend .icon-up-dir; does not work because not <i> */
 	background: url('../img/sort_asc.png') no-repeat center left; 
 }
 
