@@ -9,7 +9,7 @@ from django.core.management.base import NoArgsCommand
 
 
 class Command(NoArgsCommand):
-    help = 'Runs subcommands: installgithooks, preptemplates, prepapps, collectmedia, prepcss -c, collectstatic -l, collectbinaries'
+    help = 'Runs subcommands: installgithooks, preptemplates, prepapps, prepbower, collectstatic -l --noinput, prepcss, collectbinaries'
 
     def handle_noargs(self, **options):
         #management.call_command('collectreqs')
@@ -19,6 +19,6 @@ class Command(NoArgsCommand):
         management.call_command('prepapps')
         management.call_command('prepbower')
         # manage.py help collectstatic says: -i PATTERN, --ignore=PATTERN Ignore files or directories matching this glob-style pattern. Use multiple times to ignore more.
-        management.call_command('collectstatic', noinput=True, link=True)
+        management.call_command('collectstatic', interactive=False, link=True)
         management.call_command('prepcss')
         management.call_command('collectbinaries')
