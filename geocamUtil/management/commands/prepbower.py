@@ -31,4 +31,4 @@ class Command(BaseCommand):
         if os.path.isdir(path):
             return
 
-        management.call_command('bower', 'install', verbosity=verbosity)
+        management.call_command('bower_install', verbosity=verbosity, force=True)
