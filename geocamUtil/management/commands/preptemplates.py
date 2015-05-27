@@ -39,7 +39,7 @@ class Command(NoArgsCommand):
         builder = Builder()
 
         context = dict(((k, getattr(settings, k)) for k in dir(settings) if not k.startswith('_')))
-        context.update(dict(USER=os.environ['USER']))
+        context.update(dict(USER=os.getenv('USER')))
 
         srcs = glob('%smanagement/preptemplates/*' % siteDir)
         for src in srcs:
