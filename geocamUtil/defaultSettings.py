@@ -7,6 +7,8 @@
 # stop pylint from warning that these variable docstrings are "useless"
 # pylint: disable=W0105
 
+import socket
+
 GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60 * 60
 """
 The age at which a geocamUtil.tempfiles file becomes "stale".  When
@@ -152,3 +154,8 @@ GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',
                                     'jquery-form',
                                     'gumby#master',
                                     )
+
+try:
+    HOSTNAME = socket.gethostname()
+except:
+    HOSTNAME = 'localhost'
