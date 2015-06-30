@@ -60,6 +60,9 @@
 	color: $light-fg !important;
 }
 
+.btn.small, .mybutton.small { font-size: 10px; font-size: 0.8rem; height: 23px; line-height: 21px; font-weight: 700;}
+
+
 input[type="submit"], input[type="button"], button, .button, a.actionlink {
 	@extend .mybutton;
 	text-decoration: none;
@@ -104,6 +107,8 @@ input[type="submit"], input[type="button"], button, .button, a.actionlink {
 	}
 	.small {
 		min-width: 50px;
+		font-size: 0.8rem;
+		font-weight: 700;
 	}
 	
 	.pill-left {
