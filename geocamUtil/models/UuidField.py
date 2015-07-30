@@ -44,3 +44,5 @@ try:
     add_introspection_rules([], [r'^geocamUtil\.models\.UuidField'])
 except ImportError:
     pass
+
+UuidField.UuidField = UuidField

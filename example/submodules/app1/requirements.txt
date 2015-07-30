@@ -1,2 +1,0 @@
-# random pypi package we are unlikely to use for other things
-dutest==0.2.3

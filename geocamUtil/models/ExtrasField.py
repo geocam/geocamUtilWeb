@@ -80,3 +80,5 @@ try:
     add_introspection_rules([], [r'^geocamUtil\.models\.ExtrasField'])
 except ImportError:
     pass
+
+ExtrasField.ExtrasField = ExtrasField
