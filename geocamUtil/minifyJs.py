@@ -7,7 +7,7 @@
 import os
 import logging
 
-
+# This is basically obsolete; django pipeline handles javascript minification.
 def minifyJsExecute(dst, srcPairs):
     # don't import unless minifyJsExecute is actually called (usually won't be)
     from slimit import minify
