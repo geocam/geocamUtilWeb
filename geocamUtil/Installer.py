@@ -13,7 +13,7 @@ import shutil
 import itertools
 
 from geocamUtil.Builder import Builder
-from geocamUtil import settings
+from django.conf import settings
 
 
 class Installer(object):

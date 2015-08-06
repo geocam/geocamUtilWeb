@@ -13,7 +13,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 
 from geocamUtil.management.commandUtil import getSiteDir, dosys
-from geocamUtil import settings
+from django.conf import settings
 
 """
 It turns out you can compress directly from compass by configuring the config.rb to compress.  Who knew? 

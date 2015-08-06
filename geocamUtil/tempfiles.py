@@ -13,7 +13,7 @@ import traceback
 import sys
 
 from geocamUtil import FileUtil
-from geocamUtil import settings
+from django.conf import settings
 
 
 def getTempName(prefix, suffix=''):

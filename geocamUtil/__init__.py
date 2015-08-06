@@ -10,7 +10,6 @@ geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.
 
 import django.conf
 
-from geocamUtil.MultiSettings import MultiSettings
 from geocamUtil import defaultSettings
 
 __version_info__ = {
@@ -35,5 +34,3 @@ def get_version():
     return ''.join(vers)
 
 __version__ = get_version()
-
-settings = MultiSettings(django.conf.settings, defaultSettings)

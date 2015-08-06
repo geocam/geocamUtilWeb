@@ -5,7 +5,7 @@
 # __END_LICENSE__
 
 from geocamUtil.middleware.security import requestIsSecure
-from geocamUtil import settings
+from django.conf import settings
 
 
 def getAccountWidget(request):

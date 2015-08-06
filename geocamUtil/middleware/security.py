@@ -27,7 +27,7 @@ except ImportError:
     def get_host(request):
         return request.get_host()
 
-from geocamUtil import settings
+from django.conf import settings
 
 # stop pylint from warning about too many return statements; it's good
 # style in this case

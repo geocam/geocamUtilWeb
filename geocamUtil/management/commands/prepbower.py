@@ -15,7 +15,7 @@ from django.core.management.base import BaseCommand
 from django.core import management
 
 from geocamUtil.management.commandUtil import getSiteDir, dosys
-from geocamUtil import settings
+from django.conf import settings
 
 
 def bowerCompleted(path):

@@ -11,7 +11,7 @@ import django
 
 from geocamUtil.management import commandUtil
 from geocamUtil.Installer import Installer
-from geocamUtil import settings
+from django.conf import settings
 
 
 class Command(commandUtil.PathCommand):

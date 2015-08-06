@@ -11,7 +11,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from geocamUtil.middleware.SecurityMiddleware import requestIsSecure
-from geocamUtil import settings
+from django.conf import settings
 
 register = template.Library()
 
