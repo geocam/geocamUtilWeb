@@ -4,7 +4,7 @@
 #All rights reserved.
 # __END_LICENSE__
 
-from geocamUtil import settings
+from django.conf import settings
 
 
 def AuthUrlsContextProcessor(request):
