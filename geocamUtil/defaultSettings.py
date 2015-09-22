@@ -142,7 +142,7 @@ GEOCAM_UTIL_COMPRESSCSS_FILES = ['gumby/css/gumby.css']
 
 # include this in your siteSettings.py BOWER_INSTALLED_APPS
 GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',
-                                    'modernizr',
+                                    'modernizr=components-modernizr',
                                     'jquery',
                                     'jquery-ui',
                                     'datatables=DataTables',
