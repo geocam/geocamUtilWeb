@@ -159,3 +159,18 @@ try:
     HOSTNAME = socket.gethostname()
 except:
     HOSTNAME = 'localhost'
+
+# set up a dictionary of the siteframes you will be working with.
+# This is used by the Siteframe Choice form field
+XGDS_SITEFRAMES = {
+#                    '10S': {  # ARC Marscape siteframe for testing
+#                            'name': 'Ames',
+#                            'east0': 582670.0,  # Easting
+#                            'north0': 4141480.0,  # Northing
+#                            'zone': '10S',
+#                            'zoneNumber': 10,
+#                            'axes': 'NED',
+#                            'north': 'grid',
+#                            'timezone': 'America/Los_Angeles'
+#                            },
+                   }
