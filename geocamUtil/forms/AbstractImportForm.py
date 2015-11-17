@@ -14,11 +14,22 @@
 #specific language governing permissions and limitations under the License.
 # __END_LICENSE__
 
+import pytz
 from django import forms
+from django.conf import settings
 from geocamUtil.forms.SiteframeChoiceField import SiteframeChoiceField
 
 class AbstractImportForm(forms.Form):
     timezone = SiteframeChoiceField(required=True, choices=(('utc', 'UTC'),))
 
+    def getTimezone(self):
+        if self.cleaned_data['timezone'] == 'utc':
+            tz = pytz.utc
+        else:
+            tz = pytz.timezone(settings.XGDS_SITEFRAMES[self.cleaned_data['timezone']]['timezone'])
+        return tz
+    
     class meta:
         abstract=True
+    
+    
