@@ -39,7 +39,8 @@ class ServerIdModel(models.Model):
         if not index:
             try:
                 index = index_map[cls.__name__]
-                index_map[cls.__name__] = index + 1
+                index = index + 1
+                index_map[cls.__name__] = index
             except:
                 # Initializing
                 if cls.objects.count():
