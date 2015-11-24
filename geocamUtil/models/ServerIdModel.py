@@ -43,55 +43,50 @@ class ServerIdModel(models.Model):
     
     @classmethod
     def getUniqueIndex(cls):
-        query = "select MAX(CAST(SUBSTRING_INDEX(id, '_', -1) AS UNSIGNED))  from " + cls._meta.db_table
+        query = "select MAX(CAST(SUBSTRING_INDEX(id, '_', -1) AS UNSIGNED)) " + \
+                "from %s where id like '%s_%%'" % (cls._meta.db_table, HOSTNAME)
         cursor = connection.cursor()
         cursor.execute(query)
         result = cursor.fetchone()
-        try:
+        if result[0] is not None:
             index = int(result[0]) + 1
-        except:
+        else:
             index = 1
-        finally:
-            cursor.close()
+        cursor.close()
         return index
     
     @classmethod
     def getKey(cls):
         keyName = "using_" + str(cls.__name__)
-        key = cache.get(keyName)
-        if not key:
-            cache.set(keyName, True)
-        else:
+        if not cache.add(keyName, True, 10):  # Should never have key for > 10 sec.
             count = 0
             # now we have to wait
-            while key and count<10:
+            keyLock = False
+            while not keyLock and count<10:
                 time.sleep(0.001)
-                key = cache.get(keyName)
-                count = count + 1
-            if not key:
-                cache.set("using " + cls.__name__, True)
-            else:
-                raise Exception("Could not get key to insert into " + cls.__name__)
+                keyLock = cache.add(keyName, True, 10)
+                count += 1
+            if not keyLock:
+                raise Exception("Could not get lock on PK to insert into " + cls.__name__)
         return keyName
         
     @classmethod
-    def getLastId(cls):
-        # get the key to use this 
+    def getNextId(cls):
+        # get the key to use for this table and grab lock on it
         keyName = cls.getKey()
             
         try:
-            index = cache.get(cls.__name__)
-            index = index + 1
+            index = int(cache.incr(cls.__name__))  # get PK index from cache and bump up by 1
         except:
-            # Initializing
+            # Key index not cached, initialize from DB
             index = cls.getUniqueIndex()
-        cache.set(cls.__name__,index)
-        cache.set(keyName, None)
-            
+            cache.set(cls.__name__,index)
+
+        cache.delete(keyName) # Release lock on key
         return index
 
     def fillId(self):
-        next_id = self.getLastId()
+        next_id = self.getNextId()
         self.pk = HOSTNAME + "_" + str(next_id)
 
     def save(self, *args, **kwargs):
