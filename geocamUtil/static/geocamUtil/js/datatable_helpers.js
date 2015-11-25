@@ -62,9 +62,9 @@ defaultOptions = {
         bLengthChange: true,
         bSort: true,
         bJQueryUI: false,
-        sScrollY:  calcDataTableHeight(),
-        "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
-        "oLanguage": {
+        scrollY:  calcDataTableHeight(),
+        lengthMenu: [[10, 20, 40, -1], [10, 20, 40, "All"]],
+        oLanguage: {
             "sLengthMenu": "Display _MENU_"
         }
 };
