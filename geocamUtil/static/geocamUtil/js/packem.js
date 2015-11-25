@@ -27,9 +27,7 @@ function makeChildrenResizable($container, $itemElems){
 		aspectRatio: lockAspect
 	    });
 	}
-	if (el.hasClass("startPinned")) {
-	    pinItem(el);
-	}
+	pinItem(el);
     })
     
     // bind Draggable events to Packery
