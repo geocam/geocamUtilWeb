@@ -1,0 +1,53 @@
+.item {
+	width: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	background: #CACACA;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	border-width: 2px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.item.w2 {
+	width: 49%;
+}
+
+.item.w3 {
+	width: 30%;
+}
+
+.item.auto {
+	width: auto;
+}
+
+#map {
+	padding-bottom: 50px;
+}
+
+i.pinDiv {
+	float: right;
+	margin-right: -6px;
+}
+
+
+button.tiny {
+	float: right;
+	font-size: 8px;
+	font-size: 0.8rem;
+	height: 20px;
+	line-height: 20px;
+	font-weight: 700;
+	min-width: 20px;
+	margin-bottom: 3px;
+	margin-right: -6px;
+}
+
+.icon-cancel-circled {
+	display: block;
+	position: absolute;
+	float: right;
+	top: 10px;
+	right: 0px;
+}
