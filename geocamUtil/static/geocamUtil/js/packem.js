@@ -58,7 +58,7 @@ function pinItem(item){
     }
     pinButton.removeClass('icon-lock-open');
     pinButton.addClass('icon-lock');
-    $container.packery( 'stamp', item );
+    container.packery( 'stamp', item );
 }
 
 function unpinItem(item){
@@ -72,7 +72,7 @@ function unpinItem(item){
     }
     pinButton.removeClass('icon-lock');
     pinButton.addClass('icon-lock-open');
-    $container.packery( 'unstamp', item );
+    container.packery( 'unstamp', item );
 }
 
 clickPinFunction = function(event) {
