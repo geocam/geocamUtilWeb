@@ -30,6 +30,8 @@ REPOS = (
     'https://babelfish.arc.nasa.gov/git/xgds_data',
     'https://babelfish.arc.nasa.gov/git/xgds_image',
     'https://babelfish.arc.nasa.gov/git/xgds_kn',
+    'https://babelfish.arc.nasa.gov/git/xgds_map_server',
+    'https://github.com/xgds/xgds_notes2.git',
     'https://babelfish.arc.nasa.gov/git/xgds_planner2',
     'https://babelfish.arc.nasa.gov/git/xgds_plot',
     'https://babelfish.arc.nasa.gov/git/xgds_plrp',
