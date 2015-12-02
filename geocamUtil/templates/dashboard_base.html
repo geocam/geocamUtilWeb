@@ -3,6 +3,8 @@
 
  {% block cssExtras %}
  {{ block.super }}
+ 
+    <link rel="stylesheet" type="text/css" href="{{EXTERNAL_URL}}jquery-ui/themes/base/jquery-ui.css"></link>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}geocamUtil/css/dashboard.css"></link>
     
     <!--  map stuff -->
@@ -45,7 +47,11 @@
     	app.vent.on("mapSearch:drewFeatures", function(e) {
         	app.vent.trigger('mapSearch:fit');
             });
+        {% block prePackery %}
+		{% endblock prePackery %}
+		
     	initializePackery();
+    	
     	{% block otherJSInit %}
 		{% endblock otherJSInit %}
 	});
@@ -81,7 +87,7 @@
 		{% endblock firstPackery %}
 		
 		<div id="map" class="item auto freeAspect" data-isStamped="false">
-			<i class="icon-lock pinDiv warning"></i>
+			<i class="icon-lock-open pinDiv warning"></i>
 		</div>
 		
 		{% block lastPackery %}

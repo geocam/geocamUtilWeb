@@ -26,8 +26,7 @@ function makeChildrenResizable($container, $itemElems){
 	    el.resizable({
 		aspectRatio: lockAspect
 	    });
-	}
-	pinItem(el);
+	} 
     })
     
     // bind Draggable events to Packery
@@ -45,6 +44,11 @@ function makeChildrenResizable($container, $itemElems){
 	    $container.packery( 'fit', ui.element[0] );
 	}, 100 );
     });
+    
+    $itemElems.each(function(index, element) {
+	// always start pinned
+	pinItem($(element));
+    })
 }
 
 function pinItem(item){
@@ -66,7 +70,7 @@ function unpinItem(item){
     var pinButton = item.find(".pinDiv");
     var container = $('#container');
 
-    item.draggable( "enable" );
+    item.draggable("enable");
     if (!item.hasClass("noresize")){
 	item.resizable("enable");
     }
