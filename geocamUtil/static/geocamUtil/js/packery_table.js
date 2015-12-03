@@ -13,7 +13,10 @@ function setupTable(divID, tableID, initialData, aoColumns){
 	defaultOptions["aaData"] = initialData;
 	defaultOptions["aoColumns"] = aoColumns;
 	defaultOptions["scrollY"] = 200;
-
+	defaultOptions["fnCreatedRow"] = function(nRow, aData, iDataIndex) { // add image id to row
+		$(nRow).attr('id', aData['id'])
+	}
+	
 	if ( ! $.fn.DataTable.isDataTable( '#' + tableID ) ) {
 		  theDataTable = $('#' + tableID ).dataTable(defaultOptions);
 	}
