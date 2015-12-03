@@ -153,6 +153,7 @@ GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',
                                     'jeditable',
                                     'jquery-form',
                                     'gumby#master',
+                                    'bootstrap'
                                     )
 
 try:
