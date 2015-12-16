@@ -6,6 +6,7 @@
  
     <link rel="stylesheet" type="text/css" href="{{EXTERNAL_URL}}jquery-ui/themes/base/jquery-ui.css"></link>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}geocamUtil/css/dashboard.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}geocamUtil/css/datatable.css"></link>
     
     <!--  map stuff -->
 	<link rel="stylesheet" type="text/css" href="{{ EXTERNAL_URL }}openlayers3/ol.css"></link>
@@ -68,8 +69,7 @@
 	{% include "MapJS.html" %}
 	{% endwith %}
 	{% endif %}
-	<script type="text/javascript" src='{{ EXTERNAL_URL }}jquery-ui/jquery-ui.min.js'></script>
-	<script type="text/javascript" src="{{ EXTERNAL_URL }}datatables/media/js/jquery.dataTables.min.js"></script>
+	
 	<script type="text/javascript" src="{{ STATIC_URL }}geocamUtil/js/datatable_helpers.js"></script>
 	<script type="text/javascript" src="{{ EXTERNAL_URL }}packery/dist/packery.pkgd.min.js" ></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}geocamUtil/js/packem.js"></script>
