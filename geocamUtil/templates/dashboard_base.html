@@ -3,25 +3,7 @@
 
  {% block cssExtras %}
  {{ block.super }}
- 
-    <link rel="stylesheet" type="text/css" href="{{EXTERNAL_URL}}jquery-ui/themes/base/jquery-ui.css"></link>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}geocamUtil/css/dashboard.css"></link>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}geocamUtil/css/datatable.css"></link>
-    
-    <!--  map stuff -->
-	<link rel="stylesheet" type="text/css" href="{{ EXTERNAL_URL }}openlayers3/ol.css"></link>
-    <link rel="stylesheet" type="text/css" href="{{ EXTERNAL_URL }}ol3-popup/src/ol3-popup.css"></link>
-    <style scoped>
-    #map {
-	  	 margin-top: 25px;
-	 	 height: 200px;
-	  }
-    </style>
-    <!--  end map stuff -->
-    <!--  map layers stuff -->
-    <link rel="stylesheet" type="text/css" href="{{ EXTERNAL_URL }}fancytree/dist/skin-lion/ui.fancytree.min.css"></link>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}xgds_map_server/css/fancytree_custom.css"></link>
-    <!--  end layers stuff -->
+	{% include "xgds_map_server/MapServerCSS.html" %}
  {% endblock cssExtras %}
 
 
