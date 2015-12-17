@@ -93,3 +93,43 @@ disableLimitSearch = function() {
     defaultOptions['bFilter'] = false;
     defaultOptions['bInfo'] = false;
 }
+
+/* Get the rows which are currently selected */
+function getSelectedRows( table ) {
+    return table.find('tr.selected');
+}		  
+
+function clearTableSelection(table){
+    getSelectedRows(table).removeClass('selected');
+}
+
+function selectRow(table, rowId){
+    var identifier = 'tr#' + rowId;
+    table.find(identifier).addClass('selected');
+}
+
+function ensureSelectedRow(table, rowId){
+    var identifier = 'tr#' + rowId;
+    var row = table.find(identifier);
+    if (!row.hasClass('selected')){
+	row.addClass('selected');
+    }
+}
+
+function connectSelectionCallback(table, callback, singleSelection){
+    try {
+	table.find('tbody').on( 'click', 'tr', function () {
+	    if (singleSelection){
+		clearTableSelection(table);
+	    }
+	    $(this).toggleClass('selected');
+	    	if (callback !== undefined){
+        		callback(this);
+        	    }
+        	} 
+	);
+    } catch (err) {
+	console.log("could not connect selection callback");
+    }
+
+}
