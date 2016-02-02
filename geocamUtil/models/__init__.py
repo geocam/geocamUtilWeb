@@ -7,7 +7,6 @@
 from django.db import models
 
 from UuidField import UuidField
-from ExtrasField import ExtrasField
 from dateTimeUtc import DateTimeUtcField
 from timestampDescriptor import TimestampDescriptor
 from AbstractEnum import AbstractEnumModel
