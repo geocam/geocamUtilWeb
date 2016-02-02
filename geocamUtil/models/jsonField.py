@@ -10,6 +10,10 @@ from geocamUtil import anyjson as json
 
 
 class JsonMixin(object):
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
+
+
     def to_python(self, value):
         if value in ('', None):
             return None
@@ -40,7 +44,6 @@ class JsonCharField(JsonMixin, models.CharField):
     quirks of Django, trying to store a string or unicode object is
     likely to cause confusion during packing/unpacking.
     """
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargsin):
         kwargs = {
@@ -67,7 +70,6 @@ class JsonTextField(JsonMixin, models.TextField):
     quirks of Django, trying to store a string or unicode object is
     likely to cause confusion during packing/unpacking.
     """
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargsin):
         kwargs = {
@@ -77,11 +79,3 @@ class JsonTextField(JsonMixin, models.TextField):
         self.valueType = kwargs.pop('valueType', None)
         super(JsonTextField, self).__init__(*args, **kwargs)
 
-
-try:
-    from south.modelsinspector import add_introspection_rules
-    # tell south it can freeze this field without any special nonsense
-    add_introspection_rules([], [r'^geocamUtil\.models\.JsonCharField'])
-    add_introspection_rules([], [r'^geocamUtil\.models\.JsonTextField'])
-except ImportError:
-    pass
