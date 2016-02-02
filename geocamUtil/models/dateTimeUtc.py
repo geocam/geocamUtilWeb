@@ -49,7 +49,10 @@ def backportTimeZone():
 
 
 class DateTimeUtcField(models.DateTimeField):
-    __metaclass__ = models.SubfieldBase
+
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
+
 
     def to_python(self, value):
         if not backportTimeZone():
