@@ -12,6 +12,7 @@ from timestampDescriptor import TimestampDescriptor
 from AbstractEnum import AbstractEnumModel
 from jsonField import (JsonCharField,
                        JsonTextField)
+from geocamUtil.models.ExtrasDotField import ExtrasDotField
 
 
 class UuidExample(models.Model):
@@ -20,8 +21,8 @@ class UuidExample(models.Model):
 
 
 class ExtrasExample(models.Model):
-    """The sole purpose of this model is to test the ExtrasField class."""
-    extras = ExtrasField()
+    """The sole purpose of this model is to test the ExtrasDotField class."""
+    extras = ExtrasDotField()
 
 
 class DateTimeUtcExample(models.Model):
