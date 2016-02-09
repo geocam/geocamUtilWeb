@@ -8,7 +8,7 @@ import logging
 import os
 from glob import glob
 
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.template import Template, Context
 from django.conf import settings
 
@@ -31,7 +31,7 @@ def fillTemplate(inputFile, outputFile, context):
     file(outputFile, 'w').write(text)
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Render site's management/preptemplates/* into build/preptemplates"
 
     def handle_noargs(self, **options):

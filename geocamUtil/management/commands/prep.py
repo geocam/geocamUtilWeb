@@ -5,10 +5,10 @@
 # __END_LICENSE__
 
 from django.core import management
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'Runs subcommands: installgithooks, preptemplates, prepapps, prepbower, collectstatic -l --noinput, prepcss, collectbinaries'
 
     def handle_noargs(self, **options):
