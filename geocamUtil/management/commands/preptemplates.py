@@ -34,7 +34,7 @@ def fillTemplate(inputFile, outputFile, context):
 class Command(BaseCommand):
     help = "Render site's management/preptemplates/* into build/preptemplates"
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         siteDir = commandUtil.getSiteDir()
         builder = Builder()
 
