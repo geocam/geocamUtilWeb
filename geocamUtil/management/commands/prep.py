@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     help = 'Runs subcommands: installgithooks, preptemplates, prepapps, prepbower, collectstatic -l --noinput, prepcss, collectbinaries'
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         #management.call_command('collectreqs')
         #management.call_command('installreqs')
         management.call_command('installgithooks')
