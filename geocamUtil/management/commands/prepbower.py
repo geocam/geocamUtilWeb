@@ -56,7 +56,6 @@ class Command(BaseCommand):
                                 # avoid interactive prompts that fail under 'vagrant provision'
                                 '--',
                                 '--config.interactive=false',
-                                '--verbosity=%d' % verbosity,
                                 # continue in spite of conflicting version requirements
                                 #'--force',
                                 *settings.BOWER_INSTALLED_APPS)
