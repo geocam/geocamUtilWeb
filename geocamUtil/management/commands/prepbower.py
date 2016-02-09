@@ -22,8 +22,11 @@ def bowerCompleted(path):
     # since we create the bower_components directory ourselves, the
     # easiest way to check if bower ran properly last time is to look
     # for bower.json files.
-    installedCount = len(glob.glob('%s/*/bower.json' % path))
-    return installedCount != 0
+    thelist = glob.glob('%s/*/bower.json' % path)
+    if thelist:
+        installedCount = len(thelist)
+        return installedCount != 0
+    return False
 
 
 class Command(BaseCommand):
