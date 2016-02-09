@@ -49,8 +49,9 @@ class Command(BaseCommand):
             # don't re-run bower if it succeeded before
             return
 
-        management.call_command('bower', 'install',
+        management.call_command('bower_install',
                                 # avoid interactive prompts that fail under 'vagrant provision'
+                                '--',
                                 '--config.interactive=false',
                                 # continue in spite of conflicting version requirements
                                 '--force',
