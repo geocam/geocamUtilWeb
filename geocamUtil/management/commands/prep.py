@@ -12,9 +12,12 @@ class Command(BaseCommand):
     help = 'Runs subcommands: installgithooks, preptemplates, prepapps, prepbower, collectstatic -l --noinput, prepcss, collectbinaries'
 
     def handle(self, *args, **options):
-        #management.call_command('collectreqs')
-        #management.call_command('installreqs')
         management.call_command('installgithooks')
+        
+        management.call_command('prepmigrations')
+        management.call_command('migrate')
+        management.call_command('prepfixtures')
+                
         management.call_command('preptemplates')
         management.call_command('prepapps')
         management.call_command('prepbower')
