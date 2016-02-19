@@ -595,7 +595,7 @@ class SecurityMiddleware(object):
 
         if isinstance(response, HttpResponseRedirect) and request.method == "POST":
             try:
-                redirectTo = request.REQUEST.get('next', None)
+                redirectTo = request.GET.get('next', None)
             except:  # pylint: disable=W0702
                 # probably badly formed request content -- log error and don't worry about it
                 errClass, errObject, errTB = sys.exc_info()[:3]
