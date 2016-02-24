@@ -4,6 +4,7 @@
 #All rights reserved.
 # __END_LICENSE__
 
+import copy
 import time
 import datetime
 import calendar
@@ -22,7 +23,8 @@ def utcToTimeZone(dt, tz):
     # returns localized datetime in given timezone
     if isinstance(tz, (str, unicode)):
         tz = pytz.timezone(tz)
-    return dt.replace(tzinfo=pytz.utc).astimezone(tz)
+    mydt = copy.copy(dt)
+    return mydt.replace(tzinfo=pytz.utc).astimezone(tz)
 
 
 def timeZoneToUtc(dt):
