@@ -14,8 +14,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         management.call_command('installgithooks')
         
-        management.call_command('prepmigrations')
-        management.call_command('migrate')
+#         management.call_command('prepmigrations')
+#         management.call_command('migrate --fake-initial')
         management.call_command('prepfixtures')
                 
         management.call_command('preptemplates')
