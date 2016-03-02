@@ -106,7 +106,7 @@ class DateTimeUtcField(models.DateTimeField):
             return super(DateTimeUtcField, self).pre_save(model_instance, add)
 
         if self.auto_now or (self.auto_now_add and add):
-            value = timezone.now()
+            value = timezone.now(pytz.utc)
             setattr(model_instance, self.attname, value)
             return value
         else:
