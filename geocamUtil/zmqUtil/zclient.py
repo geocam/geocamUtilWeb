@@ -16,6 +16,8 @@ import zerorpc
 from IPython.config.loader import Config
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.lib.inputhook import inputhook_manager, stdin_ready
+import django
+django.setup()
 try:
     from django.conf import settings
 except ImportError:
