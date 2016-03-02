@@ -73,7 +73,7 @@ def formatUtcTimeAsAbbreviatedLocalTime(utcDT):
     except AttributeError:
         return 'undated'
     localDT = utcToLocalTime(utcDT)
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(pytz.utc)
     if localDT.toordinal() == now.toordinal():
         # if today, leave off date
         return 'Today %s' % localDT.strftime('%H:%M')
@@ -105,7 +105,7 @@ def stringToLocalDT(s, intervalStart=True, now=None):
     current time.'"""
 
     if now is None:
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(pytz.utc)
     strftime = datetime.datetime.strftime
     bigDefaults = now
     if intervalStart:
@@ -188,7 +188,7 @@ def getTimeShort(utcDt, tz=None, now=None):
     # pylint: disable=R0911,R0912
 
     if now is None:
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(pytz.utc)
     diff = now - utcDt
     diffSecs = diff.days * 24 * 60 * 60 + diff.seconds
     diffMins = diffSecs // 60

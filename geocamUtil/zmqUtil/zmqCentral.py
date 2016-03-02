@@ -9,6 +9,7 @@ import sys
 import os
 import logging
 import datetime
+import pytz
 import time
 import traceback
 import atexit
@@ -208,7 +209,7 @@ class ZmqCentral(object):
         self.opts.subscribeEndpoint = self.opts.subscribeEndpoint.format(bindInterface=self.opts.bindInterface)
 
         # open log files
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(pytz.utc)
         self.logDir = os.path.abspath(self.opts.logDir)
         if self.opts.messageLog != 'none':
             self.messageLogPath = self.readyLog(self.opts.messageLog, now)

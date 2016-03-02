@@ -36,7 +36,7 @@ class TimestampDescriptor(object):
         timestamp = TimestampDescriptor('timestampSeconds', 'timestampMicroseconds')
 
     >> s = SomeModel()
-    >> now = datetime.datetime.now()
+    >> now = datetime.datetime.now(pytz.utc)
     >> now
     datetime.datetime(2012, 5, 22, 7, 37, 16, 689212)
     >> s.timestamp = now
