@@ -28,9 +28,8 @@ def utcToTimeZone(dt, tz):
 
 
 def timeZoneToUtc(dt):
-    # returns UTC datetime with no tzinfo so it can be saved without further
-    # modification using Django ORM
-    return dt.astimezone(pytz.utc).replace(tzinfo=None)
+    # returns UTC datetime 
+    return dt.astimezone(pytz.utc)
 
 
 def localDateTimeToPosix(localDT):
