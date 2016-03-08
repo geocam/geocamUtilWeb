@@ -118,18 +118,18 @@ function ensureSelectedRow(table, rowId){
 
 function connectSelectionCallback(table, callback, singleSelection){
     try {
-	table.find('tbody').on( 'click', 'tr', function () {
-	    if (singleSelection){
-		clearTableSelection(table);
-	    }
-	    $(this).toggleClass('selected');
-	    	if (callback !== undefined){
-        		callback(this);
-        	    }
-        	} 
-	);
+		table.find('tbody').on( 'click', 'tr', function () {
+		    if (singleSelection){
+		    	clearTableSelection(table);
+		    }
+		    $(this).toggleClass('selected');
+		    	if (callback !== undefined){
+	        		callback(this);
+	        	}
+	       	} 
+		);
     } catch (err) {
-	console.log("could not connect selection callback");
+    	console.log("could not connect selection callback");
     }
 
 }
