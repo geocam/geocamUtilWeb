@@ -28,7 +28,14 @@ class AbstractImportForm(forms.Form):
         else:
             tz = pytz.timezone(settings.XGDS_SITEFRAMES[self.cleaned_data['timezone']]['timezone'])
         return tz
-    
+
+    def getTimezoneName(self):
+        if self.cleaned_data['timezone'] == 'utc':
+            return 'Etc/UTC'
+        else:
+            return settings.XGDS_SITEFRAMES[self.cleaned_data['timezone']]['timezone']
+        return None
+
     class meta:
         abstract=True
     
