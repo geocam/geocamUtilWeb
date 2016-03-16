@@ -44,6 +44,7 @@
 
 {% block scripts %}
 {{block.super}}
+	{% include "xgds_core/timeJS.html" %}
 	{% if app %}
 	{% include "MapJS.html" %}
 	{% else %}
