@@ -8,6 +8,7 @@
 # pylint: disable=W0105
 
 import socket
+from geocamUtil.SettingsUtil import getOrCreateArray
 
 GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60 * 60
 """
@@ -140,21 +141,21 @@ PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
 GEOCAM_UTIL_PREPCSS_DIRS = ['gumby']
 GEOCAM_UTIL_COMPRESSCSS_FILES = ['gumby/css/gumby.css']
 
-# include this in your siteSettings.py BOWER_INSTALLED_APPS
-GEOCAM_UTIL_BOWER_INSTALLED_APPS = ('underscore',
-                                    'modernizr=components-modernizr',
-                                    'jquery#2.1.4',
-                                    'jquery-ui',
-                                    'datatables=DataTables',
-                                    'datatables-editable=git://github.com/jphustman/jquery-datatables-editable',
-                                    'jeditable',
-                                    'jqueryui-timepicker-addon=jQuery-Timepicker-Addon',
-                                    'jquery-validate',
-                                    'jeditable',
-                                    'jquery-form',
-                                    'gumby#master',
-                                    'bootstrap'
-                                    )
+BOWER_INSTALLED_APPS = getOrCreateArray('BOWER_INSTALLED_APPS')
+BOWER_INSTALLED_APPS += ['underscore',
+                         'modernizr=components-modernizr',
+                         'jquery#2.1.4',
+                         'jquery-ui',
+                         'datatables=DataTables',
+                         'datatables-editable=git://github.com/jphustman/jquery-datatables-editable',
+                         'jeditable',
+                         'jqueryui-timepicker-addon=jQuery-Timepicker-Addon',
+                         'jquery-validate',
+                         'jeditable',
+                         'jquery-form',
+                         'gumby#master',
+                         'bootstrap'
+                         ]
 
 try:
     HOSTNAME = socket.gethostname()
