@@ -16,7 +16,7 @@ class Command(BaseCommand):
         
 #         management.call_command('prepmigrations')
 #         management.call_command('migrate --fake-initial')
-        management.call_command('prepfixtures')
+#         management.call_command('prepfixtures')
                 
         management.call_command('preptemplates')
         management.call_command('prepapps')
