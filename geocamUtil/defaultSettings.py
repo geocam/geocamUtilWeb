@@ -154,7 +154,9 @@ BOWER_INSTALLED_APPS += ['underscore',
                          'jeditable',
                          'jquery-form',
                          'gumby#master',
-                         'bootstrap'
+                         'bootstrap',
+                         'moment',
+                         'moment-timezone',
                          ]
 
 try:
