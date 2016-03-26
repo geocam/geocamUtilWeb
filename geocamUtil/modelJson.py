@@ -11,8 +11,8 @@ import json
 from django.forms import model_to_dict
 
 
-def modelToDict(model):
-    return model_to_dict(model)
+def modelToDict(model, fields=None, exclude=None):
+    return model_to_dict(model, fields, exclude)
 
 
 def dictToJson(dict, encoder=None):
