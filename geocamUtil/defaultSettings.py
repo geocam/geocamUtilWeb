@@ -178,3 +178,6 @@ XGDS_SITEFRAMES = {
 #                            'timezone': 'America/Los_Angeles'
 #                            },
                    }
+
+# If you have a license for datatables editor then this can be true
+GEOCAM_UTIL_DATATABLES_EDITOR = False
