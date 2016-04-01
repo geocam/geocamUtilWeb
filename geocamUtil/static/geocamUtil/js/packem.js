@@ -8,8 +8,8 @@ function initializePackery() {
     //update  sizing
     var $container = $('#container');
     $container.packery({
-	itemSelector: '.item',
-	gutter: 10
+    	itemSelector: '.item',
+    	gutter: 10
     });
     makeResizable($container);
     bindLockItemBtnCallback($container);
@@ -30,7 +30,7 @@ function makeChildrenResizable($container, $itemElems){
 	el.draggable();
 	if (!el.hasClass("noresize")){
 	    el.resizable({
-		aspectRatio: lockAspect
+	    	aspectRatio: lockAspect
 	    });
 	} 
     })
@@ -41,14 +41,14 @@ function makeChildrenResizable($container, $itemElems){
     // handle resizing
     var resizeTimeout;
     $itemElems.on( 'resize', function( event, ui ) {
-	// debounce
-	if ( resizeTimeout ) {
-	    clearTimeout( resizeTimeout );
-	}
-
-	resizeTimeout = setTimeout( function() {
-	    $container.packery( 'fit', ui.element[0] );
-	}, 100 );
+		// debounce
+		if ( resizeTimeout ) {
+		    clearTimeout( resizeTimeout );
+		}
+	
+		resizeTimeout = setTimeout( function() {
+		    $container.packery( 'fit', ui.element[0] );
+		}, 100 );
     });
     
     $itemElems.each(function(index, element) {
@@ -90,9 +90,9 @@ clickPinFunction = function(event) {
     var item = pinButton.closest(".item");
     
     if (pinButton.hasClass('icon-lock')) {
-	unpinItem(item);
+    	unpinItem(item);
     } else {
-	pinItem(item);
+    	pinItem(item);
     }
 }
 
@@ -112,6 +112,10 @@ function matchWidth(sourceDivID, destDivID) {
     destDiv.width(sourceDiv.width());
     $("#container").packery();
     return destDiv;
+}
+
+function layout() {
+	$("#container").packery('layout');
 }
 
 /**
