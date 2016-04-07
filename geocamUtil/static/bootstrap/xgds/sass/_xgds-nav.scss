@@ -1,0 +1,8 @@
+.currentnav {
+	@extend .active;
+}
+
+.bg-primary {
+  color: $light-fg !important;
+  background-color: $navbar-color !important;
+}

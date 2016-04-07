@@ -6,7 +6,7 @@
 # Compass::Frameworks.register('modular-scale', :path => File.expand_path("#{extensions_dir}/modular-scale"))
 
 # Uncomment these to use regular Ruby gems.
- require 'modular-scale'
+require 'modular-scale'
 # require 'sassy-math'
 
 # Set this to the root of your project when deployed:
