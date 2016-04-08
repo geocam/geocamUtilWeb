@@ -16,24 +16,29 @@
 
 import pytz
 from django import forms
-from django.conf import settings
-from geocamUtil.forms.SiteframeChoiceField import SiteframeChoiceField
+from django.forms.models import ChoiceField
+from geocamUtil.models import SiteFrame
 
+    
 class AbstractImportForm(forms.Form):
-    timezone = SiteframeChoiceField(required=True, choices=(('utc', 'UTC'),))
+    siteframe_zones = SiteFrame.objects.values('timezone').distinct()
+    listresult = sorted([str(r['timezone']) for r in siteframe_zones])
+    choices = [(v, v) for v in listresult]
+    choices.append(('utc', 'UTC'))
+    timezone = ChoiceField(required=True, choices=choices)
 
     def getTimezone(self):
         if self.cleaned_data['timezone'] == 'utc':
             tz = pytz.utc
         else:
-            tz = pytz.timezone(settings.XGDS_SITEFRAMES[self.cleaned_data['timezone']]['timezone'])
+            tz = pytz.timezone(self.cleaned_data['timezone'])
         return tz
 
     def getTimezoneName(self):
         if self.cleaned_data['timezone'] == 'utc':
             return 'Etc/UTC'
         else:
-            return settings.XGDS_SITEFRAMES[self.cleaned_data['timezone']]['timezone']
+            return self.cleaned_data['timezone']
         return None
 
     class meta:

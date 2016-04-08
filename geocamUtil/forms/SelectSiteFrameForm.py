@@ -16,7 +16,7 @@
 
 from django.conf import settings
 from django import forms
-from geocamUtil.models.SiteFrame import SiteFrame
+from geocamUtil.models import SiteFrame
 from django.forms.models import ModelChoiceField
 
 class SelectSiteFrameForm(forms.Form):
