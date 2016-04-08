@@ -124,7 +124,13 @@ function connectSelectionCallback(table, callback, singleSelection){
 		    }
 		    $(this).toggleClass('selected');
 		    	if (callback !== undefined){
-	        		callback(this);
+		    		var dt = table.DataTable();
+		    		var rows = dt.rows('.selected');
+		    		var data = dt.rows('.selected').data();
+		    		for (var i=0; i < rows.length; i++){
+		    			callback(rows[i], data[i]);
+		    		}
+		    		
 	        	}
 	       	} 
 		);
