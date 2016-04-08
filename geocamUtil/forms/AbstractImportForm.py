@@ -21,8 +21,8 @@ from geocamUtil.models import SiteFrame
 
     
 class AbstractImportForm(forms.Form):
-    siteframe_zones = SiteFrame.objects.values('timezone').distinct()
-    listresult = sorted([str(r['timezone']) for r in siteframe_zones])
+    siteframe_zones = lambda:SiteFrame.objects.values('timezone').distinct()
+    listresult = sorted([str(r['timezone']) for r in siteframe_zones()])
     choices = [(v, v) for v in listresult]
     choices.append(('utc', 'UTC'))
     timezone = ChoiceField(required=True, choices=choices)
