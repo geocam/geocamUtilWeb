@@ -15,17 +15,29 @@
 # __END_LICENSE__
 
 import pytz
+from django.utils.functional import lazy
 from django import forms
 from django.forms.models import ChoiceField
 from geocamUtil.models import SiteFrame
+from django.core.cache import caches
 
-    
+def getTimezoneChoices():
+    _cache = caches['default']
+    TIMEZONE_CHOICES = _cache.get('TIMEZONE_CHOICES')
+    if not TIMEZONE_CHOICES:
+        try:
+	    siteframe_zones = SiteFrame.objects.values('timezone').distinct()
+            listresult = sorted([str(r['timezone']) for r in siteframe_zones])
+            TIMEZONE_CHOICES = [(v, v) for v in listresult]
+            TIMEZONE_CHOICES.append(('utc', 'UTC'))
+            _cache.set('TIMEZONE_CHOICES',TIMEZONE_CHOICES)
+        except:
+            return [] # just to handle the case where we are migrating and have not yet built this table
+    return TIMEZONE_CHOICES
+
+
 class AbstractImportForm(forms.Form):
-    siteframe_zones = lambda:SiteFrame.objects.values('timezone').distinct()
-    listresult = sorted([str(r['timezone']) for r in siteframe_zones()])
-    choices = [(v, v) for v in listresult]
-    choices.append(('utc', 'UTC'))
-    timezone = ChoiceField(required=True, choices=choices)
+    timezone = ChoiceField(required=True, choices=lazy(getTimezoneChoices, list)())
 
     def getTimezone(self):
         if self.cleaned_data['timezone'] == 'utc':
