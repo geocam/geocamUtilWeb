@@ -20,7 +20,7 @@ def siteframes_dict():
     siteframes = SiteFrame.objects.all().order_by('name')
     result = {}
     for siteframe in siteframes:
-        result[siteframe.zone] = model_to_dict(siteframe)
+        result[siteframe.id] = model_to_dict(siteframe)
     return mark_safe(json.dumps(result))
 
 
