@@ -15,18 +15,36 @@
 # __END_LICENSE__
 
 from collections import OrderedDict
-from django.forms.fields import ChoiceField
-from django.conf import settings
 
-class SiteframeChoiceField(ChoiceField):
+from django.conf import settings
+from django.forms.fields import ChoiceField
+from django.forms.models import ModelChoiceField
+
+from geocamUtil.models import SiteFrame
+
+class SiteframeChoiceField(ModelChoiceField):
     """Uses the name in siteframe to map to the dictionary identifier in settings
     """
     def __init__(self, choices=(), required=True, widget=None, label=None,
                  initial=None, help_text=None, *args, **kwargs):
-        sfChoices = []
-        sfChoices.extend(choices)
-        od = OrderedDict(sorted(settings.XGDS_SITEFRAMES.items(), key=lambda t: t[1]['name']))
-        for key, value in od.iteritems():
-            sfChoices.append((key, value['name']))
-        super(SiteframeChoiceField, self).__init__(choices=tuple(sfChoices), required=required, widget=widget, label=label,
+        if not initial:
+            initial = SiteFrame.objects.get(pk=settings.XGDS_CURRENT_SITEFRAME_ID)
+        SITE_FRAMES = SiteFrame.objects.all().order_by('name')
+        super(SiteframeChoiceField, self).__init__(queryset=SITE_FRAMES, required=required, widget=widget, label=label,
                                                    initial=initial, help_text=help_text, *args, **kwargs)
+       
+    def label_from_instance(self, obj):
+        return obj.name
+
+# class SiteframeChoiceField(ChoiceField):
+#     """Uses the name in siteframe to map to the dictionary identifier in settings
+#     """
+#     def __init__(self, choices=(), required=True, widget=None, label=None,
+#                  initial=None, help_text=None, *args, **kwargs):
+#         sfChoices = []
+#         sfChoices.extend(choices)
+#         od = OrderedDict(sorted(settings.XGDS_SITEFRAMES.items(), key=lambda t: t[1]['name']))
+#         for key, value in od.iteritems():
+#             sfChoices.append((key, value['name']))
+#         super(SiteframeChoiceField, self).__init__(choices=tuple(sfChoices), required=required, widget=widget, label=label,
+#                                                    initial=initial, help_text=help_text, *args, **kwargs)

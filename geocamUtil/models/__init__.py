@@ -6,6 +6,7 @@
 
 from django.db import models
 
+from SiteFrame import SiteFrame
 from UuidField import UuidField
 from dateTimeUtc import DateTimeUtcField
 from timestampDescriptor import TimestampDescriptor

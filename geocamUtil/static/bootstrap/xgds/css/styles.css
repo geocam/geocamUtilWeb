@@ -7208,3 +7208,16 @@ a.bg-danger:focus, a.bg-danger:hover {
   color: white !important;
   background-color: #646466 !important;
 }
+
+/* line 1, ../sass/_xgds-gridstack.scss */
+.grid-stack-item-content {
+  background-color: #e8e8e8;
+  display: block;
+  margin: 20px 0 10px;
+}
+
+/* line 7, ../sass/_xgds-gridstack.scss */
+.grid-stack-item {
+  /*	left: 10px;
+  	right: 10px; */
+}

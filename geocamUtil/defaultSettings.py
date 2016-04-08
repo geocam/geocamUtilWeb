@@ -158,6 +158,7 @@ BOWER_INSTALLED_APPS += ['underscore',
                          'tether=https://github.com/HubSpot/tether.git',
                          'moment',
                          'moment-timezone',
+                         'fontawesome',
                          ]
 
 try:
@@ -167,7 +168,7 @@ except:
 
 # set up a dictionary of the siteframes you will be working with.
 # This is used by the Siteframe Choice form field
-XGDS_SITEFRAMES = {
+# XGDS_SITEFRAMES = {
 #                    '10S': {  # ARC Marscape siteframe for testing
 #                            'name': 'Ames',
 #                            'east0': 582670.0,  # Easting
@@ -178,7 +179,8 @@ XGDS_SITEFRAMES = {
 #                            'north': 'grid',
 #                            'timezone': 'America/Los_Angeles'
 #                            },
-                   }
+#                    }
+
 
 # If you have a license for datatables editor then this can be true
 GEOCAM_UTIL_DATATABLES_EDITOR = False
