@@ -116,7 +116,7 @@ function ensureSelectedRow(table, rowId){
     }
 }
 
-function connectSelectionCallback(table, callback, singleSelection){
+function connectSelectionCallback(table, callback, singleSelection, context){
     try {
 		table.find('tbody').on( 'click', 'tr', function () {
 		    if (singleSelection){
@@ -128,7 +128,7 @@ function connectSelectionCallback(table, callback, singleSelection){
 		    		var rows = dt.rows('.selected');
 		    		var data = dt.rows('.selected').data();
 		    		for (var i=0; i < rows.length; i++){
-		    			callback(rows[i], data[i]);
+		    			callback(rows[i], data[i], context);
 		    		}
 		    		
 	        	}
