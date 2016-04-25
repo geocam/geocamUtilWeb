@@ -60,6 +60,7 @@ defaultOptions = {
         bPaginate: true,
         iDisplayLength: -1, 
         bLengthChange: true,
+        select: true,
         bSort: true,
         bJQueryUI: false,
         scrollY:  calcDataTableHeight(),
@@ -118,22 +119,15 @@ function ensureSelectedRow(table, rowId){
 
 function connectSelectionCallback(table, callback, singleSelection, context){
     try {
-		table.find('tbody').on( 'click', 'tr', function () {
-		    if (singleSelection){
-		    	clearTableSelection(table);
-		    }
-		    $(this).toggleClass('selected');
-		    	if (callback !== undefined){
-		    		var dt = table.DataTable();
-		    		var rows = dt.rows('.selected');
-		    		var data = dt.rows('.selected').data();
-		    		for (var i=0; i < rows.length; i++){
-		    			callback(rows[i], data[i], context);
-		    		}
-		    		
-	        	}
-	       	} 
-		);
+    	var dt = table.DataTable();
+    	dt.on( 'select', function ( e, dt, type, indexes ) {
+    	    if ( type === 'row' ) {
+    	    	for (var i=0; i<indexes.length; i++){
+    	    		callback(indexes[i], dt.row(indexes[i]).data(), context);
+    	    	}
+    	    }
+    	} );
+    	
     } catch (err) {
     	console.log("could not connect selection callback");
     }
