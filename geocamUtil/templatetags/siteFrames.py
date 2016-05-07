@@ -39,11 +39,3 @@ def siteframe_form():
         theForm =  SelectSiteFrameForm()
         return theForm.as_table()
     return ''
-
-#     
-#     <tr><th><label for="id_siteFrame">Site:</label></th><td><select id="id_siteFrame" name="siteFrame">
-# <option value="10S">Ames</option>
-# <option value="12T" selected="selected">Craters of the Moon</option>
-# <option value="5Q">Hawaii Lava Flows</option>
-# </select></td></tr>
-# 
