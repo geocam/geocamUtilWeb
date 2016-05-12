@@ -17,6 +17,9 @@ class SiteFrame(models.Model):
     axes = models.CharField(max_length=8, default='ENU')
     north = models.CharField(max_length = 8)
     timezone = models.CharField(max_length=64)
+    projCode = models.CharField(max_length=32, null=True)
+    projString = models.CharField(max_length=512, null=True)
+    projUnits = models.CharField(max_length=32, default="m")
     
     def __unicode__(self):
         return self.name
