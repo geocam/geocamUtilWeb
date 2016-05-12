@@ -17,3 +17,4 @@ example/build
 /dist/
 geocamUtil/zmq/log
 .sass-cache
+migrations/
