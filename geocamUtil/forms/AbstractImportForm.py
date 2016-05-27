@@ -26,7 +26,7 @@ def getTimezoneChoices():
     TIMEZONE_CHOICES = _cache.get('TIMEZONE_CHOICES')
     if not TIMEZONE_CHOICES:
         try:
-	    siteframe_zones = SiteFrame.objects.values('timezone').distinct()
+            siteframe_zones = SiteFrame.objects.values('timezone').distinct()
             listresult = sorted([str(r['timezone']) for r in siteframe_zones])
             TIMEZONE_CHOICES = [(v, v) for v in listresult]
             TIMEZONE_CHOICES.append(('utc', 'UTC'))
