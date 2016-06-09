@@ -184,3 +184,6 @@ except:
 
 # If you have a license for datatables editor then this can be true
 GEOCAM_UTIL_DATATABLES_EDITOR = False
+
+# default to earth
+GEOCAM_UTIL_BODY_RADIUS_METERS = 6371010

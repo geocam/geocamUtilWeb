@@ -6,8 +6,12 @@
 
 import math
 from math import pi, sqrt, sin, tan, cos, atan2
+from django.conf import settings
 
+# for reference, but we get these from settings now.
 EARTH_RADIUS_METERS = 6371010
+MOON_RADIUS_METERS = 1737400
+
 DEG2RAD = pi / 180.0
 RAD2DEG = 180.0 / pi
 
@@ -28,8 +32,8 @@ def calculateDiffMeters(a, b):
     latDiff = (a[1] - b[1]) * DEG2RAD
     lonDiff = (a[0] - b[0]) * DEG2RAD
     lat = 0.5 * (a[1] + b[1]) * DEG2RAD
-    return [math.cos(lat) * EARTH_RADIUS_METERS * lonDiff,
-            EARTH_RADIUS_METERS * latDiff]
+    return [math.cos(lat) * settings.GEOCAM_UTIL_BODY_RADIUS_METERS * lonDiff,
+            settings.GEOCAM_UTIL_BODY_RADIUS_METERS * latDiff]
 
 
 def calculateUTMDiffMeters(a, b):
@@ -50,8 +54,8 @@ def addMeters(latLon, xy):
     x = xy[0]
     y = xy[1]
     latRad = latLon[1] * DEG2RAD
-    latDiff = y / EARTH_RADIUS_METERS
-    lonDiff = x / (math.cos(latRad) * EARTH_RADIUS_METERS)
+    latDiff = y / settings.GEOCAM_UTIL_BODY_RADIUS_METERS
+    lonDiff = x / (math.cos(latRad) * settings.GEOCAM_UTIL_BODY_RADIUS_METERS)
     return [latLon[0] + RAD2DEG * lonDiff,
             latLon[1] + RAD2DEG * latDiff]
 
@@ -102,6 +106,7 @@ class UtmProjector(object):
 
     # Equations from USGS Bulletin 1532
     # Written by Chuck Gantz- chuck.gantz@globalstar.com
+    # TODO this is only for earth ...
     def utmFromLatLon(self, lonDeg, latDeg):
         a = WGS84_A
         e2 = WGS84_E2
@@ -144,6 +149,7 @@ class UtmProjector(object):
 
     # Equations from USGS Bulletin 1532
     # Written by Chuck Gantz- chuck.gantz@globalstar.com
+    # TODO this is only for earth
     def latLonFromUtm(self, east, north):
         k0 = 0.9996
         a = WGS84_A
@@ -183,6 +189,7 @@ class UtmProjector(object):
                 RAD2DEG * lat)
 
 
+# TODO this is only for earth
 def transformLonLatAltToEcef(lonLatAlt):
     """
     Transform tuple lon,lat,alt (WGS84 degrees, meters) to tuple ECEF
@@ -199,6 +206,7 @@ def transformLonLatAltToEcef(lonLatAlt):
             ((a * (1 - e2) / chi) + alt) * sin(lat))
 
 
+# TODO this is only for earth
 def transformEcefToLonLatAlt(ecef):
     """
     Transform tuple ECEF x,y,z (meters) to tuple lon,lat,alt
