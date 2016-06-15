@@ -15,6 +15,16 @@ except ImportError:
 from django.http import HttpResponse
 
 
+def wrapKmlForDownload(text, attachmentName=None):
+    document = wrapKmlDocument(text, attachmentName)
+    response = djangoResponse(document)
+    if attachmentName is not None:
+        if not attachmentName.endswith('.kml'):
+            attachmentName += '.kml'
+        response['Content-disposition'] = 'attachment; filename=%s' % attachmentName
+    return response
+
+
 def wrapKmlHttp(text):
     wrapped = wrapKml(text)
     return ("""HTTP/1.0 200 OK\r
