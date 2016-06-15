@@ -16,6 +16,8 @@ from django.http import HttpResponse
 
 
 def wrapKmlForDownload(text, attachmentName=None):
+    """ Wrap the content text to be downloaded as a file attachment
+    """
     document = wrapKmlDocument(text, attachmentName)
     response = djangoResponse(document)
     if attachmentName is not None:
