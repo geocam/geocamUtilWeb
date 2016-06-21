@@ -87,7 +87,7 @@ def deprecateCheck(msg):
     if b is 'ok':
         return (True, None)
     else:
-        print >> sys.stderr, 'geocamUtil.middleware.SecurityMiddleware: Using deprecated feature: %s' % msg
+#         print >> sys.stderr, 'geocamUtil.middleware.SecurityMiddleware: Using deprecated feature: %s' % msg
         if b is 'warn':
             return (True, None)
         elif b is 'disable':
@@ -600,9 +600,9 @@ class SecurityMiddleware(object):
                 # probably badly formed request content -- log error and don't worry about it
                 errClass, errObject, errTB = sys.exc_info()[:3]
                 traceback.print_tb(errTB)
-                print >> sys.stderr, '%s.%s: %s' % (errClass.__module__,
-                                                    errClass.__name__,
-                                                    str(errObject))
+#                 print >> sys.stderr, '%s.%s: %s' % (errClass.__module__,
+#                                                     errClass.__name__,
+#                                                     str(errObject))
                 return response
             print >> sys.stderr, 'redirectTo:', redirectTo
             print >> sys.stderr, 'next:', request.GET.get('next')
