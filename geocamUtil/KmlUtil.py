@@ -7,6 +7,7 @@
 # pylint: disable=W0622
 
 import re
+from xml.sax.saxutils import escape
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -65,7 +66,7 @@ def wrapKmlDocument(text, docId=None):
     <name>%(docId)s</name>
     %(text)s
   </Document>
-""" % dict(docId=docId, text=text))
+""" % dict(docId=escape(docId), text=text))
     else:
         return wrapKml("""
   <Document>
