@@ -27,7 +27,20 @@ def wrapKmlForDownload(text, attachmentName=None):
         response['Content-disposition'] = 'attachment; filename=%s' % attachmentName
     return response
 
-
+def buildNetworkLink(url, name, interval=5):
+    return '''
+<NetworkLink>
+  <name>%(name)s</name>
+  <Link>
+    <href>%(url)s</href>
+    <refreshMode>onInterval</refreshMode>
+    <refreshInterval>%(interval)d</refreshInterval>
+  </Link>
+</NetworkLink>
+''' % dict(name=escape(name),
+           interval=interval,
+           url=escape(url))
+    
 def wrapKmlHttp(text):
     wrapped = wrapKml(text)
     return ("""HTTP/1.0 200 OK\r
