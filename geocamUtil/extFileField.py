@@ -27,11 +27,12 @@ class ExtFileField(forms.FileField):
 
     def clean(self, *args, **kwargs):
         data = super(ExtFileField, self).clean(*args, **kwargs)
-        filename = data.name
-        ext = os.path.splitext(filename)[1]
-        ext = ext.lower()
-        if ext not in self.ext_whitelist:
-            raise forms.ValidationError("Not allowed filetype!")
+        if data: # We check for null file in case the field is optional so form_clean() doesn't fail
+            filename = data.name
+            ext = os.path.splitext(filename)[1]
+            ext = ext.lower()
+            if ext not in self.ext_whitelist:
+                raise forms.ValidationError("Not allowed filetype!")
         return data
 
 
