@@ -131,7 +131,6 @@ function connectSelectionCallback(table, callback, singleSelection, context){
     } catch (err) {
     	console.log("could not connect selection callback");
     }
-
 }
 
 /* 
