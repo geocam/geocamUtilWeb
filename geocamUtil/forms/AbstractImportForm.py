@@ -21,7 +21,7 @@ from django.forms.models import ChoiceField
 from geocamUtil.models import SiteFrame
 from django.core.cache import caches
 
-def getTimezoneChoices():
+def getTimezoneChoices(empty=None):
     _cache = caches['default']
     TIMEZONE_CHOICES = _cache.get('TIMEZONE_CHOICES')
     if not TIMEZONE_CHOICES:
@@ -33,6 +33,8 @@ def getTimezoneChoices():
             _cache.set('TIMEZONE_CHOICES',TIMEZONE_CHOICES)
         except:
             return [] # just to handle the case where we are migrating and have not yet built this table
+    if empty:
+        TIMEZONE_CHOICES.insert(0, (None, '-------'))
     return TIMEZONE_CHOICES
 
 
