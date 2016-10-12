@@ -23,7 +23,7 @@ DESC = " ".join(__import__('geocamUtil').__doc__.splitlines()).strip()
 setup(
     name="geocamUtil",
     version=__import__('geocamUtil').get_version().replace(' ', '-'),
-    url='http://github.com/geocam/geocamUtilWeb',
+    url='https://github.com/geocam/geocamUtilWeb',
     author='Trey Smith',
     author_email='trey.smith@nasa.gov',
     description=DESC,
