@@ -7,12 +7,20 @@
 # This is a pip requirements file
 # http://pip.openplans.org/requirement-format.html
 
-Django
+# geocamUtil is a "kitchen-sink" repo of miscellaneous utilities.  In
+# order to use *all* of the utilities, you would need to install all of
+# the third-party dependencies below. However, some parts of geocamUtil
+# function without *any* dependencies. Therefore, we're currently
+# configuring it so that 'pip install geocamUtil' won't auto-install
+# dependencies, giving you full flexibility to manually install only
+# what you need.
+
+#Django
 #iso8601
 #PIL
 #pytz
 
-rdflib==2.4.2
+#rdflib==2.4.2
 
 # for testing only
 #mocker

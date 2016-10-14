@@ -8,8 +8,6 @@
 geocamUtil -- Utilities used by Django apps in the GeoCam Share app collection.
 """
 
-import django.conf
-
 from geocamUtil import defaultSettings
 
 __version_info__ = {
