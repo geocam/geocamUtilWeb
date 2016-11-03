@@ -120,7 +120,8 @@ function ensureSelectedRow(table, rowId){
 function connectSelectionCallback(table, callback, singleSelection, context){
     try {
     	var dt = table.DataTable();
-    	dt.on( 'select', function ( e, dt, type, indexes ) {
+    	dt.off('select.dt');
+    	dt.on( 'select.dt', function ( e, dt, type, indexes ) {
     	    if ( type === 'row' ) {
     	    	for (var i=0; i<indexes.length; i++){
     	    		callback(indexes[i], dt.row(indexes[i]).data(), context);
