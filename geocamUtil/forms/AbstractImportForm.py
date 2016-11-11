@@ -20,6 +20,7 @@ from django import forms
 from django.forms.models import ChoiceField
 from geocamUtil.models import SiteFrame
 from django.core.cache import caches
+from django.conf import settings
 
 def getTimezoneChoices(empty=None):
     _cache = caches['default']
@@ -39,7 +40,7 @@ def getTimezoneChoices(empty=None):
 
 
 class AbstractImportForm(forms.Form):
-    timezone = ChoiceField(required=True, choices=lazy(getTimezoneChoices, list)())
+    timezone = ChoiceField(required=True, choices=lazy(getTimezoneChoices, list)(), initial=settings.TIME_ZONE)
 
     def getTimezone(self):
         if self.cleaned_data['timezone'] == 'utc':
