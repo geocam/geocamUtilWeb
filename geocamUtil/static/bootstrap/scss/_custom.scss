@@ -1,0 +1,49 @@
+// Bootstrap 4 overrides
+
+
+// Start with assigning color names to specific hex values.
+$white:  #fff !default;
+$black:  #000 !default;
+$red:    #d9534f !default;
+$orange: #f0ad4e !default;
+$yellow: #ffd500 !default;
+$green:  #5cb85c !default;
+$blue:   #0275d8 !default;
+$teal:   #5bc0de !default;
+$pink:   #ff5b77 !default;
+$purple: #613d7c !default;
+
+$color-primary: #005c8e;	// primary color for headers, buttons, etc	
+$color-secondary: #42A5DA; // secondary color for subnav
+$color-tertiary: #8b9ba3;	
+
+// Reassign color vars to semantic color scheme
+$brand-primary:             $color-primary !default;
+$brand-success:             $green !default;
+$brand-info:                $teal !default;
+$brand-warning:             $orange !default;
+$brand-danger:              $red !default;
+$brand-inverse:             $gray-dark !default;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:       $pink !default;
+$body-color:    $gray-dark !default;
+$inverse-bg:    $gray-dark !default;
+$inverse-color: $gray-lighter !default;
+
+
+// Fonts
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$font-family-base:       $font-family-sans-serif !default;
+
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg:   1.25rem !default;
+$font-size-sm:   .875rem !default;
+$font-size-xs:   .75rem !default;
+
