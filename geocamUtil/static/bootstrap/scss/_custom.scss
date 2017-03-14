@@ -2,48 +2,98 @@
 
 
 // Start with assigning color names to specific hex values.
-$white:  #fff !default;
-$black:  #000 !default;
-$red:    #d9534f !default;
-$orange: #f0ad4e !default;
-$yellow: #ffd500 !default;
-$green:  #5cb85c !default;
-$blue:   #0275d8 !default;
-$teal:   #5bc0de !default;
-$pink:   #ff5b77 !default;
-$purple: #613d7c !default;
+$white:  #fff;
+$black:  #000;
+$red:    #d9534f;
+$orange: #f0ad4e;
+$yellow: #ffd500;
+$green:  #5cb85c;
+$blue:   #0275d8;
+$teal:   #5bc0de;
+$pink:   #ff5b77;
+$purple: #613d7c;
 
-$color-primary: #005c8e;	// primary color for headers, buttons, etc	
-$color-secondary: #42A5DA; // secondary color for subnav
-$color-tertiary: #8b9ba3;	
+$color-primary-bg: #005c8e;	// primary background color for headers, buttons, etc	
+$color-secondary-bg: #42A5DA; // secondary background color for subnav
+$color-tertiary-bg: #8b9ba3; // tertiary background color
+
+$color-primary: white;	// primary foreground color	
+$color-secondary: white; // secondary foreground color
+$color-tertiary: white;	//tertiary foreground color
+
+$link-color:            $color-secondary-bg;
 
 // Reassign color vars to semantic color scheme
-$brand-primary:             $color-primary !default;
-$brand-success:             $green !default;
-$brand-info:                $teal !default;
-$brand-warning:             $orange !default;
-$brand-danger:              $red !default;
-$brand-inverse:             $gray-dark !default;
+$brand-primary:             $color-primary-bg;
+$brand-success:             $green;
+$brand-info:                $teal;
+$brand-warning:             $orange;
+$brand-danger:              $red;
+$brand-inverse:             $color-secondary-bg;
 
 
 // Body
 //
 // Settings for the `<body>` element.
 
-$body-bg:       $pink !default;
-$body-color:    $gray-dark !default;
-$inverse-bg:    $gray-dark !default;
-$inverse-color: $gray-lighter !default;
+$body-bg:       $white;
+$body-color:    $gray-dark;
+$inverse-bg:    $gray-dark;
+$inverse-color: $gray-lighter;
 
+// Buttons
+
+$btn-line-height:                1;
+$btn-padding-y:                  .4rem;
+$btn-border-radius:             0.5rem;
+$btn-border-radius-lg:           0.6rem;
+$btn-border-radius-sm:           0.3rem;
+
+$btn-primary-color:              $color-secondary;
+$btn-primary-bg:                 $color-secondary-bg;
+$btn-primary-border:             $color-secondary-bg;
+
+$btn-secondary-color:            $color-tertiary;
+$btn-secondary-bg:               $color-tertiary-bg;
+$btn-secondary-border:           $color-tertiary-bg;
 
 // Fonts
 //
 // Font, line-height, and color for body text, headings, and more.
 
-$font-family-base:       $font-family-sans-serif !default;
+$font-family-base:       $font-family-sans-serif;
 
-$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
-$font-size-lg:   1.25rem !default;
-$font-size-sm:   .875rem !default;
-$font-size-xs:   .75rem !default;
+$font-size-base: .9rem; // Assumes the browser default, typically `16px`
+$font-size-lg:   1.1rem;
+$font-size-sm:   .78rem;
+$font-size-xs:   .675rem;
+$line-height-base: 1.2;
 
+$enable-shadows: true;
+$spacer: 0.5rem;
+
+.navbar-nav {
+    .nav-link {
+    	font-size: $font-size-lg;
+    }
+}
+
+.nav-pills .nav-link.active {
+	  background-color: $color-tertiary-bg !important;
+	  color: $color-tertiary;
+	}
+
+$logo-width: 200px; // set this to the width of your logo
+$rem-size: 16;
+$logo-extra-padding: ($rem-size*2.5);
+$logo-padded-width: 240px;
+
+.subnav {
+    margin-left: $logo-padded-width;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.container {
+	padding-top: 4px;
+}
