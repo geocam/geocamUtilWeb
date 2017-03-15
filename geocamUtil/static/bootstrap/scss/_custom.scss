@@ -83,17 +83,21 @@ $spacer: 0.5rem;
 	  color: $color-tertiary;
 	}
 
-$logo-width: 200px; // set this to the width of your logo
+$logo-width: 150px; // set this to the width of your logo
 $rem-size: 16;
 $logo-extra-padding: ($rem-size*2.5);
-$logo-padded-width: 240px;
+$logo-padded-width: 190px;
 
 .subnav {
-    margin-left: $logo-padded-width;
+    padding-left: $logo-padded-width;
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
 .container {
-	padding-top: 4px;
+	padding-top: 5px;
+}
+
+.container-fluid{
+	padding-top: 5px;
 }
