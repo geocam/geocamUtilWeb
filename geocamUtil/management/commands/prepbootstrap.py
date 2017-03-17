@@ -25,15 +25,16 @@ class Command(BaseCommand):
         verbosity = int(options.get('verbosity', 0))
 
         siteDir = getSiteDir()
-        bootstrapDir = getattr(settings, 'STATIC_ROOT', '%sbuild/static/bootstrap' % siteDir)
+        staticDir = getattr(settings, 'STATIC_ROOT', '%sbuild/static' % siteDir)
+        bootstrapDir = os.path.join(staticDir, 'bootstrap')
 
         ret = os.chdir(bootstrapDir)
         if ret != 0:
             if verbosity > 1:
                 print >> sys.stderr, ret
         if verbosity > 1:
-            print 'about to grunt bootstrap'
-        dosys('grunt dist ', verbosity)
+            print 'about to grunt dist-css for bootstrap'
+        dosys('grunt dist-css ', verbosity)
         if verbosity > 1:
-            print 'done with grunt for bootstrap'
+            print 'done with grunt dist-css for bootstrap'
 
