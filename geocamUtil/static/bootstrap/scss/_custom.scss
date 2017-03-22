@@ -21,6 +21,11 @@ $color-primary: white;	// primary foreground color
 $color-secondary: white; // secondary foreground color
 $color-tertiary: white;	//tertiary foreground color
 
+$brand-primary:             $color-primary-bg;
+$brand-inverse:             $color-tertiary-bg;
+
+$headings-color: $color-primary-bg;
+
 $link-color:            $color-secondary-bg;
 
 $dashboard-bgcolor: #e8e8e8;
