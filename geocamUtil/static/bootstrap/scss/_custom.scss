@@ -87,6 +87,9 @@ $line-height-base: 1.2;
 $enable-shadows: true;
 $spacer: 0.5rem;
 
+// nav
+$nav-link-padding:              .3em .5em;
+
 $navbar-padding-y: 0px;
 
 .navbar-nav {
@@ -102,12 +105,9 @@ $navbar-padding-y: 0px;
 
 $logo-width: 150px; // set this to the width of your logo
 $rem-size: 16;
-$logo-extra-padding: ($rem-size*2.5);
-$logo-padded-width: 190px;
 
 .subnav {
-    //padding-left: $logo-padded-width;
-    padding-left: 4px;
+    padding-left: 1rem;
     padding-top: 4px;
     padding-bottom: 4px;
 }
@@ -126,3 +126,4 @@ $logo-padded-width: 190px;
 	margin: 20px 0 10px;
 	padding: 8px;
 }
+
