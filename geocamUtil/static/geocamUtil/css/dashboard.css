@@ -26,13 +26,13 @@ button.tiny {
 	margin-right: -6px;
 }
 
-.icon-cancel-circled {
+/* .icon-cancel-circled {
 	display: block;
 	position: absolute;
 	float: right;
 	top: 10px;
 	right: 0px;
-}
+} */
 
 #new-window-btn {
 	display: block;

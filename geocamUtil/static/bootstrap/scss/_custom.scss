@@ -45,11 +45,11 @@ $inverse-color: $gray-lighter;
 
 // Buttons
 
+// we have slightly smaller standard buttons
+
 $btn-line-height:                1;
-$btn-padding-y:                  .4rem;
-$btn-border-radius:             0.5rem;
-$btn-border-radius-lg:           0.6rem;
-$btn-border-radius-sm:           0.3rem;
+$btn-padding-x:               .5rem;
+$btn-padding-y:               .3rem;
 
 $btn-primary-color:              $color-secondary;
 $btn-primary-bg:                 $color-secondary-bg;
@@ -58,6 +58,19 @@ $btn-primary-border:             $color-secondary-bg;
 $btn-secondary-color:            $color-tertiary;
 $btn-secondary-bg:               $color-tertiary-bg;
 $btn-secondary-border:           $color-tertiary-bg;
+
+$btn-block-spacing-y:            .3rem;
+$btn-toolbar-margin:             .2rem;
+
+
+// Forms
+
+// and slightly smaller forms
+
+$input-padding-x:                .5rem;
+$input-padding-y:                .3rem;
+$input-line-height:              1;
+
 
 // Fonts
 //
