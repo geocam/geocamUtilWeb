@@ -36,18 +36,18 @@ class Command(BaseCommand):
         siteDir = getSiteDir()
         staticRoot = getattr(settings, 'STATIC_ROOT', '%sbuild/static' % siteDir)
 
-        for cssDir in getattr(settings, 'GEOCAM_UTIL_PREPCSS_DIRS'):
-            fullDir = os.path.join(staticRoot, cssDir)
-            ret = os.chdir(fullDir)
-            if ret != 0:
-                if verbosity > 1:
-                    print >> sys.stderr, ret
-            if verbosity > 1:
-                print 'about to compass %s' % fullDir
-            dosys('compass clean ', verbosity)
-            dosys('compass compile ', verbosity)
-            if verbosity > 1:
-                print 'done with compass'
+#         for cssDir in getattr(settings, 'GEOCAM_UTIL_PREPCSS_DIRS'):
+#             fullDir = os.path.join(staticRoot, cssDir)
+#             ret = os.chdir(fullDir)
+#             if ret != 0:
+#                 if verbosity > 1:
+#                     print >> sys.stderr, ret
+#             if verbosity > 1:
+#                 print 'about to compass %s' % fullDir
+#             dosys('compass clean ', verbosity)
+#             dosys('compass compile ', verbosity)
+#             if verbosity > 1:
+#                 print 'done with compass'
 
         if compress:
             for compressFile in getattr(settings, 'GEOCAM_UTIL_COMPRESSCSS_FILES'):

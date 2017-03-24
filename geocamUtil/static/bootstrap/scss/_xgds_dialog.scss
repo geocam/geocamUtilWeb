@@ -1,0 +1,15 @@
+// jQuery Dialog
+
+.ui-dialog .ui-dialog-buttonpane button {
+	@extend .btn;
+	@extend .btn-primary;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	@extend .close;
+}
+
+/*.btn-group button {
+	border-color: white;
+}
+*/

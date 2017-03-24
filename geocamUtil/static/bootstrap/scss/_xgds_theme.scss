@@ -1,0 +1,24 @@
+$color-primary-bg: #005c8e;	// primary background color for headers, buttons, etc	
+$color-secondary-bg: #42A5DA; // secondary background color for subnav
+$color-tertiary-bg: #8b9ba3; // tertiary background color
+
+$color-primary: white;	// primary foreground color	
+$color-secondary: white; // secondary foreground color
+$color-tertiary: white;	//tertiary foreground color
+
+$color-primary-inverse: $color-primary-bg;
+$color-primary-inverse-bg: $color-primary;
+
+$color-secondary-inverse: $color-secondary-bg;
+$color-secondary-inverse-bg: $color-secondary;
+
+$dashboard-bgcolor: #e8e8e8;
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:       $white;
+$body-color:    $gray-dark;
+$inverse-bg:    $gray-dark;
+$inverse-color: $gray-lighter;

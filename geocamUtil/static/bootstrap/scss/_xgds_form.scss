@@ -1,0 +1,91 @@
+// Forms
+
+// and slightly smaller forms
+
+$input-padding-x:                .5rem;
+$input-padding-y:                .3rem;
+$input-line-height:              1;
+
+$input-height:                   (($font-size-base) + ($input-padding-y * 2));
+
+// DEFAULT forms to use bootstrap
+
+form {
+	@extend .form-inline;
+}
+
+form p {
+	@extend .input-group;
+	margin-bottom: 4px;
+}
+
+input {
+	@extend .form-control;
+	@extend .form-control-sm;
+	@extend .col-3;
+	width: auto;
+}
+
+form input[type="submit"] {
+	@extend .btn;
+	@extend .btn-primary;
+	//@extend .col-1;
+	//width: auto;
+	//margin-top: 4px;
+}
+
+input[type="file"] {
+	@extend .form-control-file;
+	@extend .form-control-sm;
+	@extend .col-3;
+	width: auto;
+	min-width: 300px;
+	max-width: 100%;
+}
+
+form > p > input[type="checkbox"], form > p > input[type="radio"] {
+	@extend .form-check-input;
+	@extend .d-flex;
+	@extend .justify-content-start;
+	margin-top: 0.7rem;
+	margin-bottom: 0px;
+	width: auto;
+	box-shadow: none;
+}
+
+select {
+	@extend .form-control;
+	@extend .form-control-sm;
+	@extend .col-3;
+	width: auto;
+}
+
+form > p > label {
+	@extend .col-form-label;
+	@extend .col-1;
+	@extend .d-flex;
+	@extend .justify-content-end;
+	height: 2rem;
+}
+
+form table label {
+	display: inline;
+}
+
+form table th {
+	font-weight: initial;
+}
+
+textarea {
+	@extend .form-control;
+	@extend .form-control-sm;
+	@extend .col-3;
+	width: auto;
+}
+
+.helptext {
+	@extend .text-muted;
+	@extend .small;
+	padding-top: 0.5rem;
+	padding-left: 3px;
+}

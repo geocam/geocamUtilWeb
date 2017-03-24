@@ -20,4 +20,6 @@ from geocamUtil.models import SiteFrame
 from django.forms.models import ModelChoiceField
 
 class SelectSiteFrameForm(forms.Form):
-    siteFrame = ModelChoiceField(queryset=SiteFrame.objects.all().order_by('name'), initial=settings.XGDS_CURRENT_SITEFRAME_ID, required=True, label=settings.XGDS_MAP_SERVER_SITE_MONIKER)
+    siteFrame = ModelChoiceField(queryset=SiteFrame.objects.all().order_by('name'), 
+                                 initial=settings.XGDS_CURRENT_SITEFRAME_ID, required=True, 
+                                 label=settings.XGDS_MAP_SERVER_SITE_MONIKER)

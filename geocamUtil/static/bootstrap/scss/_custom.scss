@@ -13,22 +13,19 @@ $teal:   #5bc0de;
 $pink:   #ff5b77;
 $purple: #613d7c;
 
-$color-primary-bg: #005c8e;	// primary background color for headers, buttons, etc	
-$color-secondary-bg: #42A5DA; // secondary background color for subnav
-$color-tertiary-bg: #8b9ba3; // tertiary background color
+@import "xgds_theme";
 
-$color-primary: white;	// primary foreground color	
-$color-secondary: white; // secondary foreground color
-$color-tertiary: white;	//tertiary foreground color
 
 $brand-primary:             $color-primary-bg;
 $brand-inverse:             $color-tertiary-bg;
 
 $headings-color: $color-primary-bg;
 
+$table-head-bg:                 $color-tertiary-bg;
+$table-head-color:              $color-tertiary;
+
 $link-color:            $color-secondary-bg;
 
-$dashboard-bgcolor: #e8e8e8;
 
 // Reassign color vars to semantic color scheme
 $brand-primary:             $color-primary-bg;
@@ -39,14 +36,7 @@ $brand-danger:              $red;
 $brand-inverse:             $color-secondary-bg;
 
 
-// Body
-//
-// Settings for the `<body>` element.
 
-$body-bg:       $white;
-$body-color:    $gray-dark;
-$inverse-bg:    $gray-dark;
-$inverse-color: $gray-lighter;
 
 // Buttons
 
@@ -68,22 +58,14 @@ $btn-block-spacing-y:            .3rem;
 $btn-toolbar-margin:             .2rem;
 
 
-// Forms
-
-// and slightly smaller forms
-
-$input-padding-x:                .5rem;
-$input-padding-y:                .3rem;
-$input-line-height:              1;
-
 
 // Fonts
 //
 // Font, line-height, and color for body text, headings, and more.
 
-$font-family-base:       $font-family-sans-serif;
+$font-family-sans-serif: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
-$font-size-base: .9rem; // Assumes the browser default, typically `16px`
+$font-size-base: .8rem; // Assumes the browser default, typically `16px`;
 $font-size-lg:   1.1rem;
 $font-size-sm:   .78rem;
 $font-size-xs:   .675rem;
@@ -108,10 +90,14 @@ $navbar-padding-y: 0px;
 	  color: $color-tertiary;
 	}
 
+.nav .fa {
+	color: $gray-light;
+}
 $logo-width: 150px; // set this to the width of your logo
 $rem-size: 16;
 
 .subnav {
+	//background: $color-secondary-bg;
     padding-left: 1rem;
     padding-top: 4px;
     padding-bottom: 4px;
@@ -131,4 +117,13 @@ $rem-size: 16;
 	margin: 20px 0 10px;
 	padding: 8px;
 }
+
+
+// Table spacing
+$table-cell-padding:            .2rem;
+$table-head-bg:                 $color-tertiary-bg;
+$table-head-color:              $color-tertiary;
+
+
+
 
