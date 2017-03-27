@@ -76,6 +76,11 @@ $enable-shadows: true;
 $spacer: 0.5rem;
 
 // nav
+$navbar-brand-padding-y:            0px;
+.navbar-brand {
+	padding-top: 0px;
+}
+
 $nav-link-padding:              .3em .5em;
 $navbar-padding-y: 0px;
 
@@ -118,8 +123,9 @@ $navbar-padding-y: 0px;
 	width: 100%;
 	padding-left: 0px;
 	padding-right: 0px;
+	padding-top: 0px;
 	align-items: initial;
-	}
+}
 	
 
 .container {
