@@ -66,7 +66,8 @@ $btn-toolbar-margin:             .2rem;
 $font-family-sans-serif: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
 $font-size-base: .8rem; // Assumes the browser default, typically `16px`;
-$font-size-lg:   1.1rem;
+$font-size-lg:   1rem;
+$font-size-md:	 .9rem;
 $font-size-sm:   .78rem;
 $font-size-xs:   .675rem;
 $line-height-base: 1.2;
@@ -76,13 +77,20 @@ $spacer: 0.5rem;
 
 // nav
 $nav-link-padding:              .3em .5em;
-
 $navbar-padding-y: 0px;
 
 .navbar-nav {
     .nav-link {
-    	font-size: $font-size-base;
+    	font-size: $font-size-md;
+    	font-variant: small-caps;
+    	//letter-spacing: 0.05rem;
     }
+    .nav-link.active {
+    	font-weight:bold;
+    }
+ 
+ 	
+    
 }
 
 .nav-pills .nav-link.active {
@@ -93,15 +101,26 @@ $navbar-padding-y: 0px;
 .nav .fa {
 	color: $gray-light;
 }
-$logo-width: 150px; // set this to the width of your logo
-$rem-size: 16;
 
 .subnav {
-	//background: $color-secondary-bg;
-    padding-left: 1rem;
-    padding-top: 4px;
-    padding-bottom: 4px;
+	font-size: $font-size-md;
+    font-variant: small-caps;
+    a {
+    	color: $navbar-inverse-color;
+
+	      @include hover-focus {
+	        color: $navbar-inverse-hover-color;
+	      }
+    }
 }
+
+#mainNavbar {
+	width: 100%;
+	padding-left: 0px;
+	padding-right: 0px;
+	align-items: initial;
+	}
+	
 
 .container {
 	padding-top: 5px;
@@ -125,5 +144,12 @@ $table-head-bg:                 $color-tertiary-bg;
 $table-head-color:              $color-tertiary;
 
 
+/*
+h6 {
+	font-variant: small-caps;
+}
+*/
 
-
+a > i {
+	vertical-align:middle;
+}
