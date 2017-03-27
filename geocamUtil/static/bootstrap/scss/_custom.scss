@@ -35,9 +35,6 @@ $brand-warning:             $orange;
 $brand-danger:              $red;
 $brand-inverse:             $color-secondary-bg;
 
-
-
-
 // Buttons
 
 // we have slightly smaller standard buttons
@@ -88,20 +85,27 @@ $navbar-padding-y: 0px;
     .nav-link {
     	font-size: $font-size-md;
     	font-variant: small-caps;
-    	//letter-spacing: 0.05rem;
     }
     .nav-link.active {
     	font-weight:bold;
     }
- 
- 	
-    
 }
 
 .nav-pills .nav-link.active {
 	  background-color: $color-tertiary-bg !important;
 	  color: $color-tertiary;
 	}
+	
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    font-weight: bold;
+    color:$color-secondary-bg !important;
+}
+
+.nav-tabs > .nav-link.active,
+  .nav-tabs > .nav-item.show .nav-link {
+  	font-weight: bold;
+    color:$color-secondary-bg;
+  }
 
 .nav .fa {
 	color: $gray-light;
@@ -112,11 +116,16 @@ $navbar-padding-y: 0px;
     font-variant: small-caps;
     a {
     	color: $navbar-inverse-color;
-
-	      @include hover-focus {
-	        color: $navbar-inverse-hover-color;
-	      }
     }
+    
+    a:hover {
+    	color: $navbar-inverse-hover-color;
+    }
+    
+}
+
+.navbar-collapse {
+	padding-top: 1rem;
 }
 
 #mainNavbar {
