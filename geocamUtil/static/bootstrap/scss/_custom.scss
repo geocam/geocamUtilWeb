@@ -122,6 +122,10 @@ $navbar-padding-y: 0px;
     	color: $navbar-inverse-hover-color;
     }
     
+    .nav-tabs {
+		border-bottom-color: $color-primary-bg !important;
+	}
+    
 }
 
 .navbar-collapse {
