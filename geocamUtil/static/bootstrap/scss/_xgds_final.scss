@@ -1,0 +1,14 @@
+// This file is included last.
+
+@include text-emphasis-variant('.text-primary-inverse', $brand-primary-inverse);
+
+.btn {
+	font-variant: small-caps;
+	font-size: $font-size-md;
+}
+
+.btn-group {
+	> .btn {
+		border-color: $body-bg;
+	}
+}

@@ -16,7 +16,8 @@ $purple: #613d7c;
 @import "xgds_theme";
 
 
-$brand-primary:             $color-primary-bg;
+$brand-primary:             $color-primary-bg; //use with .text-primary
+$brand-primary-inverse:		$color-primary;    //use with .text-primary-invers
 $brand-inverse:             $color-tertiary-bg;
 
 $headings-color: $color-primary-bg;
@@ -142,11 +143,11 @@ $navbar-padding-y: 0px;
 	
 
 .container {
-	padding-top: 5px;
+	padding-top: 10px;
 }
 
 .container-fluid{
-	padding-top: 5px;
+	padding-top: 10px;
 }
 
 .grid-stack-item-content {
@@ -163,12 +164,19 @@ $table-head-bg:                 $color-tertiary-bg;
 $table-head-color:              $color-tertiary;
 
 
-/*
-h6 {
-	font-variant: small-caps;
-}
-*/
-
 a > i {
 	vertical-align:middle;
+}
+
+.text-primary-inverse a, .text-primary-inverse a:hover, .text-primary-inverse a:active, .text-primary-inverse a:visited {
+	color:$brand-primary-inverse;
+	text-decoration: none;
+}
+
+.fa-lg {
+	vertical-align: middle !important;
+}
+
+.mt-negative-1rem {
+	margin-top:-1rem;
 }

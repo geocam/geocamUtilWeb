@@ -29,9 +29,16 @@ input {
 form input[type="submit"] {
 	@extend .btn;
 	@extend .btn-primary;
-	//@extend .col-1;
+	@extend .col-1;
 	//width: auto;
 	//margin-top: 4px;
+}
+
+form p input[type="submit"] {
+	border-bottom-left-radius: $border-radius !important;
+	border-top-left-radius: $border-radius !important;
+	display: inherit;
+	flex-direction: initial;
 }
 
 input[type="file"] {
@@ -90,13 +97,5 @@ textarea {
 	padding-left: 3px;
 }
 
-.btn {
-	font-variant: small-caps;
-}
 
-.btn-group {
-	> .btn {
-		border-color: $body-bg;
-	}
-}
 
