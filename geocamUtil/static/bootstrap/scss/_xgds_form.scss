@@ -19,10 +19,17 @@ form p {
 	margin-bottom: 4px;
 }
 
-input {
+form input {
 	@extend .form-control;
 	@extend .form-control-sm;
 	@extend .col-3;
+	width: auto;
+}
+
+input {
+	@extend .form-control;
+	@extend .form-control-sm;
+//	@extend .col-3;
 	width: auto;
 }
 
@@ -30,9 +37,19 @@ form input[type="submit"] {
 	@extend .btn;
 	@extend .btn-primary;
 	@extend .col-1;
-	//width: auto;
-	//margin-top: 4px;
 }
+
+form input[type="button"] {
+	@extend .btn;
+	@extend .btn-primary;
+}
+
+form table th {
+	background-color: initial;
+	color:initial;
+	text-align: right;
+}
+
 
 form p input[type="submit"] {
 	border-bottom-left-radius: $border-radius !important;
@@ -48,6 +65,14 @@ input[type="file"] {
 	width: auto;
 	min-width: 300px;
 	max-width: 100%;
+}
+
+input[type="search"] {
+	display: inline-block;
+	width: auto;
+	min-width: 150px;
+	max-width: 100%;
+	margin-left: 0.3rem;
 }
 
 form > p > input[type="checkbox"], form > p > input[type="radio"] {
@@ -96,6 +121,3 @@ textarea {
 	padding-top: 0.5rem;
 	padding-left: 3px;
 }
-
-
-
