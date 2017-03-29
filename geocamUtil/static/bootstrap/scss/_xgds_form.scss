@@ -29,8 +29,14 @@ form input {
 input {
 	@extend .form-control;
 	@extend .form-control-sm;
-//	@extend .col-3;
 	width: auto;
+}
+
+form div.btn-group {
+	input, a {
+		max-width: initial;
+		font-size: $font-size-base;
+	}
 }
 
 form input[type="submit"] {
@@ -43,13 +49,6 @@ form input[type="button"] {
 	@extend .btn;
 	@extend .btn-primary;
 }
-
-form table th {
-	background-color: initial;
-	color:initial;
-	text-align: right;
-}
-
 
 form p input[type="submit"] {
 	border-bottom-left-radius: $border-radius !important;
@@ -98,14 +97,6 @@ form > p > label {
 	@extend .d-flex;
 	@extend .justify-content-end;
 	height: 2rem;
-}
-
-form table label {
-	display: inline;
-}
-
-form table th {
-	font-weight: initial;
 }
 
 textarea {

@@ -10,6 +10,19 @@ table th {
 	background-color: $color-primary-bg;
 	color: $color-primary;
 }
+
+form table th {
+	background-color: initial;
+	color:initial;
+	text-align: right;
+	font-weight: initial;
+}
+
+form table label {
+	display: inline;
+}
+
+
 	
 /* datatables */
 .dataTable {
@@ -100,3 +113,9 @@ table th {
 	padding-left: 0.9rem;
 }
 
+form table.dataTable th {
+	text-align: left;
+	background-color: $color-primary-bg;
+	color: $color-primary;
+	vertical-align: middle;
+}
