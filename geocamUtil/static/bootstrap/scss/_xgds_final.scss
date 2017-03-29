@@ -12,6 +12,7 @@
 		border-color: $body-bg;
 	}
 	margin-bottom: 4px;
+	display: inline-table; //fixes heights
 }
 
 .btn-green {
@@ -21,3 +22,9 @@
 .btn-red {
   @include button-variant($white, $red, $red);
 }
+
+label {
+	margin-bottom: initial;
+	padding-right: 2px;
+	padding-left: 2px;
+	}
