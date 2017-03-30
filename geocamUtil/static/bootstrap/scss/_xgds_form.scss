@@ -24,6 +24,7 @@ form input {
 	@extend .form-control-sm;
 	@extend .col-3;
 	width: auto;
+	max-width: initial;
 }
 
 input {
@@ -43,11 +44,15 @@ form input[type="submit"] {
 	@extend .btn;
 	@extend .btn-primary;
 	@extend .col-1;
+	max-width: inherit;
+    width: auto;
 }
 
 form input[type="button"] {
 	@extend .btn;
 	@extend .btn-primary;
+	max-width: inherit;
+    width: auto;
 }
 
 form p input[type="submit"] {
@@ -89,6 +94,7 @@ form select {
 	@extend .form-control-sm;
 	@extend .col-3;
 	width: auto;
+	max-width: initial;
 }
 
 form > p > label {
@@ -104,6 +110,7 @@ textarea {
 	@extend .form-control-sm;
 	@extend .col-3;
 	width: auto;
+	max-width: initial;
 }
 
 .helptext {
@@ -111,4 +118,25 @@ textarea {
 	@extend .small;
 	padding-top: 0.5rem;
 	padding-left: 3px;
+}
+
+form.bbf-form ul {
+	box-sizing: initial;
+	width: 100%;
+	-webkit-padding-start: initial;
+	label {
+		justify-content: flex-end;
+	}
+	textarea {
+		height: 4rem;
+	}
+}
+
+.bbf-help {
+	@extend .helptext;
+	padding-top: 0.2rem;
+}
+
+.bbf-field input[type="select"], .bbf-field select {
+	width: auto;
 }
