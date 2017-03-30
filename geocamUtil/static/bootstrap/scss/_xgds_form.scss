@@ -46,6 +46,7 @@ form input[type="submit"] {
 	@extend .col-1;
 	max-width: inherit;
     width: auto;
+    flex: initial;
 }
 
 form input[type="button"] {
@@ -53,12 +54,14 @@ form input[type="button"] {
 	@extend .btn-primary;
 	max-width: inherit;
     width: auto;
+    flex: initial;
 }
 
 form p input[type="submit"] {
 	border-bottom-left-radius: $border-radius !important;
 	border-top-left-radius: $border-radius !important;
 	display: inherit;
+	flex: initial;
 	flex-direction: initial;
 }
 
