@@ -192,3 +192,24 @@ a > i {
 		margin-right: 0px;
 	}
 }
+
+// note tag styling
+.label {
+	background-color: $note-tag-bgcolor;
+	color: $note-tag-color;
+	border-radius: 2px;
+    line-height: 20px;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    text-align: center;
+    box-shadow: 5px 0 0 $note-tag-bgcolor, -5px 0 0 $note-tag-bgcolor;
+}
+
+/* .label-info {
+  background-color: #5bc0de;
+}*/
+
+.label-info[href]:hover,
+.label-info[href]:focus {
+  background-color: #31b0d5;
+}
