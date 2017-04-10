@@ -6,12 +6,12 @@ table {
 	width: auto;
 }
 
-table th {
+table thead th {
 	background-color: $color-primary-bg;
 	color: $color-primary;
 }
 
-form table th {
+form table thead th {
 	background-color: initial;
 	color:initial;
 	text-align: right;
@@ -118,4 +118,18 @@ form table.dataTable th {
 	background-color: $color-primary-bg;
 	color: $color-primary;
 	vertical-align: middle;
+}
+
+.table-bordered {
+  border: 1px solid $table-bordered-color;
+  //border-collapse: separate;
+  //*border-collapse: collapse;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid $table-bordered-color;
 }
