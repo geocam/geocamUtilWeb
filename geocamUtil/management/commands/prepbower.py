@@ -50,7 +50,7 @@ class Command(BaseCommand):
             # don't re-run bower if it succeeded before
             return
 
-	print "About to invoke bower"
+        print "About to invoke bower"
         management.call_command('bower_install',
                                 # avoid interactive prompts that fail under 'vagrant provision'
                                 '--',
