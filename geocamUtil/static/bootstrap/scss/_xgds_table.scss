@@ -11,6 +11,12 @@ table thead th {
 	color: $color-primary;
 }
 
+table thead th:empty {
+	background-color: initial;
+	color: initial;
+	border-top: 0px;
+}
+
 form table thead th {
 	background-color: initial;
 	color:initial;
