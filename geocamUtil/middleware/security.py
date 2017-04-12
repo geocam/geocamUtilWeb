@@ -604,8 +604,8 @@ class SecurityMiddleware(object):
 #                                                     errClass.__name__,
 #                                                     str(errObject))
                 return response
-            print >> sys.stderr, 'redirectTo:', redirectTo
-            print >> sys.stderr, 'next:', request.GET.get('next')
+#            print >> sys.stderr, 'redirectTo:', redirectTo
+#            print >> sys.stderr, 'next:', request.GET.get('next')
             if (redirectTo and redirectTo.endswith('?protocol=http')):
                 initUrl = response['Location']
                 url = request.build_absolute_uri(initUrl)
