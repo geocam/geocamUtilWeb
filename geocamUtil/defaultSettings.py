@@ -108,21 +108,7 @@ If live mode is true, various live feed data can send inputs to site and
      'geocamUtil.context_processors.SettingsContextProcessor.SettingsContextProcessor'
  """
 
-# WARNING could NOT get pipeline compiler to compile gumby, so instead we have our own step in prep, prepcss.
-# do not do this section
-# GEOCAM_UTIL_PIPELINE_COMPILERS = ('pipeline_compass.compiler.CompassCompiler',  # this is for django-pipeline-compass
-#                                   )
-# """
-# And you must add this to PIPELINE_COMPILERS in siteSettings
-# PIPELINE_COMPILERS = ()
-# PIPELINE_COMPILERS = PIPELINE_COMPILERS + geocamUtil.settings.GEOCAM_UTIL_PIPELINE_COMPILERS
-# """
-# end do not do section
 
-
-"""
-Set up pipeline for gumby.
-"""
 """
 Note the following for some reason does not work when only included here, so you must also have this in your siteSettings.py
 PIPELINE_CSS = {}
@@ -138,8 +124,6 @@ PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
 # PIPELINE_DISABLE_WRAPPER = True
 
-GEOCAM_UTIL_PREPCSS_DIRS = ['gumby']
-GEOCAM_UTIL_COMPRESSCSS_FILES = ['gumby/css/gumby.css']
 
 BOWER_INSTALLED_APPS = getOrCreateArray('BOWER_INSTALLED_APPS')
 BOWER_INSTALLED_APPS += ['underscore',
@@ -152,7 +136,6 @@ BOWER_INSTALLED_APPS += ['underscore',
                          'jqueryui-timepicker-addon=jQuery-Timepicker-Addon',
                          'jquery-validate',
                          'jeditable',
-                         'gumby#master',
                          'bootstrap#v4.0.0-alpha.6',
                          'tether=https://github.com/HubSpot/tether.git',
                          'moment',
