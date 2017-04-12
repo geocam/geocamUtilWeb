@@ -102,7 +102,7 @@ form select {
 
 form > p > label {
 	@extend .col-form-label;
-	@extend .col-1;
+	@extend .col-2;
 	@extend .d-flex;
 	@extend .justify-content-end;
 	height: 2rem;
