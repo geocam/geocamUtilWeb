@@ -29,3 +29,8 @@ $inverse-color: $gray-lighter;
 .gray-light {
 	color: $gray-light;
 }
+
+$navbar-inverse-color:                 rgba($white,.7);
+$navbar-inverse-hover-color:           rgba($white,.8);
+$navbar-inverse-active-color:          rgba($white,1);
+$navbar-inverse-disabled-color:        rgba($white,.2);
