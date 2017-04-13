@@ -7,8 +7,8 @@ table {
 }
 
 table thead th {
-	background-color: $color-primary-bg;
-	color: $color-primary;
+	background-color: $color-table-th-bg;
+	color: $color-table-th;
 }
 
 table thead th:empty {
@@ -85,21 +85,21 @@ form table label {
 .sorting_asc {
 	/* @extend .icon-up-dir; does not work because not <i> */
 	background: url('../../img/sort_asc.png') no-repeat center left;
-	background-color: $color-primary-bg; 
+	background-color: $color-table-th-bg; 
 	padding-left: 0.9rem;
 }
 
 .sorting_desc {
 	//@extend .icon-down-dir;
 	background: url('../../img/sort_desc.png') no-repeat center left; 
-	background-color: $color-primary-bg;
+	background-color: $color-table-th-bg;
 	padding-left: 0.9rem;
 }
 
 .sorting {
 	//@extend .icon-arrow-combo;
 	background: url('../../img/sort_both.png') no-repeat center left;
-	background-color: $color-primary-bg; 
+	background-color: $color-table-th-bg; 
 	padding-left: 0.9rem;
 }
 
@@ -107,7 +107,7 @@ form table label {
 	//@extend .icon-up-dir;
 	color: $btn-link-disabled-color;
 	background: url('../../img/sort_asc_disabled.png') no-repeat center left;
-	background-color: $color-primary-bg;
+	background-color: $color-table-th-bg;
 	padding-left: 0.9rem;
 }
 
@@ -115,14 +115,14 @@ form table label {
 	//@extend .icon-down-dir;
 	color: $btn-link-disabled-color;
 	background: url('../../img/sort_desc_disabled.png') no-repeat center left;
-	background-color: $color-primary-bg;
+	background-color: $color-table-th-bg;
 	padding-left: 0.9rem;
 }
 
 form table.dataTable th {
 	text-align: left;
-	background-color: $color-primary-bg;
-	color: $color-primary;
+	background-color: $color-table-th-bg;
+	color: $color-table-th;
 	vertical-align: middle;
 }
 
