@@ -143,3 +143,12 @@ form.bbf-form ul {
 .bbf-field input[type="select"], .bbf-field select {
 	width: auto;
 }
+.form-check-input {
+  position: absolute;
+  margin-top: $form-check-input-margin-y;
+  margin-left: -$form-check-input-gutter;
+
+  &:only-child {
+    position: absolute;
+  }
+}
