@@ -147,8 +147,21 @@ form.bbf-form ul {
   position: absolute;
   margin-top: $form-check-input-margin-y;
   margin-left: -$form-check-input-gutter;
-
   &:only-child {
-    position: absolute;
+    position: inherit;
+    margin-left: -3px;
+  }
+
+}
+
+form > p > input[type="checkbox"], form > p > input[type="radio"] {
+	position: inherit;
+    margin-left: -3px;
+    margin-top: 0.7rem;
+}
+
+label checkbox {
+  &:only-child {
+    position: inherit;
   }
 }
