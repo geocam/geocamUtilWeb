@@ -128,7 +128,7 @@ PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
 BOWER_INSTALLED_APPS = getOrCreateArray('BOWER_INSTALLED_APPS')
 BOWER_INSTALLED_APPS += ['underscore',
                          'modernizr=components-modernizr',
-                         'jquery#3.1.1',
+                         'jquery#3.2.1',
                          'jquery-ui',
                          'datatables=DataTables',
                          'datatables-select',
