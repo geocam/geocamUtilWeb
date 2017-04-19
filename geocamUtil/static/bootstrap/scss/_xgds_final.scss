@@ -1,6 +1,7 @@
 // This file is included last.
 
 @include text-emphasis-variant('.text-primary-inverse', $brand-primary-inverse);
+@include text-emphasis-variant('.text-secondary', $color-secondary-bg);
 
 .btn {
 	font-variant: small-caps;
