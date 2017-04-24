@@ -23,6 +23,6 @@ def AuthUrlsContextProcessor(request):
 
     return {
         'login_url': settings.LOGIN_URL,
-        'logout_url': settings.LOGOUT_URL,
+        'logout_url': settings.LOGIN_URL,
         'login_url_with_next': settings.LOGIN_URL + loginSuffix
     }

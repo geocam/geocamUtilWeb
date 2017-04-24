@@ -192,9 +192,9 @@ def currentnav(parser, token):
 
     # views.py
 
-    return render_to_response('my.html',
-                              # the template context must include the request object
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'my.html',
+                  )
 
     # settings.py
 
