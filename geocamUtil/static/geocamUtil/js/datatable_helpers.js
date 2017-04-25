@@ -7,7 +7,7 @@
 /*
  * Utilities to make using datatable easier
  * Import it of course
- * <script language="javascript" type="text/javascript" src="{{ STATIC_URL }}geocamUtil/js/datatable_helpers.js"></script>
+ * <script language="javascript" type="text/javascript" src="{% static 'geocamUtil/js/datatable_helpers.js' %}"></script>
  *
  */
 
