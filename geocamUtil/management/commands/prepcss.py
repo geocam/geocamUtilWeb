@@ -22,12 +22,15 @@ Anyhow no longer any need to call yuglify.
 class Command(BaseCommand):
     help = 'Use compass to compile css from sass in various directories.  Ruby, compass, and your gems must be installed'
 
-    option_list = BaseCommand.option_list + (
-        make_option('-c', '--compress',
-                    action='store_true',
-                    default=False,
-                    help='Use Yuglify to compress the new css'),
-    )
+    def add_arguments(self, parser):
+
+        # Named (optional) arguments
+        parser.add_argument('--compress',
+                            action='store_true',
+                            default=False,
+                            help='Use Yuglify to compress the new css')
+    
+    
 
     def handle(self, *args, **options):
         verbosity = int(options.get('verbosity', 0))

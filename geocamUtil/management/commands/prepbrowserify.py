@@ -28,8 +28,6 @@ browserify build/static/xgds_map_server/js/browserify.js -t node-underscorify -d
 class Command(BaseCommand):
     help = 'Use browserify to make pure node libraries that use require available in the browser window'
 
-    option_list = BaseCommand.option_list
-    
     def getCommandPrefix(self):
         fullCommand = 'browserify -t node-underscorify '
         if settings.DEBUG:

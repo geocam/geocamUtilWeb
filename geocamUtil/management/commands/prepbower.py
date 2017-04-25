@@ -33,8 +33,6 @@ class Command(BaseCommand):
     """
     help = 'Install bower components if they have never been installed'
 
-    option_list = BaseCommand.option_list
-
     def handle(self, *args, **options):
         verbosity = int(options.get('verbosity', 0))
         path = os.path.join(settings.BOWER_COMPONENTS_ROOT, "bower_components")

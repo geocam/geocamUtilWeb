@@ -17,12 +17,14 @@ from geocamUtil.management.commandUtil import getSiteDir, dosys
 class Command(BaseCommand):
     help = 'Install git hooks from geocamUtil/management/githooks'
 
-    option_list = BaseCommand.option_list + (
-        make_option('-f', '--force',
-                    action='store_true',
-                    default=False,
-                    help='Overwrite any existing hooks'),
-    )
+    def add_arguments(self, parser):
+
+        # Named (optional) arguments
+        parser.add_argument('--force',
+                            action='store_true',
+                            default=False,
+                            help='Overwrite any existing hooks'),
+    
 
     def handle(self, *args, **options):
         verbosity = int(options.get('verbosity', 0))
