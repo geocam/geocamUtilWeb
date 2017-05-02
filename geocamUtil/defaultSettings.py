@@ -169,3 +169,9 @@ GEOCAM_UTIL_DATATABLES_EDITOR = False
 
 # default to earth
 GEOCAM_UTIL_BODY_RADIUS_METERS = 6371010
+
+GEOCAM_UTIL_PREP_EXLUSION_APPS = ['dal',
+                                  'django',
+                                  'resumable',
+                                  'taggit',
+                                  'pipeline']
