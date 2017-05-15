@@ -222,3 +222,10 @@ a > i {
 }
 
 $form-group-margin-bottom: 0px;
+
+// bootstrap has a small but not a big, weird
+$big-font-size: 1.1rem;
+big,
+.big {
+  font-size: $big-font-size;
+}
