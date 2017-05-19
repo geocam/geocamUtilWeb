@@ -6,9 +6,17 @@
 
 from geocamUtil.management import commandUtil
 from django.core import management
+from django.conf import settings
 
 class Command(commandUtil.PathCommand):
     help = 'Execute manage.py makemigrations for each app in the site'
+
+    def isValid(self, name):
+        for exclude in settings.GEOCAM_UTIL_PREP_EXLUSION_APPS:
+            if name.startswith(exclude):
+                return False
+            
+        return True
 
     def handleImportPaths(self, impPaths, options):
         for appName in reversed(impPaths):
