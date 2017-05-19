@@ -13,9 +13,5 @@ class Command(commandUtil.PathCommand):
 
     def handleImportPaths(self, impPaths, options):
         for appName in reversed(impPaths):
-            if self.isValid(appName):
-                try:
-                    print "Loading initial data for %s" % appName
-                    management.call_command('loaddata', 'initial_data.json', app=appName)
-                except:
-                    pass
+            print "Loading initial data for %s" % appName
+            management.call_command('loaddata', 'initial_data.json', app=appName)

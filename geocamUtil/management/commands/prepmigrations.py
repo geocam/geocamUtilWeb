@@ -7,6 +7,7 @@
 from geocamUtil.management import commandUtil
 from django.core import management
 from django.conf import settings
+import traceback
 
 class Command(commandUtil.PathCommand):
     help = 'Execute manage.py makemigrations for each app in the site'
@@ -21,4 +22,10 @@ class Command(commandUtil.PathCommand):
     def handleImportPaths(self, impPaths, options):
         for appName in reversed(impPaths):
             if not appName.startswith('django'):
-                management.call_command('makemigrations', appName)
+                if self.isValid(appName):
+                    try:
+                        print "Migrating %s" % appName
+                        management.call_command('makemigrations', appName)
+                    except:
+                        traceback.print_exc()
+                        pass
