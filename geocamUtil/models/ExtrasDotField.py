@@ -45,6 +45,7 @@ class ExtrasDotField(models.TextField):
                 for key in theDotDict.iterkeys():
                     assert type(key) in (unicode, str), 'expected unicode or str keys, found a %s' % type(key).__name__
             except (ValueError, AssertionError), e:
+                #print 'problem with json for %s ' % (value)
                 raise ValidationError('Invalid JSON data in ExtrasDotField: %s' % e)
             return theDotDict
 
