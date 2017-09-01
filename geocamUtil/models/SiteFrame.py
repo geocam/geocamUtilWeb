@@ -22,7 +22,7 @@ class SiteFrame(models.Model):
     projUnits = models.CharField(max_length=32, default="m")
     
     def __unicode__(self):
-        return self.name
+        return self.displayName
 
     class Meta:
         app_label="geocamUtil"
