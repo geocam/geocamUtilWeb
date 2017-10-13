@@ -7,8 +7,7 @@
 # stop pylint from warning that these variable docstrings are "useless"
 # pylint: disable=W0105
 
-import socket
-from geocamUtil.SettingsUtil import getOrCreateArray
+from geocamUtil.SettingsUtil import getOrCreateArray, HOSTNAME
 
 GEOCAM_UTIL_DELETE_TMP_FILE_WAIT_SECONDS = 60 * 60
 """
@@ -143,10 +142,6 @@ BOWER_INSTALLED_APPS += ['underscore',
                          'fontawesome',
                          ]
 
-try:
-    HOSTNAME = socket.gethostname()
-except:
-    HOSTNAME = 'localhost'
 
 # set up a dictionary of the siteframes you will be working with.
 # This is used by the Siteframe Choice form field

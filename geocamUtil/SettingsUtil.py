@@ -4,6 +4,14 @@
 #All rights reserved.
 # __END_LICENSE__
 
+
+import socket
+try:
+    HOSTNAME = socket.gethostname()
+except:
+    HOSTNAME = 'localhost'
+
+
 INDEX = {}
 
 def getOrCreateDict(dictName):
