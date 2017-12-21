@@ -1,0 +1,28 @@
+{
+  "name": "xgds_core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "underscore": "1.8.3",
+    "modernizr": "components/modernizr",
+    "jquery": "3.2.1",
+    "jquery-ui": "components/jqueryui",
+    "datatables": "1.10.16",
+    "datatables-select": "DataTables/Select",
+    "jeditable": "NicolasCARPi/jquery_jeditable",
+    "jqueryui-timepicker-addon": "trentrichardson/jQuery-Timepicker-Addon",
+    "jquery-validate": "jquery-validation/jquery-validation",
+    "bootstrap": "4.0.0-alpha.6",
+    "tether": "HubSpot/tether",
+    "moment": "^2.19.3",
+    "moment-timezone": "^0.5.14",
+    "fontawesome": "FortAwesome/Font-Awesome"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
