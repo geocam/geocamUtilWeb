@@ -1,5 +1,5 @@
 {
-  "name": "xgds_core",
+  "name": "geocamUtil",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,8 +8,8 @@
     "modernizr": "components/modernizr",
     "jquery": "3.2.1",
     "jquery-ui": "components/jqueryui",
-    "datatables": "1.10.16",
-    "datatables-select": "DataTables/Select",
+    "datatables": "^1.10.13",
+    "datatables.net-select": "^1.2.4",
     "jeditable": "NicolasCARPi/jquery_jeditable",
     "jqueryui-timepicker-addon": "trentrichardson/jQuery-Timepicker-Addon",
     "jquery-validate": "jquery-validation/jquery-validation",

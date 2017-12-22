@@ -18,3 +18,4 @@ example/build
 geocamUtil/zmq/log
 .sass-cache
 geocamUtil/migrations/
+node_modules
