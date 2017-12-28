@@ -20,7 +20,7 @@ class Command(BaseCommand):
                 
         management.call_command('preptemplates')
         management.call_command('prepapps')
-        management.call_command('prepbower')
+#         management.call_command('prepbower')
         management.call_command('prepnpm')
         #management.call_command('prepbrowserify')
         # manage.py help collectstatic says: -i PATTERN, --ignore=PATTERN Ignore files or directories matching this glob-style pattern. Use multiple times to ignore more.
