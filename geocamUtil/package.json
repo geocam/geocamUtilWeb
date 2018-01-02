@@ -5,19 +5,18 @@
   "main": "index.js",
   "dependencies": {
     "underscore": "1.8.3",
-    "modernizr": "components/modernizr",
     "jquery": "3.2.1",
     "jquery-ui": "1.10.x",
     "datatables": "^1.10.13",
     "datatables.net-select": "^1.2.4",
-    "jeditable": "NicolasCARPi/jquery_jeditable",
-    "jqueryui-timepicker-addon": "trentrichardson/jQuery-Timepicker-Addon",
-    "jquery-validate": "jquery-validation/jquery-validation",
+    "jquery-jeditable": "^1.8.0",
+    "jquery-ui-timepicker-addon": "^1.6.3",
+    "jquery-validation": "^1.17.0",
     "bootstrap": "4.0.0-alpha.6",
-    "tether": "HubSpot/tether",
+    "tether": "^1.4.3",
     "moment": "^2.19.3",
     "moment-timezone": "^0.5.14",
-    "fontawesome": "FortAwesome/Font-Awesome"
+    "font-awesome": "^4.7.0"
   },
   "devDependencies": {},
   "scripts": {
