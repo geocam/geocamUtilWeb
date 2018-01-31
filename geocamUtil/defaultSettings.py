@@ -124,25 +124,6 @@ PIPELINE_YUGLIFY_JS_ARGUMENTS = 'mangle:false --terminal'
 # PIPELINE_DISABLE_WRAPPER = True
 
 
-BOWER_INSTALLED_APPS = getOrCreateArray('BOWER_INSTALLED_APPS')
-BOWER_INSTALLED_APPS += ['underscore',
-                         'modernizr=components-modernizr',
-                         'jquery#3.2.1',
-                         'jquery-ui',
-                         'datatables=DataTables',
-                         'datatables-select',
-                         'jeditable',
-                         'jqueryui-timepicker-addon=jQuery-Timepicker-Addon',
-                         'jquery-validate',
-                         'jeditable',
-                         'bootstrap#v4.0.0-alpha.6',
-                         'tether=https://github.com/HubSpot/tether.git',
-                         'moment',
-                         'moment-timezone',
-                         'fontawesome',
-                         ]
-
-
 # set up a dictionary of the siteframes you will be working with.
 # This is used by the Siteframe Choice form field
 # XGDS_SITEFRAMES = {

@@ -1,0 +1,27 @@
+{
+  "name": "geocamUtil",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "underscore": "1.8.3",
+    "jquery": "3.2.1",
+    "jquery-ui-dist": "VWoeltjen/jquery-ui-dist",
+    "datatables": "^1.10.13",
+    "datatables.net-select": "^1.2.4",
+    "jquery-jeditable": "^1.8.0",
+    "jquery-ui-timepicker-addon": "^1.6.3",
+    "jquery-validation": "^1.17.0",
+    "bootstrap": "4.0.0-alpha.6",
+    "tether": "^1.4.3",
+    "moment": "^2.19.3",
+    "moment-timezone": "^0.5.14",
+    "font-awesome": "^4.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
