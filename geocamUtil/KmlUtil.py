@@ -62,8 +62,9 @@ def djangoResponse(wrappedText):
 def wrapKml(text, docId=None):
     if docId:
         text = re.sub(r'^<(\w+)>', '<\\1 id="%s">' % docId, text)
-    return ("""<kml>
-%s
+    return ("""<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  %s
 </kml>
 """ % text)
 
