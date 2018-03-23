@@ -6,7 +6,7 @@
   "dependencies": {
     "underscore": "1.8.3",
     "jquery": "3.2.1",
-    "jquery-ui-dist": "VWoeltjen/jquery-ui-dist",
+    "jquery-ui-dist": "xgds/jquery-ui-dist",
     "datatables": "^1.10.13",
     "datatables.net-select": "^1.2.4",
     "jquery-jeditable": "^1.8.0",
