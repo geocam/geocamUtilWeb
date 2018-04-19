@@ -46,3 +46,13 @@ except ImportError:
     pass
 
 UuidField.UuidField = UuidField
+
+
+class UuidModel(models.Model):
+    """
+    A model mixin which provides a uuid field
+    """
+    uuid = UuidField(db_index=True)
+
+    class Meta:
+        abstract = True

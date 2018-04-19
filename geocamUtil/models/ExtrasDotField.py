@@ -49,5 +49,9 @@ class ExtrasDotField(models.TextField):
                 raise ValidationError('Invalid JSON data in ExtrasDotField: %s' % e)
             return theDotDict
 
+    def to_dict(self, value=''):
+        return self.to_python(value)
+
+
     def get_db_prep_value(self, value, connection=None, prepared=False):
         return str(value)
