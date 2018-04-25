@@ -25,19 +25,25 @@ import os
 
 # should edit this to be the list of repos we plan to open source eventually
 REPOS = (
-    'https://babelfish.arc.nasa.gov/git/xgds_basalt',
+    'https://github.com/xgds/xgds_basalt',
+    'https://github.com/xgds/xgds_braille',
+    'https://github.com/xgds/xgds_baseline',
+    'https://github.com/xgds/xgds_video',
+    'https://github.com/xgds/xgds_status_board',
+    'https://github.com/xgds/xgds_core',
+    'https://github.com/xgds/xgds_instrument',
+    'https://github.com/xgds/ansible-provision',
     'https://babelfish.arc.nasa.gov/git/xgds_basalt_deploy',
-    'https://babelfish.arc.nasa.gov/git/xgds_data',
-    'https://babelfish.arc.nasa.gov/git/xgds_image',
+    'https://github.com/xgds/xgds_image',
     'https://babelfish.arc.nasa.gov/git/xgds_kn',
-    'https://babelfish.arc.nasa.gov/git/xgds_map_server',
-    'https://babelfish.arc.nasa.gov/git/xgds_planner2',
-    'https://babelfish.arc.nasa.gov/git/xgds_plot',
+    'https://github.com/xgds/xgds_map_server',
+    'https://github.com/xgds/xgds_planner2',
+    'https://github.com/xgds/xgds_plot',
     'https://babelfish.arc.nasa.gov/git/xgds_plrp',
     'https://babelfish.arc.nasa.gov/git/xgds_plrp_deploy',
     'https://babelfish.arc.nasa.gov/git/xgds_rp',
     'https://babelfish.arc.nasa.gov/git/xgds_rp_deploy',
-    'https://babelfish.arc.nasa.gov/git/xgds_sample',
+    'https://github.com/xgds/xgds_sample',
 )
 
 
