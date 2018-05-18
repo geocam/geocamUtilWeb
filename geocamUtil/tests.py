@@ -7,11 +7,11 @@
 # stop pylint from warning us that we "aren't using" imported test cases
 # pylint: disable=W0611
 
-from geocamUtil.models.timestampDescriptorTest import TimestampDescriptorTest
+from geocamUtil.models.testTimestampDescriptor import TimestampDescriptorTest
 from geocamUtil.MultiSettingsTest import MultiSettingsTest
 from geocamUtil.anyjsonTest import AnyJsonTest
-from geocamUtil.models.UuidFieldTest import UuidFieldTest
-from geocamUtil.models.jsonFieldTest import JsonFieldTest
+from geocamUtil.models.testUuidField import UuidFieldTest
+from geocamUtil.models.testjsonField import JsonFieldTest
 from geocamUtil.BuilderTest import BuilderTest
 from geocamUtil.InstallerTest import InstallerTest
 from geocamUtil.storeTest import StoreTest

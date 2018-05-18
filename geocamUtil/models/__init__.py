@@ -13,3 +13,8 @@ from timestampDescriptor import TimestampDescriptor
 from AbstractEnum import AbstractEnumModel
 from jsonField import (JsonCharField,
                        JsonTextField)
+from test import UuidExample
+from test import ExtrasExample
+from test import DateTimeUtcExample
+from test import TimestampDescriptorExample
+from test import JsonExample
