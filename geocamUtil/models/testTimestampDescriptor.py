@@ -5,6 +5,7 @@
 # __END_LICENSE__
 
 import datetime
+import pytz
 
 from django.test import TestCase
 
@@ -18,7 +19,7 @@ class TimestampDescriptorTest(TestCase):
         pass
 
     def test_standard(self):
-        ts = datetime.datetime(2012, 5, 22, 7, 37, 16, 689212)
+        ts = datetime.datetime(2012, 5, 22, 7, 37, 16, 689212, tzinfo=pytz.utc)
         obj = TimestampDescriptorExample()
         obj.timestamp = ts
         obj.save()
