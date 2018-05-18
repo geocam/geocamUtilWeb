@@ -19,16 +19,22 @@ class UuidExample(models.Model):
     """The sole purpose of this model is to test the UuidField class."""
     uuid = UuidField()
 
+    class Meta:
+        app_label="geocamUtil"
 
 class ExtrasExample(models.Model):
     """The sole purpose of this model is to test the ExtrasDotField class."""
     extras = ExtrasDotField()
 
+    class Meta:
+        app_label="geocamUtil"
 
 class DateTimeUtcExample(models.Model):
     """The sole purpose of this model is to test the DateTimeUtcField class."""
     timestamp = DateTimeUtcField()
 
+    class Meta:
+        app_label="geocamUtil"
 
 class TimestampDescriptorExample(models.Model):
     """
@@ -38,6 +44,8 @@ class TimestampDescriptorExample(models.Model):
     timestampMicroseconds = models.PositiveIntegerField(default=0)
     timestamp = TimestampDescriptor('timestampSeconds', 'timestampMicroseconds')
 
+    class Meta:
+        app_label="geocamUtil"
 
 class JsonExample(models.Model):
     """The sole purpose of this model is to test the JSON field types."""
@@ -45,3 +53,6 @@ class JsonExample(models.Model):
     floatChar = JsonCharField(max_length=80, valueType='array<float>')
     intText = JsonTextField(valueType='array<int>')
     floatText = JsonTextField(valueType='array<float>')
+
+    class Meta:
+        app_label="geocamUtil"

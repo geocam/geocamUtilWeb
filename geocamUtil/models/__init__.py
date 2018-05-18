@@ -6,15 +6,16 @@
 
 from django.db import models
 
-from SiteFrame import SiteFrame
+from geocamUtil.models.SiteFrame import SiteFrame
 from UuidField import UuidField
 from dateTimeUtc import DateTimeUtcField
 from timestampDescriptor import TimestampDescriptor
 from AbstractEnum import AbstractEnumModel
 from jsonField import (JsonCharField,
                        JsonTextField)
-from test import UuidExample
-from test import ExtrasExample
-from test import DateTimeUtcExample
-from test import TimestampDescriptorExample
-from test import JsonExample
+
+from geocamUtil.models.examples import UuidExample
+from geocamUtil.models.examples import ExtrasExample
+from geocamUtil.models.examples import DateTimeUtcExample
+from geocamUtil.models.examples import TimestampDescriptorExample
+from geocamUtil.models.examples import JsonExample
