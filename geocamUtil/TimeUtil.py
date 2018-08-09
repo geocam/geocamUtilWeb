@@ -222,3 +222,34 @@ def getTimeShort(utcDt, tz=None, now=None):
                     return localizedDt.strftime('%b %e')
                 else:
                     return localizedDt.strftime('%Y-%m-%d')
+
+
+def convert_time_with_zone(event_time, timezone):
+    """
+    Clean a time in a form
+    :param event_time:
+    :param timezone:
+    :return: datetime aware time
+    """
+    if not event_time:
+        return None
+    else:
+        if timezone:
+            tz = pytz.timezone(timezone)
+            if not event_time.tzinfo:
+                event_time = tz.localize(event_time)
+            elif event_time.tzinfo and event_time.tzinfo.zone != timezone:
+                # it will come in as a datetime aware time
+                event_time = event_time.replace(tzinfo=None)
+                event_time = tz.localize(event_time)
+        if event_time.tzinfo != pytz.utc:
+            event_time = timeZoneToUtc(event_time)
+        return event_time
+
+
+def clean_timezone(incoming_timezone):
+    if incoming_timezone== 'utc':
+        return 'Etc/UTC'
+    else:
+        return incoming_timezone
+    return None
