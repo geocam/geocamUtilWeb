@@ -25,6 +25,8 @@ from django.conf import settings
 def getTimezoneChoices(empty=None):
     _cache = caches['default']
     TIMEZONE_CHOICES = _cache.get('TIMEZONE_CHOICES')
+    if settings.DEBUG:
+        TIMEZONE_CHOICES = NONE
     if not TIMEZONE_CHOICES:
         try:
             siteframe_zones = SiteFrame.objects.values('timezone').distinct()
