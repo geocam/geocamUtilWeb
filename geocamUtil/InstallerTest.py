@@ -22,7 +22,7 @@ def touchFile(path):
 class InstallerTest(unittest.TestCase):
     def setUp(self):
         self.dir = tempfile.mkdtemp()
-        print self.dir
+        # print self.dir
         touchFile('%s/app1/ab/a.txt' % self.dir)
         touchFile('%s/app2/ab/b.txt' % self.dir)
         touchFile('%s/app1/xy/x.txt' % self.dir)
