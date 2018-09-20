@@ -742,7 +742,7 @@ def renderSvg(size, src, dst):
         renderSvgRsvg(size, src, dst)
     else:
         renderSvgImageMagick(size, src, dst)
-    print 'svg rendered to %s' % dst
+    #print 'svg rendered to %s' % dst
 
 
 def renderIcon(iconFileName, options=None, **kwargs):
