@@ -17,7 +17,7 @@ def username_exists(username):
     return existing_users.count() > 0
 
 
-def get_new_username_from_name(first_name, last_name):
+def get_new_username_from_name(first_name, last_name=None):
     if last_name:
         # Username is first initial plus last name in lower case
         username = first_name[0].lower() + last_name.lower()

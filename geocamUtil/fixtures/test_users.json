@@ -1,0 +1,31 @@
+[
+	{
+		"pk": 1,
+		"model": "auth.user",
+		"fields": {
+			"password": "*",
+			"last_login": null,
+			"is_superuser": false,
+			"username": "bwayne",
+			"first_name": "Bob",
+			"last_name": "Wayne",
+			"email": "theotherguy@wayneenterprises.com",
+			"is_staff": false,
+			"is_active": true,
+			"date_joined": "2018-05-24 12:34:56Z"
+		}
+	},
+	{
+		"pk": 1,
+		"model": "auth.user",
+		"fields": {
+			"password": "*",
+			"last_login": null,
+			"is_superuser": false,
+			"username": "xgds",
+			"first_name": "xgds",
+			"is_staff": false,
+			"is_active": true
+		}
+	}
+]
