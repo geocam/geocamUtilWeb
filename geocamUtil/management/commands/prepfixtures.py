@@ -15,7 +15,8 @@ class Command(commandUtil.PathCommand):
         for appName in reversed(impPaths):
             print "Loading initial data for %s" % appName
             try:
-                management.call_command('loaddata', 'initial_data.json', app=appName)
+                path = '%s/initial_data.json' % appName
+                management.call_command('loaddata', path, app=appName)
             except:
                 pass
-            
+
