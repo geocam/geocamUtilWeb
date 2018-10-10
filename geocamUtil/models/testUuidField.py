@@ -6,12 +6,12 @@
 
 import re
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from geocamUtil.models import UuidExample
 
 
-class UuidFieldTest(TestCase):
+class UuidFieldTest(TransactionTestCase):
     def setUp(self):
         self.u = UuidExample()
         self.u.save()

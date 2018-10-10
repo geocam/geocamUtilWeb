@@ -6,7 +6,7 @@
 
 import os
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.core import management
 
 from geocamUtil.management import commandUtil
@@ -17,7 +17,7 @@ def dosys(cmd):
     os.system(cmd)
 
 
-class CollectReqsTest(TestCase):
+class CollectReqsTest(TransactionTestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
         self.rfile = '%s/build/management/appRequirements.txt' % self.siteDir
@@ -30,7 +30,7 @@ class CollectReqsTest(TestCase):
         self.assertEquals(9, len(file(self.rfile, 'r').read().splitlines()))
 
 
-class InstallReqsTest(TestCase):
+class InstallReqsTest(TransactionTestCase):
     def tearDown(self):
         needSudo = 'VIRTUAL_ENV' not in os.environ
         if needSudo:
@@ -46,7 +46,7 @@ class InstallReqsTest(TestCase):
         import electruth as _
 
 
-class PrepTemplatesTest(TestCase):
+class PrepTemplatesTest(TransactionTestCase):
     def assertExists(self, f):
         self.assert_(os.path.exists(f))
 
@@ -63,7 +63,7 @@ class PrepTemplatesTest(TestCase):
         self.assertExists('%sbar.conf' % self.ptDir)
 
 
-class PrepAppsTest(TestCase):
+class PrepAppsTest(TransactionTestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
         self.ps1 = '%sbuild/app1/prepStatus.txt' % self.siteDir
@@ -79,7 +79,7 @@ class PrepAppsTest(TestCase):
         self.assert_(os.path.exists(self.ps2))
 
 
-class CollectMediaTest(TestCase):
+class CollectMediaTest(TransactionTestCase):
     def setUp(self):
         self.siteDir = commandUtil.getSiteDir()
         self.bstaticDir = '%sbuild/static/' % self.siteDir

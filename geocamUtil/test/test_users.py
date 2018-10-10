@@ -14,7 +14,7 @@
 # specific language governing permissions and limitations under the License.
 # __END_LICENSE__
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 #from django.core.urlresolvers import reverse
 #from django.http import HttpResponseForbidden, Http404, JsonResponse
 from django.contrib.auth.models import User
@@ -22,7 +22,7 @@ from django.contrib.auth.models import User
 from geocamUtil.UserUtil import *
 
 
-class TestUsers(TestCase):
+class TestUsers(TransactionTestCase):
 
     fixtures = ['test_users.json']
 

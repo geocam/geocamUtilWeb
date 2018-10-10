@@ -7,14 +7,14 @@
 import datetime
 import pytz
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from geocamUtil.models import TimestampDescriptorExample
 
 # pylint: disable=E1101
 
 
-class TimestampDescriptorTest(TestCase):
+class TimestampDescriptorTest(TransactionTestCase):
     def setUp(self):
         pass
 

@@ -4,12 +4,12 @@
 #All rights reserved.
 # __END_LICENSE__
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from geocamUtil.models import JsonExample
 
 
-class JsonFieldTest(TestCase):
+class JsonFieldTest(TransactionTestCase):
     def setUp(self):
         self.obj = JsonExample()
         self.obj.intChar = [3, -4]
