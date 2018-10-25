@@ -21,7 +21,7 @@ class AbstractEnumModel(models.Model):
     display_name = models.CharField(max_length=256, blank=True, null=True)
 
     def natural_key(self):
-        return (self.value, self.display_name)
+        return self.value, self.display_name
 
     def __unicode__(self):
         return self.display_name or self.value
