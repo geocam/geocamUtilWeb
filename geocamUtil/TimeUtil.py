@@ -253,3 +253,26 @@ def clean_timezone(incoming_timezone):
     else:
         return incoming_timezone
     return None
+
+
+def hms_to_total_s(hms_string):
+    """
+    Convert HH:mm:ss to total seconds
+    :param hms_string: HH:mm:ss
+    :return: total seconds
+    """
+    tokens = hms_string.split(':')
+    if len(tokens) == 3:
+        h = tokens[0]
+        m = tokens[1]
+        s = tokens[2]
+    elif len(tokens) == 2:
+        h = 0
+        m = tokens[0]
+        s = tokens[1]
+    elif len(tokens) == 1:
+        h = 0
+        m = 0
+        s = tokens[0]
+    ans = int(s) + int(m) * 60 + int(h) * 60 * 60
+    return ans
