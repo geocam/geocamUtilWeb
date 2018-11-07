@@ -276,3 +276,19 @@ def hms_to_total_s(hms_string):
         s = tokens[0]
     ans = int(s) + int(m) * 60 + int(h) * 60 * 60
     return ans
+
+
+def seconds_to_minutes_seconds(seconds, zero_seconds_if_minutes=False):
+    """
+    Convert a seconds value which may be > 0 into minutes, seconds
+    :param seconds: the seconds
+    :param zero_seconds_if_minutes: True to zero out the seconds if minutes > 0
+    :return: minutes, seconds
+    """
+    result_seconds = seconds
+    result_minutes = 0
+    if result_seconds >= 60:
+        result_minutes = int(result_seconds / 60)
+        if zero_seconds_if_minutes:
+            result_seconds = 0
+    return result_minutes, result_seconds
