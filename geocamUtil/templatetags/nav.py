@@ -201,7 +201,7 @@ def currentnav(parser, token):
     TEMPLATE_CONTEXT_PROCESSORS = (
        ...,
        # the template context must include the request object
-       'django.core.context_processors.request',
+       'django.template.context_processors.request',
     )
 
     """
