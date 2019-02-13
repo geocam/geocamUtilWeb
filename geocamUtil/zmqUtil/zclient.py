@@ -13,7 +13,7 @@ import gevent
 import gevent.monkey
 gevent.monkey.patch_all(thread=False)
 import zerorpc
-from IPython.config.loader import Config
+from traitlets.config import Config
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.lib.inputhook import inputhook_manager, stdin_ready
 import django
