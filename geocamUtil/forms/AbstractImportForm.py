@@ -22,6 +22,7 @@ from geocamUtil.models import SiteFrame
 from django.core.cache import caches
 from django.conf import settings
 
+
 def getTimezoneChoices(empty=None):
     _cache = caches['default']
     TIMEZONE_CHOICES = _cache.get('TIMEZONE_CHOICES')
@@ -32,6 +33,10 @@ def getTimezoneChoices(empty=None):
             siteframe_zones = SiteFrame.objects.values('timezone').distinct()
             listresult = sorted([str(r['timezone']) for r in siteframe_zones])
             TIMEZONE_CHOICES = [(v, v) for v in listresult]
+            try:
+                TIMEZONE_CHOICES.remove(('Etc/UTC', 'Etc/UTC'))
+            except KeyError:
+                pass
             TIMEZONE_CHOICES.append(('utc', 'UTC'))
             _cache.set('TIMEZONE_CHOICES',TIMEZONE_CHOICES)
         except:
