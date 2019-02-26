@@ -38,7 +38,7 @@ def getTimezoneChoices(empty=None):
             except KeyError:
                 pass
             TIMEZONE_CHOICES.append(('utc', 'UTC'))
-            _cache.set('TIMEZONE_CHOICES',TIMEZONE_CHOICES)
+            _cache.set('TIMEZONE_CHOICES', TIMEZONE_CHOICES)
         except:
             return [] # just to handle the case where we are migrating and have not yet built this table
     if empty:
