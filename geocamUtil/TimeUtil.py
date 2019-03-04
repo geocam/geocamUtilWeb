@@ -238,10 +238,11 @@ def convert_time_with_zone(event_time, timezone):
             tz = pytz.timezone(timezone)
             if not event_time.tzinfo:
                 event_time = tz.localize(event_time)
-            elif event_time.tzinfo and event_time.tzinfo.zone != timezone:
-                # it will come in as a datetime aware time
-                event_time = event_time.replace(tzinfo=None)
-                event_time = tz.localize(event_time)
+            elif event_time.tzinfo:
+                if hasattr(event_time.tzinfo, 'zone') and event_time.tzinfo.zone != timezone:
+                    # it will come in as a datetime aware time
+                    event_time = event_time.replace(tzinfo=None)
+                    event_time = tz.localize(event_time)
         if event_time.tzinfo != pytz.utc:
             event_time = timeZoneToUtc(event_time)
         return event_time
