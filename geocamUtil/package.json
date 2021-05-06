@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "underscore": "1.8.3",
+    "underscore": "1.12.1",
     "jquery": "3.2.1",
     "jquery-ui-dist": "xgds/jquery-ui-dist",
     "datatables": "^1.10.13",
