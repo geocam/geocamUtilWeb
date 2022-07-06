@@ -14,7 +14,7 @@
     "jquery-validation": "^1.17.0",
     "bootstrap": "4.0.0-alpha.6",
     "tether": "^1.4.3",
-    "moment": "^2.19.3",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.14",
     "font-awesome": "^4.7.0"
   },
