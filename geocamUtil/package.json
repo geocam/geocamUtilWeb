@@ -15,7 +15,7 @@
     "bootstrap": "4.0.0-alpha.6",
     "tether": "^1.4.3",
     "moment": "^2.19.3",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.35",
     "font-awesome": "^4.7.0"
   },
   "devDependencies": {},
